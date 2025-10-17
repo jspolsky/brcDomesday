@@ -262,10 +262,56 @@
             zoomToFit();
         }
 
+        // Calculate bounds from actual data
+        function calculateDataBounds() {
+            let minLon = Infinity, maxLon = -Infinity;
+            let minLat = Infinity, maxLat = -Infinity;
+
+            // Check camp outlines
+            if (campOutlines) {
+                campOutlines.features.forEach(feature => {
+                    if (feature.geometry.type === 'LineString') {
+                        feature.geometry.coordinates.forEach(coord => {
+                            const [lon, lat] = coord;
+                            minLon = Math.min(minLon, lon);
+                            maxLon = Math.max(maxLon, lon);
+                            minLat = Math.min(minLat, lat);
+                            maxLat = Math.max(maxLat, lat);
+                        });
+                    }
+                });
+            }
+
+            // Check camp names for more comprehensive bounds
+            if (campNames) {
+                campNames.features.forEach(feature => {
+                    if (feature.geometry.type === 'LineString') {
+                        feature.geometry.coordinates.forEach(coord => {
+                            const [lon, lat] = coord;
+                            minLon = Math.min(minLon, lon);
+                            maxLon = Math.max(maxLon, lon);
+                            minLat = Math.min(minLat, lat);
+                            maxLat = Math.max(maxLat, lat);
+                        });
+                    }
+                });
+            }
+
+            return { minLon, maxLon, minLat, maxLat };
+        }
+
         // Fit all data in the viewport
         function zoomToFit() {
-            // Use the known Black Rock City bounds for consistent framing
-            const bounds = BRC_BOUNDS;
+            // Calculate bounds from actual loaded data
+            const bounds = calculateDataBounds();
+
+            // Fall back to predefined bounds if no data is loaded
+            if (!isFinite(bounds.minLon)) {
+                bounds.minLon = BRC_BOUNDS.minLon;
+                bounds.maxLon = BRC_BOUNDS.maxLon;
+                bounds.minLat = BRC_BOUNDS.minLat;
+                bounds.maxLat = BRC_BOUNDS.maxLat;
+            }
 
             // Calculate the scale needed to fit the bounds in the canvas
             const latRange = bounds.maxLat - bounds.minLat;
