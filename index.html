@@ -294,16 +294,61 @@
             redraw();
         }
 
-        // Mouse tracking for coordinates
+        // Mouse panning state
+        let isPanning = false;
+        let lastMousePos = { x: 0, y: 0 };
+
+        // Mouse event handlers for panning
+        canvas.addEventListener('mousedown', (e) => {
+            isPanning = true;
+            const rect = canvas.getBoundingClientRect();
+            lastMousePos.x = e.clientX - rect.left;
+            lastMousePos.y = e.clientY - rect.top;
+            canvas.style.cursor = 'grabbing';
+        });
+
         canvas.addEventListener('mousemove', (e) => {
             const rect = canvas.getBoundingClientRect();
             const canvasX = e.clientX - rect.left;
             const canvasY = e.clientY - rect.top;
 
-            const geo = canvasToGeo(canvasX, canvasY);
+            if (isPanning) {
+                // Calculate the difference in mouse position
+                const deltaX = canvasX - lastMousePos.x;
+                const deltaY = canvasY - lastMousePos.y;
 
+                // Convert canvas pixel movement to geographic coordinate movement
+                const latScale = Math.cos(viewport.centerY * Math.PI / 180);
+                const deltaLon = -deltaX / (viewport.scale * latScale);
+                const deltaLat = deltaY / viewport.scale;
+
+                // Update viewport center
+                viewport.centerX += deltaLon;
+                viewport.centerY += deltaLat;
+
+                // Update last mouse position
+                lastMousePos.x = canvasX;
+                lastMousePos.y = canvasY;
+
+                // Redraw the map
+                redraw();
+            }
+
+            // Update coordinate display
+            const geo = canvasToGeo(canvasX, canvasY);
             document.getElementById('coordinates').textContent =
                 `Mouse: ${geo.lon.toFixed(6)}, ${geo.lat.toFixed(6)}`;
+        });
+
+        canvas.addEventListener('mouseup', (e) => {
+            isPanning = false;
+            canvas.style.cursor = 'crosshair';
+        });
+
+        // Handle mouse leaving the canvas area
+        canvas.addEventListener('mouseleave', (e) => {
+            isPanning = false;
+            canvas.style.cursor = 'crosshair';
         });
 
         // Handle window resize
