@@ -42,7 +42,10 @@
             </div>
             <div style="margin: 10px 0;">
                 <label for="campNameInput">Camp Name:</label>
-                <input type="text" id="campNameInput" placeholder="Enter camp name..." style="margin-left: 10px; padding: 5px; width: 200px;">
+                <div style="position: relative; display: inline-block;">
+                    <input type="text" id="campNameInput" placeholder="Enter camp name..." style="margin-left: 10px; padding: 5px; width: 200px;">
+                    <div id="autocompleteDropdown" style="position: absolute; top: 100%; left: 10px; width: 200px; max-height: 200px; overflow-y: auto; background: white; border: 1px solid #ccc; border-top: none; display: none; z-index: 1000;"></div>
+                </div>
                 <button onclick="submitCampName()" style="margin-left: 10px;">Submit</button>
                 <button onclick="skipCamp()" style="margin-left: 5px; background-color: #6c757d;">Skip</button>
             </div>
@@ -76,6 +79,7 @@
         let campNames = null;
         let showNames = true;
         let showOutlines = true;
+        let allCampNames = []; // For autocomplete
 
         // Camp highlighting
         let highlightedCamp = null;
@@ -362,6 +366,24 @@
             }
         }
 
+        // Load camp names database for autocomplete
+        async function loadCampNamesDatabase() {
+            try {
+                const response = await fetch('data/camps.json');
+                if (response.ok) {
+                    const camps = await response.json();
+                    allCampNames = camps.map(camp => camp.name).filter(name => name && name.trim());
+                    // Remove duplicates and sort
+                    allCampNames = [...new Set(allCampNames)].sort();
+                    console.log(`Loaded ${allCampNames.length} camp names for autocomplete`);
+                    return allCampNames;
+                }
+            } catch (error) {
+                console.log('Could not load camp names database:', error);
+            }
+            return [];
+        }
+
         // Load existing FID mappings if available
         async function loadCampMappings() {
             // First try to load from data/camp_fid_mappings.json (preferred)
@@ -432,6 +454,11 @@
                 document.getElementById('namesCount').textContent =
                     `Camp Names: ${campNames.features.length}`;
             }
+
+            loadingStatus.textContent = 'Loading camp names database...';
+
+            // Load camp names for autocomplete
+            await loadCampNamesDatabase();
 
             loadingStatus.textContent = 'Loading existing camp mappings...';
 
@@ -687,11 +714,146 @@
             alert(`Mappings downloaded! (${mappedCount} camps)\n\nTo make these mappings load automatically next time:\n1. Move the downloaded 'camp_fid_mappings.json' file\n2. From your Downloads folder\n3. To: data/camp_fid_mappings.json\n\nThe app will then load your mappings automatically on next visit.`);
         }
 
-        // Allow Enter key to submit camp name
+        // Autocomplete functionality
+        let selectedAutocompleteIndex = -1;
+
+        function showAutocomplete(matches) {
+            const dropdown = document.getElementById('autocompleteDropdown');
+            dropdown.innerHTML = '';
+            
+            if (matches.length === 0) {
+                dropdown.style.display = 'none';
+                return;
+            }
+            
+            matches.slice(0, 10).forEach((match, index) => { // Show max 10 matches
+                const item = document.createElement('div');
+                item.textContent = match;
+                item.style.padding = '8px';
+                item.style.cursor = 'pointer';
+                item.style.borderBottom = '1px solid #eee';
+                
+                item.addEventListener('mouseenter', () => {
+                    clearAutocompleteSelection();
+                    item.style.backgroundColor = '#e9ecef';
+                    selectedAutocompleteIndex = index;
+                });
+                
+                item.addEventListener('mouseleave', () => {
+                    item.style.backgroundColor = '';
+                });
+                
+                item.addEventListener('click', () => {
+                    document.getElementById('campNameInput').value = match;
+                    dropdown.style.display = 'none';
+                    selectedAutocompleteIndex = -1;
+                });
+                
+                dropdown.appendChild(item);
+            });
+            
+            dropdown.style.display = 'block';
+        }
+
+        function clearAutocompleteSelection() {
+            const dropdown = document.getElementById('autocompleteDropdown');
+            Array.from(dropdown.children).forEach(child => {
+                child.style.backgroundColor = '';
+            });
+        }
+
+        function selectAutocompleteItem(direction) {
+            const dropdown = document.getElementById('autocompleteDropdown');
+            const items = dropdown.children;
+            
+            if (items.length === 0) return;
+            
+            clearAutocompleteSelection();
+            
+            if (direction === 'down') {
+                selectedAutocompleteIndex = (selectedAutocompleteIndex + 1) % items.length;
+            } else if (direction === 'up') {
+                selectedAutocompleteIndex = selectedAutocompleteIndex <= 0 ? items.length - 1 : selectedAutocompleteIndex - 1;
+            }
+            
+            if (selectedAutocompleteIndex >= 0) {
+                items[selectedAutocompleteIndex].style.backgroundColor = '#e9ecef';
+            }
+        }
+
+        function applySelectedAutocomplete() {
+            const dropdown = document.getElementById('autocompleteDropdown');
+            const items = dropdown.children;
+            
+            if (selectedAutocompleteIndex >= 0 && selectedAutocompleteIndex < items.length) {
+                const selectedText = items[selectedAutocompleteIndex].textContent;
+                document.getElementById('campNameInput').value = selectedText;
+                dropdown.style.display = 'none';
+                selectedAutocompleteIndex = -1;
+                return true;
+            }
+            return false;
+        }
+
+        // Allow Enter key to submit camp name and handle autocomplete navigation
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('campNameInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    submitCampName();
+            const campNameInput = document.getElementById('campNameInput');
+            
+            // Handle input changes for autocomplete
+            campNameInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim().toLowerCase();
+                
+                if (query.length < 2) {
+                    document.getElementById('autocompleteDropdown').style.display = 'none';
+                    return;
+                }
+                
+                // Find matching camp names
+                const matches = allCampNames.filter(name => 
+                    name.toLowerCase().includes(query)
+                ).slice(0, 10);
+                
+                showAutocomplete(matches);
+                selectedAutocompleteIndex = -1;
+            });
+            
+            // Handle keyboard navigation
+            campNameInput.addEventListener('keydown', (e) => {
+                const dropdown = document.getElementById('autocompleteDropdown');
+                
+                if (dropdown.style.display === 'none') {
+                    if (e.key === 'Enter') {
+                        submitCampName();
+                    }
+                    return;
+                }
+                
+                switch (e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        selectAutocompleteItem('down');
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        selectAutocompleteItem('up');
+                        break;
+                    case 'Enter':
+                        e.preventDefault();
+                        if (!applySelectedAutocomplete()) {
+                            submitCampName();
+                        }
+                        break;
+                    case 'Escape':
+                        dropdown.style.display = 'none';
+                        selectedAutocompleteIndex = -1;
+                        break;
+                }
+            });
+            
+            // Hide dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!campNameInput.contains(e.target) && !document.getElementById('autocompleteDropdown').contains(e.target)) {
+                    document.getElementById('autocompleteDropdown').style.display = 'none';
                 }
             });
         });

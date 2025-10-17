@@ -19,6 +19,25 @@ body {
     cursor: crosshair;
 }
 
+/* Autocomplete dropdown styling */
+#autocompleteDropdown {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#autocompleteDropdown div {
+    transition: background-color 0.1s ease;
+}
+
+#autocompleteDropdown div:hover {
+    background-color: #e9ecef !important;
+}
+
+#autocompleteDropdown div:last-child {
+    border-bottom: none;
+}
+
 #controls {
     height: 20vh;
     padding: 20px;
