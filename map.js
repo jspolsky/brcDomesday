@@ -665,6 +665,7 @@ function updateSidebarContent(campName) {
 // Mouse panning state
 let isPanning = false;
 let lastMousePos = { x: 0, y: 0 };
+let mouseDownPos = { x: 0, y: 0 }; // Track where mouse was pressed for click detection
 
 // Mouse event handlers for panning
 canvas.addEventListener('mousedown', (e) => {
@@ -672,16 +673,9 @@ canvas.addEventListener('mousedown', (e) => {
     const canvasX = e.clientX - rect.left;
     const canvasY = e.clientY - rect.top;
 
-    // Check if clicking on a camp
-    const geo = canvasToGeo(canvasX, canvasY);
-    const clickedCamp = findCampAtLocation(geo.lon, geo.lat);
-
-    if (clickedCamp && clickedCamp.properties && clickedCamp.properties.fid) {
-        const fid = clickedCamp.properties.fid;
-        const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
-        openSidebar(campName, canvasX);
-        return; // Don't start panning when clicking on a camp
-    }
+    // Track mouse down position for click detection
+    mouseDownPos.x = canvasX;
+    mouseDownPos.y = canvasY;
 
     isPanning = true;
     lastMousePos.x = canvasX;
@@ -774,6 +768,28 @@ canvas.addEventListener('mousemove', (e) => {
 });
 
 canvas.addEventListener('mouseup', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const canvasX = e.clientX - rect.left;
+    const canvasY = e.clientY - rect.top;
+
+    // Check if this was a click (mouse didn't move much) vs a drag
+    const dx = canvasX - mouseDownPos.x;
+    const dy = canvasY - mouseDownPos.y;
+    const distanceMoved = Math.sqrt(dx * dx + dy * dy);
+
+    // If mouse moved less than 5 pixels, treat it as a click
+    if (distanceMoved < 5) {
+        // Check if clicking on a camp
+        const geo = canvasToGeo(canvasX, canvasY);
+        const clickedCamp = findCampAtLocation(geo.lon, geo.lat);
+
+        if (clickedCamp && clickedCamp.properties && clickedCamp.properties.fid) {
+            const fid = clickedCamp.properties.fid;
+            const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
+            openSidebar(campName, canvasX);
+        }
+    }
+
     isPanning = false;
     canvas.style.cursor = 'crosshair';
 });
