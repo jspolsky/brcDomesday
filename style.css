@@ -6,7 +6,7 @@ body {
 }
 
 #mapContainer {
-    height: 80vh;
+    height: 60vh;
     width: 100vw;
     position: relative;
     background-color: #fff;
@@ -39,7 +39,7 @@ body {
 }
 
 #controls {
-    height: 20vh;
+    height: 40vh;
     padding: 20px;
     background-color: #f8f8f8;
     border-top: 1px solid #ddd;
