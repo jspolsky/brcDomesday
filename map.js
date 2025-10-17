@@ -37,6 +37,8 @@ let currentPopupCampName = null; // Track which camp is currently shown in popup
 let sidebarOpen = false; // Track if sidebar is open
 let currentSidebarCampName = null; // Track which camp is in sidebar
 let sidebarOnLeft = false; // Track which side the sidebar is on
+let fullCampInfoOpen = false; // Track if full camp info is open
+let currentFullCampName = null; // Track which camp is in full info mode
 
 // Map rotation - 45 degrees clockwise to show 12:00 pointing up
 const ROTATION_ANGLE = -45 * Math.PI / 180; // -45 degrees in radians (negative = clockwise)
@@ -660,8 +662,90 @@ function moveSidebarToSide(toLeft) {
 
 // Update sidebar content when hovering over different camp
 function updateSidebarContent(campName) {
-    if (!sidebarOpen || currentSidebarCampName === campName) return;
+    if (!sidebarOpen || currentSidebarCampName === campName || fullCampInfoOpen) return;
     updateSidebarCampInfo(campName);
+}
+
+// Open full camp information mode
+function openFullCampInfo(campName) {
+    const campData = findCampDataByName(campName);
+    const overlay = document.getElementById('mapOverlay');
+    const fullInfo = document.getElementById('fullCampInfo');
+
+    fullCampInfoOpen = true;
+    currentFullCampName = campName;
+
+    // Update content
+    document.getElementById('fullCampName').textContent = campData ? (campData.name || campName) : campName;
+    document.getElementById('fullCampLocation').textContent = campData ? (campData.location_string || '') : '';
+    document.getElementById('fullCampDescription').textContent = campData ? (campData.description || 'No description available.') : 'No description available.';
+
+    // Build additional details
+    let details = '';
+    if (campData) {
+        if (campData.hometown) {
+            details += `<strong>Hometown:</strong> ${campData.hometown}<br><br>`;
+        }
+        if (campData.url) {
+            details += `<strong>Website:</strong> <a href="${campData.url}" target="_blank" style="color: #66aaff;">${campData.url}</a><br><br>`;
+        }
+        if (campData.contact_email) {
+            details += `<strong>Contact:</strong> ${campData.contact_email}<br><br>`;
+        }
+        if (campData.landmark) {
+            details += `<strong>Landmark:</strong> ${campData.landmark}<br><br>`;
+        }
+        if (campData.location && campData.location.dimensions) {
+            details += `<strong>Dimensions:</strong> ${campData.location.dimensions}<br><br>`;
+        }
+    }
+    document.getElementById('fullCampDetails').innerHTML = details;
+
+    // Update image
+    const img = document.getElementById('fullCampImage');
+    if (campName === 'First Camp') {
+        img.src = '';
+        img.src = 'firstcamp.jpg';
+        img.style.display = 'block';
+    } else if (campData && campData.images && campData.images.length > 0 && campData.images[0].thumbnail_url) {
+        const thumbnailUrl = campData.images[0].thumbnail_url;
+        img.src = '';
+        img.src = thumbnailUrl;
+        img.style.display = 'block';
+
+        // Load high-res version
+        const highResUrl = thumbnailUrl.split('?')[0];
+        if (highResUrl !== thumbnailUrl) {
+            const highResImg = new Image();
+            highResImg.onload = () => {
+                if (currentFullCampName === campName && fullCampInfoOpen) {
+                    img.src = highResUrl;
+                }
+            };
+            highResImg.src = highResUrl;
+        }
+    } else {
+        img.style.display = 'none';
+    }
+
+    // Show overlay and full info
+    overlay.classList.remove('overlay-hidden');
+    fullInfo.classList.remove('fullcamp-hidden');
+
+    // Hide sidebar
+    closeSidebar();
+}
+
+// Close full camp information mode
+function closeFullCampInfo() {
+    const overlay = document.getElementById('mapOverlay');
+    const fullInfo = document.getElementById('fullCampInfo');
+
+    overlay.classList.add('overlay-hidden');
+    fullInfo.classList.add('fullcamp-hidden');
+
+    fullCampInfoOpen = false;
+    currentFullCampName = null;
 }
 
 // Mouse panning state
@@ -788,7 +872,14 @@ canvas.addEventListener('mouseup', (e) => {
         if (clickedCamp && clickedCamp.properties && clickedCamp.properties.fid) {
             const fid = clickedCamp.properties.fid;
             const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
-            openSidebar(campName, canvasX);
+
+            // If sidebar is already open with THIS SAME camp, go to full info mode
+            if (sidebarOpen && currentSidebarCampName === campName) {
+                openFullCampInfo(campName);
+            } else {
+                // Otherwise, open/switch sidebar (works for both new camps and different camps)
+                openSidebar(campName, canvasX);
+            }
         }
     }
 
@@ -914,10 +1005,14 @@ canvas.addEventListener('touchend', (e) => {
 // Handle window resize
 window.addEventListener('resize', resizeCanvas);
 
-// Handle ESC key to close sidebar
+// Handle ESC key to close full camp info or sidebar
 window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && sidebarOpen) {
-        closeSidebar();
+    if (e.key === 'Escape') {
+        if (fullCampInfoOpen) {
+            closeFullCampInfo();
+        } else if (sidebarOpen) {
+            closeSidebar();
+        }
     }
 });
 
