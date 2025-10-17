@@ -397,6 +397,107 @@
             canvas.style.cursor = 'crosshair';
         });
 
+        // Zoom functionality
+        function zoomAtPoint(canvasX, canvasY, zoomFactor) {
+            // Get the geographic coordinates at the mouse position before zooming
+            const geoBeforeZoom = canvasToGeo(canvasX, canvasY);
+
+            // Apply the zoom
+            viewport.scale *= zoomFactor;
+
+            // Constrain zoom levels to reasonable bounds
+            const minScale = 100;   // Very zoomed out
+            const maxScale = 50000; // Very zoomed in
+            viewport.scale = Math.max(minScale, Math.min(maxScale, viewport.scale));
+
+            // Get the geographic coordinates at the same canvas position after zooming
+            const geoAfterZoom = canvasToGeo(canvasX, canvasY);
+
+            // Adjust the viewport center to keep the mouse position fixed
+            viewport.centerX += geoBeforeZoom.lon - geoAfterZoom.lon;
+            viewport.centerY += geoBeforeZoom.lat - geoAfterZoom.lat;
+
+            redraw();
+        }
+
+        // Mouse wheel zoom handler
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault(); // Prevent page scrolling
+
+            const rect = canvas.getBoundingClientRect();
+            const canvasX = e.clientX - rect.left;
+            const canvasY = e.clientY - rect.top;
+
+            // Calculate zoom factor from wheel delta
+            // Normalize the wheel delta for cross-browser compatibility
+            let deltaY = e.deltaY;
+            if (e.deltaMode === 1) { // DOM_DELTA_LINE
+                deltaY *= 40;
+            } else if (e.deltaMode === 2) { // DOM_DELTA_PAGE
+                deltaY *= 400;
+            }
+
+            // Smooth zoom factor calculation
+            const zoomSpeed = 0.001;
+            const zoomFactor = Math.exp(-deltaY * zoomSpeed);
+
+            zoomAtPoint(canvasX, canvasY, zoomFactor);
+        }, { passive: false });
+
+        // Touch/trackpad gesture support for pinch-to-zoom
+        let lastTouchDistance = 0;
+        let touchCenter = { x: 0, y: 0 };
+
+        canvas.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                // Calculate initial distance between two touches
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const rect = canvas.getBoundingClientRect();
+
+                const dx = (touch1.clientX - touch2.clientX);
+                const dy = (touch1.clientY - touch2.clientY);
+                lastTouchDistance = Math.sqrt(dx * dx + dy * dy);
+
+                // Calculate center point of the two touches
+                touchCenter.x = (touch1.clientX + touch2.clientX) / 2 - rect.left;
+                touchCenter.y = (touch1.clientY + touch2.clientY) / 2 - rect.top;
+
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 2 && lastTouchDistance > 0) {
+                // Calculate current distance between two touches
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const rect = canvas.getBoundingClientRect();
+
+                const dx = (touch1.clientX - touch2.clientX);
+                const dy = (touch1.clientY - touch2.clientY);
+                const currentDistance = Math.sqrt(dx * dx + dy * dy);
+
+                // Calculate zoom factor from distance change
+                const zoomFactor = currentDistance / lastTouchDistance;
+
+                // Update center point
+                touchCenter.x = (touch1.clientX + touch2.clientX) / 2 - rect.left;
+                touchCenter.y = (touch1.clientY + touch2.clientY) / 2 - rect.top;
+
+                zoomAtPoint(touchCenter.x, touchCenter.y, zoomFactor);
+
+                lastTouchDistance = currentDistance;
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', (e) => {
+            if (e.touches.length < 2) {
+                lastTouchDistance = 0;
+            }
+        });
+
         // Handle window resize
         window.addEventListener('resize', resizeCanvas);
 
