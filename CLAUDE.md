@@ -4,13 +4,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**BRC Domesday** is an interactive web-based map visualization tool for Burning Man 2025 camp data. The project addresses a key challenge: while Burning Man provides GeoJSON data with precise camp outlines and vectorized camp name renderings, there's no direct link between them. The goal is to create a human-assisted mapping tool to connect camp outlines (by FID) to actual camp names.
+**BRC Domesday** is an interactive web-based map visualization tool for Burning Man 2025 camp data. It shows a detailed map of Burning Man where you can mouse over any camp and see information about that camp.
+
+In building the app, we discovered a problem. 
 
 ### The Problem
 - `camp_outlines_2025.geojson` contains precise polygon boundaries with FID identifiers
 - `camp_names_2025.geojson` contains vector paths for text rendering (not OCR-friendly)
 - `camps.json` contains full camp metadata (name, description, location string, etc.)
 - No automated way exists to match outline FIDs to camp names
+
+The first step in solving this problem was to create an interactive browser which showed the user one camp at a time, and asked them to type in the name of the camp. As the user created the camp names, it built up a file camp_fid_mappings.json which mapped FIDs from camp_outlines to camp names which are almost always found in camps.json.
+
+All that code has been moved into a git branch called createcampnames. It's not present in the main branch any more. Now the main branch is a nice browser that relies on an already-constructed FID->Camp mapping.
 
 ## Architecture
 
