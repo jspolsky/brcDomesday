@@ -555,36 +555,19 @@ function hideCampPopup() {
     currentPopupCampName = null;
 }
 
-// Open sidebar with camp details
-function openSidebar(campName, mouseX) {
+// Update sidebar content with camp information
+function updateSidebarCampInfo(campName) {
     const campData = findCampDataByName(campName);
-    const sidebar = document.getElementById('campSidebar');
-
-    sidebarOpen = true;
     currentSidebarCampName = campName;
 
-    // Determine which side to show the sidebar based on mouse position
-    const isRightHalf = mouseX > canvas.width / 2;
-
-    // Remove all sidebar position classes
-    sidebar.classList.remove('sidebar-left', 'sidebar-right');
-
-    // Add appropriate position class
-    if (isRightHalf) {
-        sidebar.classList.add('sidebar-left');
-        sidebarOnLeft = true;
-    } else {
-        sidebar.classList.add('sidebar-right');
-        sidebarOnLeft = false;
-    }
-
-    // Update sidebar content
+    // Update text content
     document.getElementById('sidebarCampName').textContent = campData ? (campData.name || campName) : campName;
     document.getElementById('sidebarCampLocation').textContent = campData ? (campData.location_string || '') : '';
     document.getElementById('sidebarCampDescription').textContent = campData ? (campData.description || 'No description available.') : 'No description available.';
 
     // Update image
     const img = document.getElementById('sidebarCampImage');
+
     // Special case for First Camp - use local image
     if (campName === 'First Camp') {
         img.src = '';
@@ -615,6 +598,31 @@ function openSidebar(campName, mouseX) {
         img.src = '';
         img.style.display = 'none';
     }
+}
+
+// Open sidebar with camp details
+function openSidebar(campName, mouseX) {
+    const sidebar = document.getElementById('campSidebar');
+
+    sidebarOpen = true;
+
+    // Determine which side to show the sidebar based on mouse position
+    const isRightHalf = mouseX > canvas.width / 2;
+
+    // Remove all sidebar position classes
+    sidebar.classList.remove('sidebar-left', 'sidebar-right');
+
+    // Add appropriate position class
+    if (isRightHalf) {
+        sidebar.classList.add('sidebar-left');
+        sidebarOnLeft = true;
+    } else {
+        sidebar.classList.add('sidebar-right');
+        sidebarOnLeft = false;
+    }
+
+    // Update sidebar content
+    updateSidebarCampInfo(campName);
 
     // Show sidebar
     sidebar.classList.remove('sidebar-hidden');
@@ -653,47 +661,7 @@ function moveSidebarToSide(toLeft) {
 // Update sidebar content when hovering over different camp
 function updateSidebarContent(campName) {
     if (!sidebarOpen || currentSidebarCampName === campName) return;
-
-    const campData = findCampDataByName(campName);
-    currentSidebarCampName = campName;
-
-    // Update sidebar content
-    document.getElementById('sidebarCampName').textContent = campData ? (campData.name || campName) : campName;
-    document.getElementById('sidebarCampLocation').textContent = campData ? (campData.location_string || '') : '';
-    document.getElementById('sidebarCampDescription').textContent = campData ? (campData.description || 'No description available.') : 'No description available.';
-
-    // Update image
-    const img = document.getElementById('sidebarCampImage');
-    // Special case for First Camp - use local image
-    if (campName === 'First Camp') {
-        img.src = '';
-        img.src = 'firstcamp.jpg';
-        img.style.display = 'block';
-    } else if (campData && campData.images && campData.images.length > 0 && campData.images[0].thumbnail_url) {
-        const thumbnailUrl = campData.images[0].thumbnail_url;
-
-        // First load the thumbnail
-        img.src = '';
-        img.src = thumbnailUrl;
-        img.style.display = 'block';
-
-        // Then load high-res version by removing query string
-        const highResUrl = thumbnailUrl.split('?')[0];
-        if (highResUrl !== thumbnailUrl) {
-            // Create a new image to preload the high-res version
-            const highResImg = new Image();
-            highResImg.onload = () => {
-                // Only update if we're still showing the same camp
-                if (currentSidebarCampName === campName && sidebarOpen) {
-                    img.src = highResUrl;
-                }
-            };
-            highResImg.src = highResUrl;
-        }
-    } else {
-        img.src = '';
-        img.style.display = 'none';
-    }
+    updateSidebarCampInfo(campName);
 }
 
 // Mouse panning state
