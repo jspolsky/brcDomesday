@@ -321,11 +321,12 @@ button:hover {
 
 #fullCampImage {
     width: 100%;
-    max-width: 800px;
+    max-height: 67.5vh;
     height: auto;
+    object-fit: contain;
     border-radius: 12px;
     margin-bottom: 20px;
-    background-color: #9b59b6;
+    background-color: #000000;
     display: block;
 }
 
