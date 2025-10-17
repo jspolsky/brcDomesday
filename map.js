@@ -752,6 +752,9 @@ function closeFullCampInfo() {
 let isPanning = false;
 let lastMousePos = { x: 0, y: 0 };
 let mouseDownPos = { x: 0, y: 0 }; // Track where mouse was pressed for click detection
+let lastClickTime = 0; // Track last click time for double-click detection
+let lastClickedCamp = null; // Track last clicked camp for double-click detection
+let singleClickTimer = null; // Timer for delayed single-click action
 
 // Mouse event handlers for panning
 canvas.addEventListener('mousedown', (e) => {
@@ -873,12 +876,41 @@ canvas.addEventListener('mouseup', (e) => {
             const fid = clickedCamp.properties.fid;
             const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
 
-            // If sidebar is already open with THIS SAME camp, go to full info mode
-            if (sidebarOpen && currentSidebarCampName === campName) {
+            const currentTime = Date.now();
+            const timeSinceLastClick = currentTime - lastClickTime;
+
+            // Check for double-click (within 300ms and same camp)
+            const isDoubleClick = timeSinceLastClick < 300 && lastClickedCamp === campName;
+
+            if (isDoubleClick) {
+                // Double-click detected: cancel any pending single-click and go to full info
+                if (singleClickTimer) {
+                    clearTimeout(singleClickTimer);
+                    singleClickTimer = null;
+                }
+                openFullCampInfo(campName);
+                // Reset to prevent triple-click from triggering
+                lastClickTime = 0;
+                lastClickedCamp = null;
+            } else if (sidebarOpen && currentSidebarCampName === campName) {
+                // Click on same camp while sidebar is already open: go to full info immediately
                 openFullCampInfo(campName);
             } else {
-                // Otherwise, open/switch sidebar (works for both new camps and different camps)
-                openSidebar(campName, canvasX);
+                // Potential single click: delay action to see if double-click follows
+                // Clear any existing timer first
+                if (singleClickTimer) {
+                    clearTimeout(singleClickTimer);
+                }
+
+                // Set a timer to open/switch sidebar after double-click window
+                singleClickTimer = setTimeout(() => {
+                    openSidebar(campName, canvasX);
+                    singleClickTimer = null;
+                }, 300);
+
+                // Track this click for double-click detection
+                lastClickTime = currentTime;
+                lastClickedCamp = campName;
             }
         }
     }
