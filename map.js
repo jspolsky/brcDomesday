@@ -6,6 +6,7 @@ const loadingStatus = document.getElementById('loadingStatus');
 // Data storage
 let campOutlines = null;
 let campFidMappings = null; // Maps FID to camp name
+let campsData = null; // Full camp data from camps.json
 let showOutlines = false; // Don't display outlines, but keep for hit testing
 
 // Background map image
@@ -386,6 +387,9 @@ async function init() {
     // Load camp FID to name mappings
     campFidMappings = await loadJSON('data/camp_fid_mappings.json');
 
+    // Load full camp data
+    campsData = await loadJSON('data/camps.json');
+
     // Load camp outlines
     campOutlines = await loadGeoJSON('data/camp_outlines_2025.geojson');
 
@@ -459,6 +463,83 @@ function showInfo() {
     alert('BRC Domesday Book\n\nAn interactive map viewer for Burning Man 2025 camp locations.\n\nControls:\n- Click and drag to pan\n- Scroll to zoom\n- Hover over camps to see their names');
 }
 
+// Find camp data by name
+function findCampDataByName(campName) {
+    if (!campsData || !campName) return null;
+
+    // Try exact match first
+    let camp = campsData.find(c => c.name === campName);
+    if (camp) return camp;
+
+    // Try case-insensitive match
+    const lowerCampName = campName.toLowerCase();
+    camp = campsData.find(c => c.name && c.name.toLowerCase() === lowerCampName);
+
+    return camp;
+}
+
+// Show camp popup
+function showCampPopup(campName, mouseX, mouseY) {
+    const popup = document.getElementById('campPopup');
+    const campData = findCampDataByName(campName);
+
+    if (!campData) {
+        popup.style.display = 'none';
+        return;
+    }
+
+    // Update popup content
+    document.getElementById('campPopupName').textContent = campData.name || campName;
+    document.getElementById('campPopupLocation').textContent = campData.location_string || '';
+
+    // Update image
+    const img = document.getElementById('campPopupImage');
+    if (campData.images && campData.images.length > 0 && campData.images[0].thumbnail_url) {
+        img.src = campData.images[0].thumbnail_url;
+        img.style.display = 'block';
+    } else {
+        img.style.display = 'none';
+    }
+
+    // Position the popup
+    popup.style.display = 'block';
+
+    // Get popup dimensions after making it visible
+    const popupRect = popup.getBoundingClientRect();
+    const canvasRect = canvas.getBoundingClientRect();
+
+    // Calculate position - offset from mouse to avoid blocking the camp
+    const offset = 20;
+    let left = mouseX + offset;
+    let top = mouseY + offset;
+
+    // Adjust horizontal position if popup would go off right edge
+    if (left + popupRect.width > canvasRect.width) {
+        left = mouseX - popupRect.width - offset;
+    }
+
+    // Adjust vertical position based on which half of screen we're in
+    if (mouseY < canvasRect.height / 2) {
+        // Top half - show below mouse
+        top = mouseY + offset;
+    } else {
+        // Bottom half - show above mouse
+        top = mouseY - popupRect.height - offset;
+    }
+
+    // Ensure popup stays within canvas bounds
+    left = Math.max(0, Math.min(left, canvasRect.width - popupRect.width));
+    top = Math.max(0, Math.min(top, canvasRect.height - popupRect.height));
+
+    popup.style.left = left + 'px';
+    popup.style.top = top + 'px';
+}
+
+// Hide camp popup
+function hideCampPopup() {
+    document.getElementById('campPopup').style.display = 'none';
+}
+
 // Mouse panning state
 let isPanning = false;
 let lastMousePos = { x: 0, y: 0 };
@@ -523,11 +604,20 @@ canvas.addEventListener('mousemove', (e) => {
                 const fid = highlightedCamp.properties.fid;
                 const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
                 campDisplay.textContent = campName;
+
+                // Show popup with camp info
+                showCampPopup(campName, canvasX, canvasY);
             } else {
                 campDisplay.textContent = '';
+                hideCampPopup();
             }
 
             redraw();
+        } else if (highlightedCamp) {
+            // Camp hasn't changed but mouse moved - update popup position
+            const fid = highlightedCamp.properties.fid;
+            const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
+            showCampPopup(campName, canvasX, canvasY);
         }
     }
 });
@@ -546,6 +636,7 @@ canvas.addEventListener('mouseleave', (e) => {
     if (highlightedCamp) {
         highlightedCamp = null;
         document.getElementById('currentCamp').textContent = '';
+        hideCampPopup();
         redraw();
     }
 });

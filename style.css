@@ -91,3 +91,46 @@ button:hover {
 #infoButton:hover {
     background-color: #5a6268;
 }
+
+#campPopup {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 2px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    pointer-events: none;
+    z-index: 1000;
+    max-width: 300px;
+}
+
+#campPopupContent {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+#campPopupImage {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+#campPopupInfo {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+#campPopupName {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 5px;
+    word-wrap: break-word;
+}
+
+#campPopupLocation {
+    font-size: 12px;
+    color: #666;
+}
