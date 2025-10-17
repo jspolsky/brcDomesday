@@ -494,7 +494,13 @@ function showCampPopup(campName, mouseX, mouseY) {
 
         // Update image
         const img = document.getElementById('campPopupImage');
-        if (campData && campData.images && campData.images.length > 0 && campData.images[0].thumbnail_url) {
+
+        // Special case for First Camp - use local image
+        if (campName === 'First Camp') {
+            img.src = '';
+            img.src = 'firstcamp.jpg';
+            img.style.display = 'block';
+        } else if (campData && campData.images && campData.images.length > 0 && campData.images[0].thumbnail_url) {
             // Clear the current image first to show purple placeholder while loading
             img.src = '';
             // Then set the new image URL
