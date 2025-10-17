@@ -466,7 +466,7 @@ function toggleOutlines() {
 
 // Info button handler (placeholder)
 function showInfo() {
-    alert('BRC Domesday Book\n\nAn interactive map viewer for Burning Man 2025 camp locations.\n\nControls:\n- Click and drag to pan\n- Scroll to zoom\n- Hover over camps to see their names');
+    alert('BRC Domesday Book\n\nAn interactive map viewer for Burning Man 2025 camp locations.\n\nControls:\n- Click and drag to pan\n- Scroll to zoom\n- Hover over camps to see their names and pictures\n- Click once for more info on a camp; double click for full details');
 }
 
 // Find camp data by name
