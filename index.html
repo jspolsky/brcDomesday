@@ -22,6 +22,7 @@
                 <span class="stats" id="namesCount">Camp Names: Loading...</span>
                 <span class="stats" id="coordinates">Mouse: --, --</span>
                 <span class="stats" id="currentCamp">Camp: None</span>
+                <span class="stats" id="diagnostic" style="color: red; display: none;"></span>
             </div>
         </div>
 
@@ -59,6 +60,7 @@
 
         // Camp highlighting
         let highlightedCamp = null;
+        let lastDiagnostic = '';
 
         // View settings
         let viewport = {
@@ -127,28 +129,67 @@
             return inside;
         }
 
-        // Find which camp contains the given geographic coordinate
+        // Find which camp contains the given geographic coordinate (with diagnostics)
         function findCampAtLocation(lon, lat) {
-            if (!campOutlines) return null;
+            lastDiagnostic = ''; // Reset diagnostic message
+            
+            if (!campOutlines) {
+                lastDiagnostic = 'No camp outline data loaded';
+                return null;
+            }
+
+            let totalFeatures = 0;
+            let lineStringFeatures = 0;
+            let validLengthFeatures = 0;
+            let closedPolygons = 0;
+            let testedFeatures = [];
 
             for (const feature of campOutlines.features) {
+                totalFeatures++;
+                
                 if (feature.geometry.type === 'LineString') {
+                    lineStringFeatures++;
                     const coordinates = feature.geometry.coordinates;
 
                     // Check if the coordinates form a closed polygon
                     if (coordinates.length > 3) {
+                        validLengthFeatures++;
                         const first = coordinates[0];
                         const last = coordinates[coordinates.length - 1];
-                        const isClosed = Math.abs(first[0] - last[0]) < 0.000001 &&
-                            Math.abs(first[1] - last[1]) < 0.000001;
+                        const tolerance = 0.000001;
+                        const isClosed = Math.abs(first[0] - last[0]) < tolerance &&
+                            Math.abs(first[1] - last[1]) < tolerance;
 
-                        if (isClosed && isPointInPolygon(lon, lat, coordinates)) {
-                            return feature;
+                        if (isClosed) {
+                            closedPolygons++;
+                            
+                            // Test if point is inside this polygon
+                            if (isPointInPolygon(lon, lat, coordinates)) {
+                                return feature; // Found it!
+                            }
+                            
+                            // For debugging, track some tested features
+                            if (testedFeatures.length < 3) {
+                                const fid = feature.properties ? feature.properties.fid : 'unknown';
+                                testedFeatures.push(fid);
+                            }
                         }
                     }
                 }
             }
 
+            // Generate diagnostic message
+            const parts = [];
+            parts.push(`${totalFeatures} total features`);
+            parts.push(`${lineStringFeatures} LineStrings`);
+            parts.push(`${validLengthFeatures} valid length`);
+            parts.push(`${closedPolygons} closed polygons`);
+            
+            if (testedFeatures.length > 0) {
+                parts.push(`tested: ${testedFeatures.join(', ')}`);
+            }
+            
+            lastDiagnostic = `No match found: ${parts.join(', ')}`;
             return null;
         }
 
@@ -190,6 +231,37 @@
             ctx.fill();
         }
 
+        // Calculate the centroid (geometric center) of a polygon
+        function calculateCentroid(coordinates) {
+            if (coordinates.length === 0) return null;
+            
+            let sumLon = 0;
+            let sumLat = 0;
+            
+            for (const coord of coordinates) {
+                sumLon += coord[0];
+                sumLat += coord[1];
+            }
+            
+            return [sumLon / coordinates.length, sumLat / coordinates.length];
+        }
+
+        // Draw a star marker at a geographic location
+        function drawStarMarker(lon, lat, color = 'red', size = 12) {
+            const canvasPoint = geoToCanvas(lon, lat);
+            
+            // Only draw if the point is visible on canvas
+            if (canvasPoint.x >= 0 && canvasPoint.x <= canvas.width && 
+                canvasPoint.y >= 0 && canvasPoint.y <= canvas.height) {
+                
+                ctx.font = `${size}px Arial`;
+                ctx.fillStyle = color;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('⭐', canvasPoint.x, canvasPoint.y);
+            }
+        }
+
         // Render all data
         function redraw() {
             // Clear canvas
@@ -200,15 +272,43 @@
             if (campOutlines && showOutlines) {
                 campOutlines.features.forEach(feature => {
                     if (feature.geometry.type === 'LineString') {
+                        const coordinates = feature.geometry.coordinates;
+                        
                         // Fill highlighted camp with yellow background
                         if (highlightedCamp && feature === highlightedCamp) {
-                            fillPolygon(feature.geometry.coordinates, 'rgba(255, 255, 0, 0.3)');
+                            fillPolygon(coordinates, 'rgba(255, 255, 0, 0.3)');
                         }
 
                         // Draw the outline
                         const color = (highlightedCamp && feature === highlightedCamp) ? 'orange' : 'lightblue';
                         const lineWidth = (highlightedCamp && feature === highlightedCamp) ? 3 : 2;
-                        drawLineString(feature.geometry.coordinates, color, lineWidth);
+                        drawLineString(coordinates, color, lineWidth);
+                    }
+                });
+            }
+
+            // Mark unclosed polygons with red stars
+            if (campOutlines && showOutlines) {
+                campOutlines.features.forEach(feature => {
+                    if (feature.geometry.type === 'LineString') {
+                        const coordinates = feature.geometry.coordinates;
+                        
+                        // Check if this polygon is unclosed
+                        if (coordinates.length > 3) {
+                            const first = coordinates[0];
+                            const last = coordinates[coordinates.length - 1];
+                            const tolerance = 0.000001;
+                            const isClosed = Math.abs(first[0] - last[0]) < tolerance &&
+                                Math.abs(first[1] - last[1]) < tolerance;
+                            
+                            // If not closed, draw a red star at the centroid
+                            if (!isClosed) {
+                                const centroid = calculateCentroid(coordinates);
+                                if (centroid) {
+                                    drawStarMarker(centroid[0], centroid[1], 'red', 16);
+                                }
+                            }
+                        }
                     }
                 });
             }
@@ -394,12 +494,21 @@
                 if (newHighlightedCamp !== highlightedCamp) {
                     highlightedCamp = newHighlightedCamp;
 
-                    // Update camp display
+                    // Update camp display and diagnostic information
                     const campDisplay = document.getElementById('currentCamp');
+                    const diagnosticDisplay = document.getElementById('diagnostic');
+                    
                     if (highlightedCamp && highlightedCamp.properties && highlightedCamp.properties.fid) {
                         campDisplay.textContent = `Camp: ${highlightedCamp.properties.fid}`;
+                        diagnosticDisplay.style.display = 'none';
                     } else {
                         campDisplay.textContent = 'Camp: None';
+                        if (lastDiagnostic) {
+                            diagnosticDisplay.textContent = lastDiagnostic;
+                            diagnosticDisplay.style.display = 'inline-block';
+                        } else {
+                            diagnosticDisplay.style.display = 'none';
+                        }
                     }
 
                     redraw();
@@ -421,6 +530,7 @@
             if (highlightedCamp) {
                 highlightedCamp = null;
                 document.getElementById('currentCamp').textContent = 'Camp: None';
+                document.getElementById('diagnostic').style.display = 'none';
                 redraw();
             }
         });
