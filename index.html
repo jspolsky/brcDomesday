@@ -31,6 +31,25 @@
             <button onclick="zoomToFit()">Zoom to Fit</button>
             <button onclick="toggleNames()">Toggle Names</button>
             <button onclick="toggleOutlines()">Toggle Outlines</button>
+            <button onclick="startCampMapping()">Start Camp Naming</button>
+        </div>
+
+        <div class="control-section" id="campNamingSection" style="display: none;">
+            <h3>Camp Naming Process</h3>
+            <div id="campProgress">Progress: 0 / 0 camps named</div>
+            <div style="margin: 10px 0;">
+                <strong>Current Camp FID: <span id="currentFID">-</span></strong>
+            </div>
+            <div style="margin: 10px 0;">
+                <label for="campNameInput">Camp Name:</label>
+                <input type="text" id="campNameInput" placeholder="Enter camp name..." style="margin-left: 10px; padding: 5px; width: 200px;">
+                <button onclick="submitCampName()" style="margin-left: 10px;">Submit</button>
+                <button onclick="skipCamp()" style="margin-left: 5px; background-color: #6c757d;">Skip</button>
+            </div>
+            <div>
+                <button onclick="saveMappings()">Save Mappings</button>
+                <button onclick="stopCampMapping()">Stop Naming</button>
+            </div>
         </div>
 
         <div class="control-section">
@@ -61,6 +80,12 @@
         // Camp highlighting
         let highlightedCamp = null;
         let lastDiagnostic = '';
+
+        // Camp naming system
+        let campNamingMode = false;
+        let currentNamingFID = 1;
+        let campMappings = {}; // FID -> camp name mapping
+        let allFIDs = []; // Array of all FID numbers from the data
 
         // View settings
         let viewport = {
@@ -337,6 +362,57 @@
             }
         }
 
+        // Load existing FID mappings if available
+        async function loadCampMappings() {
+            // First try to load from data/camp_fid_mappings.json (preferred)
+            try {
+                const response = await fetch('data/camp_fid_mappings.json');
+                if (response.ok) {
+                    const mappings = await response.json();
+                    campMappings = mappings;
+                    const loadedCount = Object.keys(mappings).length;
+                    console.log(`Loaded ${loadedCount} existing camp mappings from file`);
+                    
+                    // Update status to show mappings were loaded
+                    if (loadedCount > 0) {
+                        loadingStatus.textContent = `Loaded ${loadedCount} existing camp mappings from file`;
+                        setTimeout(() => {
+                            loadingStatus.textContent = 'Ready';
+                        }, 2000);
+                    }
+                    
+                    return mappings;
+                }
+            } catch (error) {
+                console.log('No camp mappings file found, checking browser storage...');
+            }
+            
+            // Fallback: try localStorage
+            try {
+                const storedMappings = localStorage.getItem('brc_camp_mappings');
+                if (storedMappings) {
+                    const mappings = JSON.parse(storedMappings);
+                    campMappings = mappings;
+                    const loadedCount = Object.keys(mappings).length;
+                    console.log(`Loaded ${loadedCount} existing camp mappings from browser storage`);
+                    
+                    if (loadedCount > 0) {
+                        loadingStatus.textContent = `Loaded ${loadedCount} camp mappings from browser storage`;
+                        setTimeout(() => {
+                            loadingStatus.textContent = 'Ready';
+                        }, 2000);
+                    }
+                    
+                    return mappings;
+                }
+            } catch (error) {
+                console.log('No browser storage mappings found');
+            }
+            
+            console.log('Starting fresh - no existing mappings found');
+            return {};
+        }
+
         // Initialize the application
         async function init() {
             loadingStatus.textContent = 'Loading camp outlines...';
@@ -355,6 +431,25 @@
             if (campNames) {
                 document.getElementById('namesCount').textContent =
                     `Camp Names: ${campNames.features.length}`;
+            }
+
+            loadingStatus.textContent = 'Loading existing camp mappings...';
+
+            // Load existing camp FID mappings if available
+            await loadCampMappings();
+            
+            // Extract all FIDs from camp outlines for progress tracking
+            if (campOutlines) {
+                allFIDs = campOutlines.features.map(f => f.properties.fid).sort((a, b) => a - b);
+                console.log(`Found ${allFIDs.length} total camps for naming`);
+            }
+            
+            // Update progress display with loaded mappings
+            updateNamingProgress();
+            
+            const mappedCount = Object.keys(campMappings).length;
+            if (mappedCount > 0) {
+                console.log(`Found ${mappedCount} existing camp name mappings`);
             }
 
             loadingStatus.style.display = 'none';
@@ -442,6 +537,165 @@
             redraw();
         }
 
+        // Camp naming system functions
+        function startCampMapping() {
+            if (!campOutlines) {
+                alert('Please wait for camp data to load first.');
+                return;
+            }
+
+            // Extract all FIDs from the data
+            allFIDs = campOutlines.features.map(feature => feature.properties.fid).sort((a, b) => a - b);
+            
+            campNamingMode = true;
+            currentNamingFID = findNextUnnamedCamp();
+            
+            document.getElementById('campNamingSection').style.display = 'block';
+            updateNamingProgress();
+            
+            if (currentNamingFID !== -1) {
+                zoomToCamp(currentNamingFID);
+            } else {
+                alert('All camps have been named!');
+                stopCampMapping();
+            }
+        }
+
+        function stopCampMapping() {
+            campNamingMode = false;
+            document.getElementById('campNamingSection').style.display = 'none';
+            highlightedCamp = null;
+            redraw();
+        }
+
+        function findNextUnnamedCamp() {
+            for (const fid of allFIDs) {
+                if (!campMappings[fid]) {
+                    return fid;
+                }
+            }
+            return -1; // All camps named
+        }
+
+        function zoomToCamp(fid) {
+            const camp = campOutlines.features.find(f => f.properties.fid === fid);
+            if (!camp) return;
+
+            // Calculate camp bounds
+            const coords = camp.geometry.coordinates;
+            let minLon = Infinity, maxLon = -Infinity;
+            let minLat = Infinity, maxLat = -Infinity;
+
+            coords.forEach(coord => {
+                minLon = Math.min(minLon, coord[0]);
+                maxLon = Math.max(maxLon, coord[0]);
+                minLat = Math.min(minLat, coord[1]);
+                maxLat = Math.max(maxLat, coord[1]);
+            });
+
+            // Center on the camp
+            viewport.centerX = (minLon + maxLon) / 2;
+            viewport.centerY = (minLat + maxLat) / 2;
+
+            // Zoom in to show the camp clearly
+            const latRange = maxLat - minLat;
+            const lonRange = maxLon - minLon;
+            const latScale = Math.cos(viewport.centerY * Math.PI / 180);
+
+            const scaleX = (canvas.width * 0.3) / (lonRange * latScale);
+            const scaleY = (canvas.height * 0.3) / latRange;
+            viewport.scale = Math.min(scaleX, scaleY);
+
+            // Highlight the camp
+            highlightedCamp = camp;
+            
+            // Update UI
+            document.getElementById('currentFID').textContent = fid;
+            document.getElementById('campNameInput').value = '';
+            document.getElementById('campNameInput').focus();
+            
+            redraw();
+        }
+
+        function submitCampName() {
+            const campName = document.getElementById('campNameInput').value.trim();
+            if (!campName) {
+                alert('Please enter a camp name.');
+                return;
+            }
+
+            // Save the mapping
+            campMappings[currentNamingFID] = campName;
+            console.log(`Mapped FID ${currentNamingFID} -> "${campName}"`);
+            
+            // Auto-save to localStorage as backup
+            localStorage.setItem('brc_camp_mappings', JSON.stringify(campMappings));
+
+            // Move to next camp
+            moveToNextCamp();
+        }
+
+        function skipCamp() {
+            // Mark as skipped (empty string)
+            campMappings[currentNamingFID] = '';
+            console.log(`Skipped FID ${currentNamingFID}`);
+            
+            // Move to next camp
+            moveToNextCamp();
+        }
+
+        function moveToNextCamp() {
+            currentNamingFID = findNextUnnamedCamp();
+            updateNamingProgress();
+            
+            if (currentNamingFID !== -1) {
+                zoomToCamp(currentNamingFID);
+            } else {
+                alert('All camps have been processed! You can now save the mappings.');
+                stopCampMapping();
+            }
+        }
+
+        function updateNamingProgress() {
+            const named = Object.keys(campMappings).length;
+            const total = allFIDs.length;
+            const percentage = total > 0 ? Math.round((named / total) * 100) : 0;
+            
+            let progressText = `Progress: ${named} / ${total} camps processed (${percentage}%)`;
+            if (named > 0) {
+                progressText += ` • ${named} camps named`;
+            }
+            
+            document.getElementById('campProgress').textContent = progressText;
+        }
+
+        function saveMappings() {
+            const dataStr = JSON.stringify(campMappings, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'camp_fid_mappings.json';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            console.log('Camp mappings saved:', campMappings);
+            
+            // Show instructions for persistence
+            const mappedCount = Object.keys(campMappings).length;
+            alert(`Mappings downloaded! (${mappedCount} camps)\n\nTo make these mappings load automatically next time:\n1. Move the downloaded 'camp_fid_mappings.json' file\n2. From your Downloads folder\n3. To: data/camp_fid_mappings.json\n\nThe app will then load your mappings automatically on next visit.`);
+        }
+
+        // Allow Enter key to submit camp name
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('campNameInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    submitCampName();
+                }
+            });
+        });
+
         // Mouse panning state
         let isPanning = false;
         let lastMousePos = { x: 0, y: 0 };
@@ -499,7 +753,14 @@
                     const diagnosticDisplay = document.getElementById('diagnostic');
                     
                     if (highlightedCamp && highlightedCamp.properties && highlightedCamp.properties.fid) {
-                        campDisplay.textContent = `Camp: ${highlightedCamp.properties.fid}`;
+                        const fid = highlightedCamp.properties.fid;
+                        const campName = campMappings[fid];
+                        
+                        if (campName) {
+                            campDisplay.textContent = `Camp: ${fid} - "${campName}"`;
+                        } else {
+                            campDisplay.textContent = `Camp: ${fid} (unnamed)`;
+                        }
                         diagnosticDisplay.style.display = 'none';
                     } else {
                         campDisplay.textContent = 'Camp: None';
