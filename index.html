@@ -726,6 +726,35 @@
                 return;
             }
             
+            // If there's exactly one match, auto-fill the input and select the untyped portion
+            if (matches.length === 1) {
+                const input = document.getElementById('campNameInput');
+                const currentValue = input.value;
+                const matchValue = matches[0];
+                
+                // Set the full match as the value
+                input.value = matchValue;
+                
+                // Select the portion the user didn't type
+                // Find where the user's input appears in the match (case-insensitive)
+                const userInput = currentValue.toLowerCase();
+                const matchLower = matchValue.toLowerCase();
+                const matchIndex = matchLower.indexOf(userInput);
+                
+                if (matchIndex !== -1) {
+                    // Select from the end of user's input to the end of the match
+                    const selectionStart = matchIndex + currentValue.length;
+                    input.setSelectionRange(selectionStart, matchValue.length);
+                } else {
+                    // Fallback: select everything after the current input length
+                    input.setSelectionRange(currentValue.length, matchValue.length);
+                }
+                
+                dropdown.style.display = 'none';
+                selectedAutocompleteIndex = -1;
+                return;
+            }
+            
             matches.slice(0, 10).forEach((match, index) => { // Show max 10 matches
                 const item = document.createElement('div');
                 item.textContent = match;
