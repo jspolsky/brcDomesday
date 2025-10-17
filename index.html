@@ -18,8 +18,8 @@
         <div class="control-section">
             <h3>BRC Domesday - Camp Map Visualization</h3>
             <div id="stats">
-                <span class="stats" id="outlinesCount">Camp Outlines: Loading...</span>
-                <span class="stats" id="coordinates">Mouse: --, --</span>
+                <span class="stats" id="outlinesCount">Number of camps: Loading...</span>
+                <span class="stats" id="coordinates">Lat / Long: --, --</span>
                 <span class="stats" id="currentCamp">Camp: None</span>
             </div>
         </div>
@@ -27,16 +27,8 @@
         <div class="control-section">
             <h3>Controls</h3>
             <button onclick="zoomToFit()">Zoom to Fit</button>
-            <button onclick="toggleOutlines()">Toggle Outlines</button>
         </div>
 
-        <div class="control-section">
-            <h3>Legend</h3>
-            <div style="display: flex; align-items: center; margin-bottom: 5px;">
-                <div style="width: 20px; height: 3px; background-color: lightblue; margin-right: 10px;"></div>
-                <span>Camp Outlines</span>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -432,7 +424,7 @@
             campOutlines = await loadGeoJSON('data/camp_outlines_2025.geojson');
             if (campOutlines) {
                 document.getElementById('outlinesCount').textContent =
-                    `Camp Outlines: ${campOutlines.features.length}`;
+                    `Number of camps: ${campOutlines.features.length}`;
             }
 
             loadingStatus.style.display = 'none';
@@ -548,7 +540,7 @@
             // Update coordinate display and camp detection
             const geo = canvasToGeo(canvasX, canvasY);
             document.getElementById('coordinates').textContent =
-                `Mouse: ${geo.lon.toFixed(6)}, ${geo.lat.toFixed(6)}`;
+                `Lat / Long: ${geo.lat.toFixed(6)}, ${geo.lon.toFixed(6)}`;
 
             // Check if mouse is over a camp (only when not panning)
             if (!isPanning) {
