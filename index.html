@@ -407,7 +407,7 @@
 
             // Constrain zoom levels to reasonable bounds
             const minScale = 100;   // Very zoomed out
-            const maxScale = 50000; // Very zoomed in
+            const maxScale = 500000; // Very zoomed in
             viewport.scale = Math.max(minScale, Math.min(maxScale, viewport.scale));
 
             // Get the geographic coordinates at the same canvas position after zooming
