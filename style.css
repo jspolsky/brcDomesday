@@ -116,6 +116,7 @@ button:hover {
     object-fit: cover;
     border-radius: 4px;
     flex-shrink: 0;
+    background-color: #9b59b6;
 }
 
 #campPopupInfo {

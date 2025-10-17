@@ -33,6 +33,7 @@ const BACKGROUND_IMAGE_SETTINGS = {
 
 // Camp highlighting
 let highlightedCamp = null;
+let currentPopupCampName = null; // Track which camp is currently shown in popup
 
 // Map rotation - 45 degrees clockwise to show 12:00 pointing up
 const ROTATION_ANGLE = -45 * Math.PI / 180; // -45 degrees in radians (negative = clockwise)
@@ -485,20 +486,30 @@ function showCampPopup(campName, mouseX, mouseY) {
 
     if (!campData) {
         popup.style.display = 'none';
+        currentPopupCampName = null;
         return;
     }
 
-    // Update popup content
-    document.getElementById('campPopupName').textContent = campData.name || campName;
-    document.getElementById('campPopupLocation').textContent = campData.location_string || '';
+    // Only update content if switching to a different camp
+    if (currentPopupCampName !== campName) {
+        currentPopupCampName = campName;
 
-    // Update image
-    const img = document.getElementById('campPopupImage');
-    if (campData.images && campData.images.length > 0 && campData.images[0].thumbnail_url) {
-        img.src = campData.images[0].thumbnail_url;
-        img.style.display = 'block';
-    } else {
-        img.style.display = 'none';
+        // Update popup content
+        document.getElementById('campPopupName').textContent = campData.name || campName;
+        document.getElementById('campPopupLocation').textContent = campData.location_string || '';
+
+        // Update image
+        const img = document.getElementById('campPopupImage');
+        if (campData.images && campData.images.length > 0 && campData.images[0].thumbnail_url) {
+            // Clear the current image first to show purple placeholder while loading
+            img.src = '';
+            // Then set the new image URL
+            img.src = campData.images[0].thumbnail_url;
+            img.style.display = 'block';
+        } else {
+            img.src = '';
+            img.style.display = 'none';
+        }
     }
 
     // Position the popup
@@ -538,6 +549,7 @@ function showCampPopup(campName, mouseX, mouseY) {
 // Hide camp popup
 function hideCampPopup() {
     document.getElementById('campPopup').style.display = 'none';
+    currentPopupCampName = null;
 }
 
 // Mouse panning state
