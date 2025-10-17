@@ -47,6 +47,7 @@
 
         // Data storage
         let campOutlines = null;
+        let campFidMappings = null; // Maps FID to camp name
         let showOutlines = false; // Don't display outlines, but keep for hit testing
 
         // Background map image
@@ -393,6 +394,20 @@
             }
         }
 
+        // Load JSON data (generic)
+        async function loadJSON(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(`Failed to load ${url}:`, error);
+                return null;
+            }
+        }
+
         // Initialize the application
         async function init() {
             loadingStatus.textContent = 'Loading background map image...';
@@ -408,7 +423,10 @@
                 };
             });
 
-            loadingStatus.textContent = 'Loading camp outlines...';
+            loadingStatus.textContent = 'Loading camp data...';
+
+            // Load camp FID to name mappings
+            campFidMappings = await loadJSON('data/camp_fid_mappings.json');
 
             // Load camp outlines
             campOutlines = await loadGeoJSON('data/camp_outlines_2025.geojson');
@@ -541,9 +559,11 @@
 
                     // Update camp display
                     const campDisplay = document.getElementById('currentCamp');
-                    
+
                     if (highlightedCamp && highlightedCamp.properties && highlightedCamp.properties.fid) {
-                        campDisplay.textContent = `Camp: ${highlightedCamp.properties.fid}`;
+                        const fid = highlightedCamp.properties.fid;
+                        const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
+                        campDisplay.textContent = `Camp: ${campName}`;
                     } else {
                         campDisplay.textContent = 'Camp: None';
                     }
