@@ -14,21 +14,14 @@
         <div id="loadingStatus">Loading camp data...</div>
     </div>
 
-    <div id="controls">
-        <div class="control-section">
-            <h3>BRC Domesday - Camp Map Visualization</h3>
-            <div id="stats">
-                <span class="stats" id="outlinesCount">Number of camps: Loading...</span>
-                <span class="stats" id="coordinates">Lat / Long: --, --</span>
-                <span class="stats" id="currentCamp">Camp: None</span>
-            </div>
-        </div>
-
-        <div class="control-section">
-            <h3>Controls</h3>
+    <div id="statusBar">
+        <span id="appName">BRC Domesday Book</span>
+        <span id="coordinates">--, --</span>
+        <span id="currentCamp"></span>
+        <div id="statusBarButtons">
+            <button id="infoButton" onclick="showInfo()" title="Information">ⓘ</button>
             <button onclick="zoomToFit()">Zoom to Fit</button>
         </div>
-
     </div>
 
     <script src="map.js"></script>

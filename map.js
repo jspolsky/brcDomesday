@@ -388,10 +388,6 @@ async function init() {
 
     // Load camp outlines
     campOutlines = await loadGeoJSON('data/camp_outlines_2025.geojson');
-    if (campOutlines) {
-        document.getElementById('outlinesCount').textContent =
-            `Number of camps: ${campOutlines.features.length}`;
-    }
 
     loadingStatus.style.display = 'none';
 
@@ -458,6 +454,11 @@ function toggleOutlines() {
     redraw();
 }
 
+// Info button handler (placeholder)
+function showInfo() {
+    alert('BRC Domesday Book\n\nAn interactive map viewer for Burning Man 2025 camp locations.\n\nControls:\n- Click and drag to pan\n- Scroll to zoom\n- Hover over camps to see their names');
+}
+
 // Mouse panning state
 let isPanning = false;
 let lastMousePos = { x: 0, y: 0 };
@@ -506,7 +507,7 @@ canvas.addEventListener('mousemove', (e) => {
     // Update coordinate display and camp detection
     const geo = canvasToGeo(canvasX, canvasY);
     document.getElementById('coordinates').textContent =
-        `Lat / Long: ${geo.lat.toFixed(6)}, ${geo.lon.toFixed(6)}`;
+        `${geo.lat.toFixed(6)}, ${geo.lon.toFixed(6)}`;
 
     // Check if mouse is over a camp (only when not panning)
     if (!isPanning) {
@@ -521,9 +522,9 @@ canvas.addEventListener('mousemove', (e) => {
             if (highlightedCamp && highlightedCamp.properties && highlightedCamp.properties.fid) {
                 const fid = highlightedCamp.properties.fid;
                 const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
-                campDisplay.textContent = `Camp: ${campName}`;
+                campDisplay.textContent = campName;
             } else {
-                campDisplay.textContent = 'Camp: None';
+                campDisplay.textContent = '';
             }
 
             redraw();
@@ -544,7 +545,7 @@ canvas.addEventListener('mouseleave', (e) => {
     // Clear camp highlighting when mouse leaves
     if (highlightedCamp) {
         highlightedCamp = null;
-        document.getElementById('currentCamp').textContent = 'Camp: None';
+        document.getElementById('currentCamp').textContent = '';
         redraw();
     }
 });
