@@ -22,7 +22,6 @@
                 <span class="stats" id="namesCount">Camp Names: Loading...</span>
                 <span class="stats" id="coordinates">Mouse: --, --</span>
                 <span class="stats" id="currentCamp">Camp: None</span>
-                <span class="stats" id="diagnostic" style="color: red; display: none;"></span>
             </div>
         </div>
 
@@ -60,7 +59,6 @@
 
         // Camp highlighting
         let highlightedCamp = null;
-        let lastDiagnostic = '';
 
         // View settings
         let viewport = {
@@ -129,12 +127,10 @@
             return inside;
         }
 
-        // Find which camp contains the given geographic coordinate (with diagnostics)
+        // Find which camp contains the given geographic coordinate 
         function findCampAtLocation(lon, lat) {
-            lastDiagnostic = ''; // Reset diagnostic message
             
             if (!campOutlines) {
-                lastDiagnostic = 'No camp outline data loaded';
                 return null;
             }
 
@@ -178,18 +174,6 @@
                 }
             }
 
-            // Generate diagnostic message
-            const parts = [];
-            parts.push(`${totalFeatures} total features`);
-            parts.push(`${lineStringFeatures} LineStrings`);
-            parts.push(`${validLengthFeatures} valid length`);
-            parts.push(`${closedPolygons} closed polygons`);
-            
-            if (testedFeatures.length > 0) {
-                parts.push(`tested: ${testedFeatures.join(', ')}`);
-            }
-            
-            lastDiagnostic = `No match found: ${parts.join(', ')}`;
             return null;
         }
 
@@ -494,21 +478,13 @@
                 if (newHighlightedCamp !== highlightedCamp) {
                     highlightedCamp = newHighlightedCamp;
 
-                    // Update camp display and diagnostic information
+                    // Update camp display
                     const campDisplay = document.getElementById('currentCamp');
-                    const diagnosticDisplay = document.getElementById('diagnostic');
                     
                     if (highlightedCamp && highlightedCamp.properties && highlightedCamp.properties.fid) {
                         campDisplay.textContent = `Camp: ${highlightedCamp.properties.fid}`;
-                        diagnosticDisplay.style.display = 'none';
                     } else {
                         campDisplay.textContent = 'Camp: None';
-                        if (lastDiagnostic) {
-                            diagnosticDisplay.textContent = lastDiagnostic;
-                            diagnosticDisplay.style.display = 'inline-block';
-                        } else {
-                            diagnosticDisplay.style.display = 'none';
-                        }
                     }
 
                     redraw();
@@ -530,7 +506,6 @@
             if (highlightedCamp) {
                 highlightedCamp = null;
                 document.getElementById('currentCamp').textContent = 'Camp: None';
-                document.getElementById('diagnostic').style.display = 'none';
                 redraw();
             }
         });
