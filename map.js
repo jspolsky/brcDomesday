@@ -34,6 +34,8 @@ const BACKGROUND_IMAGE_SETTINGS = {
 // Camp highlighting
 let highlightedCamp = null;
 let currentPopupCampName = null; // Track which camp is currently shown in popup
+let sidebarOpen = false; // Track if sidebar is open
+let currentSidebarCampName = null; // Track which camp is in sidebar
 
 // Map rotation - 45 degrees clockwise to show 12:00 pointing up
 const ROTATION_ANGLE = -45 * Math.PI / 180; // -45 degrees in radians (negative = clockwise)
@@ -552,16 +554,116 @@ function hideCampPopup() {
     currentPopupCampName = null;
 }
 
+// Open sidebar with camp details
+function openSidebar(campName, mouseX) {
+    const campData = findCampDataByName(campName);
+    const sidebar = document.getElementById('campSidebar');
+
+    sidebarOpen = true;
+    currentSidebarCampName = campName;
+
+    // Determine which side to show the sidebar based on mouse position
+    const isRightHalf = mouseX > canvas.width / 2;
+
+    // Remove all sidebar position classes
+    sidebar.classList.remove('sidebar-left', 'sidebar-right');
+
+    // Add appropriate position class
+    if (isRightHalf) {
+        sidebar.classList.add('sidebar-left');
+    } else {
+        sidebar.classList.add('sidebar-right');
+    }
+
+    // Update sidebar content
+    document.getElementById('sidebarCampName').textContent = campData ? (campData.name || campName) : campName;
+    document.getElementById('sidebarCampLocation').textContent = campData ? (campData.location_string || '') : '';
+    document.getElementById('sidebarCampDescription').textContent = campData ? (campData.description || 'No description available.') : 'No description available.';
+
+    // Update image
+    const img = document.getElementById('sidebarCampImage');
+    // Special case for First Camp - use local image
+    if (campName === 'First Camp') {
+        img.src = '';
+        img.src = 'firstcamp.jpg';
+        img.style.display = 'block';
+    } else if (campData && campData.images && campData.images.length > 0 && campData.images[0].thumbnail_url) {
+        img.src = '';
+        img.src = campData.images[0].thumbnail_url;
+        img.style.display = 'block';
+    } else {
+        img.src = '';
+        img.style.display = 'none';
+    }
+
+    // Show sidebar
+    sidebar.classList.remove('sidebar-hidden');
+
+    // Hide the small popup
+    hideCampPopup();
+}
+
+// Close sidebar
+function closeSidebar() {
+    const sidebar = document.getElementById('campSidebar');
+    sidebar.classList.add('sidebar-hidden');
+    sidebarOpen = false;
+    currentSidebarCampName = null;
+}
+
+// Update sidebar content when hovering over different camp
+function updateSidebarContent(campName) {
+    if (!sidebarOpen || currentSidebarCampName === campName) return;
+
+    const campData = findCampDataByName(campName);
+    currentSidebarCampName = campName;
+
+    // Update sidebar content
+    document.getElementById('sidebarCampName').textContent = campData ? (campData.name || campName) : campName;
+    document.getElementById('sidebarCampLocation').textContent = campData ? (campData.location_string || '') : '';
+    document.getElementById('sidebarCampDescription').textContent = campData ? (campData.description || 'No description available.') : 'No description available.';
+
+    // Update image
+    const img = document.getElementById('sidebarCampImage');
+    // Special case for First Camp - use local image
+    if (campName === 'First Camp') {
+        img.src = '';
+        img.src = 'firstcamp.jpg';
+        img.style.display = 'block';
+    } else if (campData && campData.images && campData.images.length > 0 && campData.images[0].thumbnail_url) {
+        img.src = '';
+        img.src = campData.images[0].thumbnail_url;
+        img.style.display = 'block';
+    } else {
+        img.src = '';
+        img.style.display = 'none';
+    }
+}
+
 // Mouse panning state
 let isPanning = false;
 let lastMousePos = { x: 0, y: 0 };
 
 // Mouse event handlers for panning
 canvas.addEventListener('mousedown', (e) => {
-    isPanning = true;
     const rect = canvas.getBoundingClientRect();
-    lastMousePos.x = e.clientX - rect.left;
-    lastMousePos.y = e.clientY - rect.top;
+    const canvasX = e.clientX - rect.left;
+    const canvasY = e.clientY - rect.top;
+
+    // Check if clicking on a camp
+    const geo = canvasToGeo(canvasX, canvasY);
+    const clickedCamp = findCampAtLocation(geo.lon, geo.lat);
+
+    if (clickedCamp && clickedCamp.properties && clickedCamp.properties.fid) {
+        const fid = clickedCamp.properties.fid;
+        const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
+        openSidebar(campName, canvasX);
+        return; // Don't start panning when clicking on a camp
+    }
+
+    isPanning = true;
+    lastMousePos.x = canvasX;
+    lastMousePos.y = canvasY;
     canvas.style.cursor = 'grabbing';
 });
 
@@ -617,19 +719,27 @@ canvas.addEventListener('mousemove', (e) => {
                 const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
                 campDisplay.textContent = campName;
 
-                // Show popup with camp info
-                showCampPopup(campName, canvasX, canvasY);
+                // If sidebar is open, update it; otherwise show popup
+                if (sidebarOpen) {
+                    updateSidebarContent(campName);
+                } else {
+                    showCampPopup(campName, canvasX, canvasY);
+                }
             } else {
                 campDisplay.textContent = '';
-                hideCampPopup();
+                if (!sidebarOpen) {
+                    hideCampPopup();
+                }
             }
 
             redraw();
         } else if (highlightedCamp) {
-            // Camp hasn't changed but mouse moved - update popup position
-            const fid = highlightedCamp.properties.fid;
-            const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
-            showCampPopup(campName, canvasX, canvasY);
+            // Camp hasn't changed but mouse moved - update popup position (only if sidebar not open)
+            if (!sidebarOpen) {
+                const fid = highlightedCamp.properties.fid;
+                const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
+                showCampPopup(campName, canvasX, canvasY);
+            }
         }
     }
 });
@@ -756,6 +866,13 @@ canvas.addEventListener('touchend', (e) => {
 
 // Handle window resize
 window.addEventListener('resize', resizeCanvas);
+
+// Handle ESC key to close sidebar
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sidebarOpen) {
+        closeSidebar();
+    }
+});
 
 // Start the application
 init();
