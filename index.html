@@ -21,6 +21,7 @@
                 <span class="stats" id="outlinesCount">Camp Outlines: Loading...</span>
                 <span class="stats" id="namesCount">Camp Names: Loading...</span>
                 <span class="stats" id="coordinates">Mouse: --, --</span>
+                <span class="stats" id="currentCamp">Camp: None</span>
             </div>
         </div>
 
@@ -392,6 +393,15 @@
 
                 if (newHighlightedCamp !== highlightedCamp) {
                     highlightedCamp = newHighlightedCamp;
+
+                    // Update camp display
+                    const campDisplay = document.getElementById('currentCamp');
+                    if (highlightedCamp && highlightedCamp.properties && highlightedCamp.properties.fid) {
+                        campDisplay.textContent = `Camp: ${highlightedCamp.properties.fid}`;
+                    } else {
+                        campDisplay.textContent = 'Camp: None';
+                    }
+
                     redraw();
                 }
             }
@@ -410,6 +420,7 @@
             // Clear camp highlighting when mouse leaves
             if (highlightedCamp) {
                 highlightedCamp = null;
+                document.getElementById('currentCamp').textContent = 'Camp: None';
                 redraw();
             }
         });
