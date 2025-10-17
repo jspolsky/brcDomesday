@@ -60,6 +60,11 @@
         // Camp highlighting
         let highlightedCamp = null;
 
+        // Map rotation - 45 degrees clockwise to show 12:00 pointing up
+        const ROTATION_ANGLE = -45 * Math.PI / 180; // -45 degrees in radians (negative = clockwise)
+        const COS_ROTATION = Math.cos(ROTATION_ANGLE);
+        const SIN_ROTATION = Math.sin(ROTATION_ANGLE);
+
         // View settings
         let viewport = {
             centerX: -119.22, // Approximate center of Black Rock City
@@ -91,8 +96,17 @@
             // Account for the fact that latitude needs to be scaled differently due to Earth's projection
             const latScale = Math.cos(viewport.centerY * Math.PI / 180); // Mercator-like adjustment
 
-            const x = canvas.width / 2 + (lon - viewport.centerX) * viewport.scale * latScale;
-            const y = canvas.height / 2 - (lat - viewport.centerY) * viewport.scale;
+            // Calculate position relative to viewport center
+            const dx = (lon - viewport.centerX) * viewport.scale * latScale;
+            const dy = -(lat - viewport.centerY) * viewport.scale;
+
+            // Apply rotation around center (clockwise by 45 degrees to put 12:00 up)
+            const rotatedX = dx * COS_ROTATION - dy * SIN_ROTATION;
+            const rotatedY = dx * SIN_ROTATION + dy * COS_ROTATION;
+
+            // Translate to canvas position
+            const x = canvas.width / 2 + rotatedX;
+            const y = canvas.height / 2 + rotatedY;
 
             return { x, y };
         }
@@ -101,8 +115,18 @@
         function canvasToGeo(canvasX, canvasY) {
             const latScale = Math.cos(viewport.centerY * Math.PI / 180);
 
-            const lon = viewport.centerX + (canvasX - canvas.width / 2) / (viewport.scale * latScale);
-            const lat = viewport.centerY - (canvasY - canvas.height / 2) / viewport.scale;
+            // Get canvas position relative to center
+            const canvasDx = canvasX - canvas.width / 2;
+            const canvasDy = canvasY - canvas.height / 2;
+
+            // Apply inverse rotation (counter-clockwise by 45 degrees)
+            // Inverse rotation matrix: transpose of rotation matrix (since rotation is orthogonal)
+            const unrotatedX = canvasDx * COS_ROTATION + canvasDy * SIN_ROTATION;
+            const unrotatedY = -canvasDx * SIN_ROTATION + canvasDy * COS_ROTATION;
+
+            // Convert back to geographic coordinates
+            const lon = viewport.centerX + unrotatedX / (viewport.scale * latScale);
+            const lat = viewport.centerY - unrotatedY / viewport.scale;
 
             return { lon, lat };
         }
