@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRC Domesday - Camp Map Viewer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        #mapContainer {
+            height: 80vh;
+            width: 100vw;
+            position: relative;
+            background-color: #fff;
+            border-bottom: 2px solid #ccc;
+        }
+
+        #mapCanvas {
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+        }
+
+        #controls {
+            height: 20vh;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-top: 1px solid #ddd;
+            overflow-y: auto;
+        }
+
+        #loadingStatus {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            z-index: 100;
+        }
+
+        .control-section {
+            margin-bottom: 15px;
+        }
+
+        .control-section h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .stats {
+            display: inline-block;
+            margin-right: 20px;
+            padding: 5px 10px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        button {
+            padding: 8px 16px;
+            margin-right: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mapContainer">
+        <canvas id="mapCanvas"></canvas>
+        <div id="loadingStatus">Loading camp data...</div>
+    </div>
+
+    <div id="controls">
+        <div class="control-section">
+            <h3>BRC Domesday - Camp Map Visualization</h3>
+            <div id="stats">
+                <span class="stats" id="outlinesCount">Camp Outlines: Loading...</span>
+                <span class="stats" id="namesCount">Camp Names: Loading...</span>
+                <span class="stats" id="coordinates">Mouse: --, --</span>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Controls</h3>
+            <button onclick="zoomToFit()">Zoom to Fit</button>
+            <button onclick="toggleNames()">Toggle Names</button>
+            <button onclick="toggleOutlines()">Toggle Outlines</button>
+        </div>
+
+        <div class="control-section">
+            <h3>Legend</h3>
+            <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                <div style="width: 20px; height: 3px; background-color: lightblue; margin-right: 10px;"></div>
+                <span>Camp Outlines</span>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <div style="width: 20px; height: 1px; background-color: black; margin-right: 10px;"></div>
+                <span>Camp Names (vector text)</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Canvas and rendering setup
+        const canvas = document.getElementById('mapCanvas');
+        const ctx = canvas.getContext('2d');
+        const loadingStatus = document.getElementById('loadingStatus');
+
+        // Data storage
+        let campOutlines = null;
+        let campNames = null;
+        let showNames = true;
+        let showOutlines = true;
+
+        // View settings
+        let viewport = {
+            centerX: -119.22, // Approximate center of Black Rock City
+            centerY: 40.782,
+            scale: 5000, // Adjust this for initial zoom level
+            offsetX: 0,
+            offsetY: 0
+        };
+
+        // Geographic bounds for Black Rock City area
+        const BRC_BOUNDS = {
+            minLon: -119.26,
+            maxLon: -119.19,
+            minLat: 40.78,
+            maxLat: 40.79
+        };
+
+        // Resize canvas to match container
+        function resizeCanvas() {
+            const container = document.getElementById('mapContainer');
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            redraw();
+        }
+
+        // Convert geographic coordinates to canvas coordinates
+        function geoToCanvas(lon, lat) {
+            // Convert longitude/latitude to canvas coordinates
+            // Account for the fact that latitude needs to be scaled differently due to Earth's projection
+            const latScale = Math.cos(viewport.centerY * Math.PI / 180); // Mercator-like adjustment
+
+            const x = canvas.width / 2 + (lon - viewport.centerX) * viewport.scale * latScale;
+            const y = canvas.height / 2 - (lat - viewport.centerY) * viewport.scale;
+
+            return { x, y };
+        }
+
+        // Convert canvas coordinates back to geographic coordinates
+        function canvasToGeo(canvasX, canvasY) {
+            const latScale = Math.cos(viewport.centerY * Math.PI / 180);
+
+            const lon = viewport.centerX + (canvasX - canvas.width / 2) / (viewport.scale * latScale);
+            const lat = viewport.centerY - (canvasY - canvas.height / 2) / viewport.scale;
+
+            return { lon, lat };
+        }
+
+        // Draw a LineString feature
+        function drawLineString(coordinates, color, lineWidth = 1) {
+            if (coordinates.length < 2) return;
+
+            ctx.strokeStyle = color;
+            ctx.lineWidth = lineWidth;
+            ctx.beginPath();
+
+            const startPoint = geoToCanvas(coordinates[0][0], coordinates[0][1]);
+            ctx.moveTo(startPoint.x, startPoint.y);
+
+            for (let i = 1; i < coordinates.length; i++) {
+                const point = geoToCanvas(coordinates[i][0], coordinates[i][1]);
+                ctx.lineTo(point.x, point.y);
+            }
+
+            ctx.stroke();
+        }
+
+        // Render all data
+        function redraw() {
+            // Clear canvas
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw camp outlines in light blue
+            if (campOutlines && showOutlines) {
+                campOutlines.features.forEach(feature => {
+                    if (feature.geometry.type === 'LineString') {
+                        drawLineString(feature.geometry.coordinates, 'lightblue', 2);
+                    }
+                });
+            }
+
+            // Draw camp names in black
+            if (campNames && showNames) {
+                campNames.features.forEach(feature => {
+                    if (feature.geometry.type === 'LineString') {
+                        drawLineString(feature.geometry.coordinates, 'black', 1);
+                    }
+                });
+            }
+        }
+
+        // Load GeoJSON data
+        async function loadGeoJSON(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(`Failed to load ${url}:`, error);
+                return null;
+            }
+        }
+
+        // Initialize the application
+        async function init() {
+            loadingStatus.textContent = 'Loading camp outlines...';
+
+            // Load camp outlines
+            campOutlines = await loadGeoJSON('data/camp_outlines_2025.geojson');
+            if (campOutlines) {
+                document.getElementById('outlinesCount').textContent =
+                    `Camp Outlines: ${campOutlines.features.length}`;
+            }
+
+            loadingStatus.textContent = 'Loading camp names...';
+
+            // Load camp names (this is the large file, so it might take a moment)
+            campNames = await loadGeoJSON('data/camp_names_2025.geojson');
+            if (campNames) {
+                document.getElementById('namesCount').textContent =
+                    `Camp Names: ${campNames.features.length}`;
+            }
+
+            loadingStatus.style.display = 'none';
+
+            // Initial render
+            resizeCanvas();
+            zoomToFit();
+        }
+
+        // Fit all data in the viewport
+        function zoomToFit() {
+            // Use the known Black Rock City bounds for consistent framing
+            const bounds = BRC_BOUNDS;
+
+            // Calculate the scale needed to fit the bounds in the canvas
+            const latRange = bounds.maxLat - bounds.minLat;
+            const lonRange = bounds.maxLon - bounds.minLon;
+
+            const latScale = Math.cos(((bounds.maxLat + bounds.minLat) / 2) * Math.PI / 180);
+
+            const scaleX = (canvas.width * 0.9) / (lonRange * latScale);
+            const scaleY = (canvas.height * 0.9) / latRange;
+
+            viewport.scale = Math.min(scaleX, scaleY);
+            viewport.centerX = (bounds.maxLon + bounds.minLon) / 2;
+            viewport.centerY = (bounds.maxLat + bounds.minLat) / 2;
+
+            redraw();
+        }
+
+        // Toggle functions
+        function toggleNames() {
+            showNames = !showNames;
+            redraw();
+        }
+
+        function toggleOutlines() {
+            showOutlines = !showOutlines;
+            redraw();
+        }
+
+        // Mouse tracking for coordinates
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const canvasX = e.clientX - rect.left;
+            const canvasY = e.clientY - rect.top;
+
+            const geo = canvasToGeo(canvasX, canvasY);
+
+            document.getElementById('coordinates').textContent =
+                `Mouse: ${geo.lon.toFixed(6)}, ${geo.lat.toFixed(6)}`;
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', resizeCanvas);
+
+        // Start the application
+        init();
+    </script>
+</body>
+
+</html>
