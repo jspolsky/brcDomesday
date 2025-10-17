@@ -732,6 +732,9 @@ function openFullCampInfo(campName) {
     overlay.classList.remove('overlay-hidden');
     fullInfo.classList.remove('fullcamp-hidden');
 
+    // Reset scroll position to top
+    fullInfo.scrollTop = 0;
+
     // Hide sidebar
     closeSidebar();
 }
