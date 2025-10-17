@@ -484,23 +484,17 @@ function showCampPopup(campName, mouseX, mouseY) {
     const popup = document.getElementById('campPopup');
     const campData = findCampDataByName(campName);
 
-    if (!campData) {
-        popup.style.display = 'none';
-        currentPopupCampName = null;
-        return;
-    }
-
     // Only update content if switching to a different camp
     if (currentPopupCampName !== campName) {
         currentPopupCampName = campName;
 
-        // Update popup content
-        document.getElementById('campPopupName').textContent = campData.name || campName;
-        document.getElementById('campPopupLocation').textContent = campData.location_string || '';
+        // Update popup content - show camp name even if no data found
+        document.getElementById('campPopupName').textContent = campData ? (campData.name || campName) : campName;
+        document.getElementById('campPopupLocation').textContent = campData ? (campData.location_string || '') : '';
 
         // Update image
         const img = document.getElementById('campPopupImage');
-        if (campData.images && campData.images.length > 0 && campData.images[0].thumbnail_url) {
+        if (campData && campData.images && campData.images.length > 0 && campData.images[0].thumbnail_url) {
             // Clear the current image first to show purple placeholder while loading
             img.src = '';
             // Then set the new image URL
