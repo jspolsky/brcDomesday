@@ -591,9 +591,26 @@ function openSidebar(campName, mouseX) {
         img.src = 'firstcamp.jpg';
         img.style.display = 'block';
     } else if (campData && campData.images && campData.images.length > 0 && campData.images[0].thumbnail_url) {
+        const thumbnailUrl = campData.images[0].thumbnail_url;
+
+        // First load the thumbnail
         img.src = '';
-        img.src = campData.images[0].thumbnail_url;
+        img.src = thumbnailUrl;
         img.style.display = 'block';
+
+        // Then load high-res version by removing query string
+        const highResUrl = thumbnailUrl.split('?')[0];
+        if (highResUrl !== thumbnailUrl) {
+            // Create a new image to preload the high-res version
+            const highResImg = new Image();
+            highResImg.onload = () => {
+                // Only update if we're still showing the same camp
+                if (currentSidebarCampName === campName && sidebarOpen) {
+                    img.src = highResUrl;
+                }
+            };
+            highResImg.src = highResUrl;
+        }
     } else {
         img.src = '';
         img.style.display = 'none';
@@ -653,9 +670,26 @@ function updateSidebarContent(campName) {
         img.src = 'firstcamp.jpg';
         img.style.display = 'block';
     } else if (campData && campData.images && campData.images.length > 0 && campData.images[0].thumbnail_url) {
+        const thumbnailUrl = campData.images[0].thumbnail_url;
+
+        // First load the thumbnail
         img.src = '';
-        img.src = campData.images[0].thumbnail_url;
+        img.src = thumbnailUrl;
         img.style.display = 'block';
+
+        // Then load high-res version by removing query string
+        const highResUrl = thumbnailUrl.split('?')[0];
+        if (highResUrl !== thumbnailUrl) {
+            // Create a new image to preload the high-res version
+            const highResImg = new Image();
+            highResImg.onload = () => {
+                // Only update if we're still showing the same camp
+                if (currentSidebarCampName === campName && sidebarOpen) {
+                    img.src = highResUrl;
+                }
+            };
+            highResImg.src = highResUrl;
+        }
     } else {
         img.src = '';
         img.style.display = 'none';
