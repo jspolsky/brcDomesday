@@ -171,9 +171,8 @@ button:hover {
 }
 
 #closeSidebar {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    position: fixed;
+    top: calc(10% + 10px);
     width: 30px;
     height: 30px;
     padding: 0;
@@ -184,7 +183,15 @@ button:hover {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    z-index: 10;
+    z-index: 2001;
+}
+
+#campSidebar.sidebar-right #closeSidebar {
+    right: calc(35% + 10px);
+}
+
+#campSidebar.sidebar-left #closeSidebar {
+    left: calc(35% + 10px);
 }
 
 #closeSidebar:hover {
@@ -193,20 +200,19 @@ button:hover {
 
 #sidebarContent {
     padding: 20px;
-    padding-top: 50px;
 }
 
 #sidebarCampName {
     font-size: 24px;
     font-weight: bold;
     margin: 0 0 15px 0;
+    padding-right: 40px;
     word-wrap: break-word;
     color: #ffffff;
 }
 
 #sidebarCampImage {
     width: 100%;
-    max-width: 400px;
     height: auto;
     border-radius: 8px;
     margin-bottom: 15px;

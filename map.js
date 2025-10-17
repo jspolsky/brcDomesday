@@ -36,6 +36,7 @@ let highlightedCamp = null;
 let currentPopupCampName = null; // Track which camp is currently shown in popup
 let sidebarOpen = false; // Track if sidebar is open
 let currentSidebarCampName = null; // Track which camp is in sidebar
+let sidebarOnLeft = false; // Track which side the sidebar is on
 
 // Map rotation - 45 degrees clockwise to show 12:00 pointing up
 const ROTATION_ANGLE = -45 * Math.PI / 180; // -45 degrees in radians (negative = clockwise)
@@ -571,8 +572,10 @@ function openSidebar(campName, mouseX) {
     // Add appropriate position class
     if (isRightHalf) {
         sidebar.classList.add('sidebar-left');
+        sidebarOnLeft = true;
     } else {
         sidebar.classList.add('sidebar-right');
+        sidebarOnLeft = false;
     }
 
     // Update sidebar content
@@ -609,6 +612,25 @@ function closeSidebar() {
     sidebar.classList.add('sidebar-hidden');
     sidebarOpen = false;
     currentSidebarCampName = null;
+    sidebarOnLeft = false;
+}
+
+// Move sidebar to the opposite side
+function moveSidebarToSide(toLeft) {
+    if (sidebarOnLeft === toLeft) return; // Already on the correct side
+
+    const sidebar = document.getElementById('campSidebar');
+
+    // Remove current position class and add new one
+    sidebar.classList.remove('sidebar-left', 'sidebar-right');
+
+    if (toLeft) {
+        sidebar.classList.add('sidebar-left');
+        sidebarOnLeft = true;
+    } else {
+        sidebar.classList.add('sidebar-right');
+        sidebarOnLeft = false;
+    }
 }
 
 // Update sidebar content when hovering over different camp
@@ -703,6 +725,13 @@ canvas.addEventListener('mousemove', (e) => {
     const geo = canvasToGeo(canvasX, canvasY);
     document.getElementById('coordinates').textContent =
         `${geo.lat.toFixed(6)}, ${geo.lon.toFixed(6)}`;
+
+    // If sidebar is open, check if we should move it to the other side
+    if (sidebarOpen && !isPanning) {
+        const isMouseInRightHalf = canvasX > canvas.width / 2;
+        // Move sidebar to left if mouse is in right half, and vice versa
+        moveSidebarToSide(isMouseInRightHalf);
+    }
 
     // Check if mouse is over a camp (only when not panning)
     if (!isPanning) {
