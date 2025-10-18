@@ -1148,11 +1148,27 @@ let lastTouchDistance = 0;
 let touchCenter = { x: 0, y: 0 };
 
 canvas.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 2) {
-        // Calculate initial distance between two touches
+    const rect = canvas.getBoundingClientRect();
+
+    if (e.touches.length === 1) {
+        // Single finger - start panning
+        const touch = e.touches[0];
+        const canvasX = touch.clientX - rect.left;
+        const canvasY = touch.clientY - rect.top;
+
+        mouseDownPos.x = canvasX;
+        mouseDownPos.y = canvasY;
+        isPanning = true;
+        lastMousePos.x = canvasX;
+        lastMousePos.y = canvasY;
+
+        e.preventDefault();
+    } else if (e.touches.length === 2) {
+        // Two fingers - start pinch zoom
+        isPanning = false; // Stop panning when two fingers touch
+
         const touch1 = e.touches[0];
         const touch2 = e.touches[1];
-        const rect = canvas.getBoundingClientRect();
 
         const dx = (touch1.clientX - touch2.clientX);
         const dy = (touch1.clientY - touch2.clientY);
@@ -1167,11 +1183,43 @@ canvas.addEventListener('touchstart', (e) => {
 }, { passive: false });
 
 canvas.addEventListener('touchmove', (e) => {
-    if (e.touches.length === 2 && lastTouchDistance > 0) {
-        // Calculate current distance between two touches
+    const rect = canvas.getBoundingClientRect();
+
+    if (e.touches.length === 1 && isPanning) {
+        // Single finger panning
+        const touch = e.touches[0];
+        const canvasX = touch.clientX - rect.left;
+        const canvasY = touch.clientY - rect.top;
+
+        // Calculate the difference in position (same logic as mouse panning)
+        const deltaX = canvasX - lastMousePos.x;
+        const deltaY = canvasY - lastMousePos.y;
+
+        // Apply inverse rotation to the pixel movement
+        const unrotatedDeltaX = deltaX * COS_ROTATION + deltaY * SIN_ROTATION;
+        const unrotatedDeltaY = -deltaX * SIN_ROTATION + deltaY * COS_ROTATION;
+
+        // Convert to geographic coordinate movement
+        const latScale = Math.cos(viewport.centerY * Math.PI / 180);
+        const deltaLon = -unrotatedDeltaX / (viewport.scale * latScale);
+        const deltaLat = unrotatedDeltaY / viewport.scale;
+
+        // Update viewport center
+        viewport.centerX += deltaLon;
+        viewport.centerY += deltaLat;
+
+        // Update last position
+        lastMousePos.x = canvasX;
+        lastMousePos.y = canvasY;
+
+        // Redraw the map
+        redraw();
+
+        e.preventDefault();
+    } else if (e.touches.length === 2 && lastTouchDistance > 0) {
+        // Two finger pinch zoom
         const touch1 = e.touches[0];
         const touch2 = e.touches[1];
-        const rect = canvas.getBoundingClientRect();
 
         const dx = (touch1.clientX - touch2.clientX);
         const dy = (touch1.clientY - touch2.clientY);
@@ -1192,7 +1240,12 @@ canvas.addEventListener('touchmove', (e) => {
 }, { passive: false });
 
 canvas.addEventListener('touchend', (e) => {
-    if (e.touches.length < 2) {
+    if (e.touches.length === 0) {
+        // All fingers lifted - end panning
+        isPanning = false;
+        lastTouchDistance = 0;
+    } else if (e.touches.length < 2) {
+        // Less than 2 fingers - end pinch zoom
         lastTouchDistance = 0;
     }
 });
