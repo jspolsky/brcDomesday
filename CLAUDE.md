@@ -33,13 +33,21 @@ The entire application is a single-page HTML/CSS/JavaScript implementation with 
 All data files are located in the `data/` subdirectory:
 - `camp_outlines_2025.geojson` (691KB) - Polygon boundaries for ~1000+ camps, each with unique `fid`
 - `camp_names_2025.geojson` (24MB) - Vector text paths for camp names (not currently rendered)
-- `camps.json` (1.5MB) - Full camp metadata from Burning Man API
+- `camps.json` (1.5MB) - Full camp metadata from Burning Man 2025
 - `camp_fid_mappings.json` - Human-curated mapping between outline FIDs and camp names
+- `campHistory.json` (3.1MB) - Historical camp attendance data (2015-2025, excluding 2020-2021)
+- `camps2015.json` through `camps2025.json` - Annual camp data from Burning Man API (source for campHistory.json)
 - `BRCMap.pdf` (10MB) - Reference PDF map
 - `BRCMapAdj.png` - PNG background image overlay aligned with GeoJSON data
 
 ### Additional Assets
 - `firstcamp.jpg` - Sample camp image for display in UI
+
+### Python Utilities
+Located in the `data/` subdirectory:
+- `download_historical_camps.py` - Downloads historical camp data from Burning Man API (2015-2025)
+- `build_camp_history.py` - Processes annual camp files to create consolidated campHistory.json
+- `README.campHistory` - Specification document for campHistory.json format
 
 ## Key Technical Details
 
@@ -53,14 +61,17 @@ All data files are located in the `data/` subdirectory:
 - **Zoom**: Mouse wheel to zoom in/out (maintains cursor position)
 - **Hover**: Displays camp name and location in popup when mouse hovers over a mapped camp
 - **Single click**: Opens sidebar with camp details (name, location, description, image)
-- **Double click**: Opens full-page camp information view
+- **Double click**: Opens full-page camp information view with:
+  - Full camp details (name, location, description, image, URL, contact, etc.)
+  - Historical attendance section showing years the camp has attended (2015-2024)
+  - Interactive year pills with dropdown tooltips showing historical location, description, and archived URL
 - **Polygon hit detection**: Ray-casting algorithm (`isPointInPolygon`) for point-in-polygon tests
 - **Visual feedback**: Yellow highlight on hovered camps
 - **Background image**: PNG overlay of the official BRC map, rotated 45° and aligned with GeoJSON data
 - **Keyboard shortcuts**: ESC to close sidebar/full-page view, 'b' to toggle background image
 
 ### Core Rendering Flow
-1. Load GeoJSON files and JSON data asynchronously (camp outlines, mappings, camp data)
+1. Load GeoJSON files and JSON data asynchronously (camp outlines, mappings, camp data, camp history)
 2. Load background PNG image and align with geographic coordinates
 3. Calculate geographic bounds from actual data
 4. Render background image (rotated 45°, scaled, and positioned to align with GeoJSON)
@@ -72,10 +83,12 @@ All data files are located in the `data/` subdirectory:
 ### Data Processing Patterns
 - **FID to camp name lookup**: `camp_fid_mappings.json` maps outline FIDs to camp names as strings
 - **Camp data lookup**: Camp names are used to find full camp details in `camps.json` (by matching the `name` field)
+- **Historical data lookup**: `campHistory.json` provides year-by-year attendance records keyed by camp name
 - **Coordinate transformation**: `geoToCanvas()` and `canvasToGeo()` handle bidirectional conversion with rotation
 - **Rotation transform**: 45° clockwise rotation applied to all coordinates to orient 12:00 at top
 - **Viewport management**: Maintains center point and scale factor, updates on user interaction
 - **Background image alignment**: Complex transform chain (geographic → canvas → rotation → scale → offset) defined in `BACKGROUND_IMAGE_SETTINGS`
+- **Wayback Machine links**: Historical URLs redirect to Internet Archive snapshots from August 1st of the relevant year
 
 ## Common Development Tasks
 
@@ -87,6 +100,17 @@ open index.html
 # Or use any local server (required for loading local data files in some browsers):
 python3 -m http.server 8000
 # Then navigate to http://localhost:8000
+```
+
+### Updating Historical Camp Data
+```bash
+cd data
+
+# Download latest camp data from Burning Man API
+python3 download_historical_camps.py YOUR_API_KEY
+
+# Rebuild the consolidated history file
+python3 build_camp_history.py
 ```
 
 ### Working with the Data
@@ -127,6 +151,30 @@ The GeoJSON structure is consistent across files:
 }
 ```
 
+### Camp History Structure (campHistory.json)
+```javascript
+{
+  "Camp Name": {
+    "name": "Camp Name",
+    "history": [
+      {
+        "year": 2025,
+        "description": "Current year description...",
+        "location_string": "D & 3:15",
+        "url": "https://example.com"
+      },
+      {
+        "year": 2024,
+        "description": "Previous year description...",
+        "location_string": "C & 3:00",
+        "url": null
+      }
+      // Sorted by year descending, excludes 2020-2021
+    ]
+  }
+}
+```
+
 ## Critical Implementation Notes
 
 ### Canvas Coordinate Math
@@ -162,6 +210,9 @@ The application maintains several state variables in `map.js`:
 - `showCampPopup(campName)` - Displays hover popup with camp name/location
 - `showCampSidebar(campName, mouseX)` - Opens sidebar with camp details (positioned left/right based on mouseX)
 - `showFullCampInfo(campName)` - Opens full-page camp information view
+- `buildCampHistorySection(campName)` - Generates historical attendance section with interactive year pills
+- `showHistoryTooltip(event)` - Displays dropdown tooltip with historical camp details
+- `positionTooltip(target, tooltip)` - Smart positioning for tooltips (below or above target)
 - `redraw()` - Main render function that draws background, outlines, and highlights
 
 ## Project Context
