@@ -235,14 +235,17 @@ button:hover {
     width: 30px;
     height: 30px;
     padding: 0;
-    font-size: 24px;
-    line-height: 1;
+    font-size: 14px;
+    line-height: 30px;
     background-color: #dc3545;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     z-index: 2001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #campSidebar.sidebar-right #closeSidebar {
@@ -349,14 +352,17 @@ button:hover {
     width: 40px;
     height: 40px;
     padding: 0;
-    font-size: 32px;
-    line-height: 1;
+    font-size: 24px;
+    line-height: 40px;
     background-color: #dc3545;
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #closeFullCamp:hover {
