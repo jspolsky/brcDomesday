@@ -746,7 +746,10 @@ function showHistoryTooltip(event) {
     }
 
     if (yearData.url) {
-        tooltipContent += `<strong>URL:</strong> <a href="${yearData.url}" target="_blank" style="color: #66aaff;">${yearData.url}</a>`;
+        // Create Wayback Machine URL for August 1st of the year
+        const waybackDate = `${yearData.year}0801`;
+        const waybackUrl = `https://web.archive.org/web/${waybackDate}/${yearData.url}`;
+        tooltipContent += `<strong>Web Archive URL:</strong> <a href="${waybackUrl}" target="_blank" style="color: #66aaff;" title="View on Wayback Machine (Aug 1, ${yearData.year})">${yearData.url}</a>`;
     }
 
     tooltip.innerHTML = tooltipContent;
