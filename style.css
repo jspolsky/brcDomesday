@@ -462,3 +462,25 @@ button:hover {
 #historyTooltip a:hover {
     color: #88ccff;
 }
+
+/* Mobile/small screen responsive styles */
+@media (max-width: 768px) {
+    /* Hide unnecessary status bar items on mobile */
+    #appName,
+    #coordinates,
+    #currentCamp,
+    #statusBarButtons button:not(#infoButton) {
+        display: none;
+    }
+
+    /* Make search box smaller on mobile */
+    #campSearch {
+        width: 150px;
+    }
+
+    /* Adjust status bar layout for mobile */
+    #statusBar {
+        gap: 10px;
+        padding: 0 10px;
+    }
+}
