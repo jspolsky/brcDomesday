@@ -339,7 +339,7 @@ button:hover {
 
 #fullCampDescription {
     font-size: 16px;
-    line-height: 1.5;
+    line-height: 1.2;
     color: #dddddd;
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -348,8 +348,49 @@ button:hover {
 
 #fullCampDetails {
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1;
     color: #cccccc;
     border-top: 1px solid #444;
     padding-top: 20px;
+}
+
+#fullCampHistory {
+    font-size: 14px;
+    color: #cccccc;
+    margin-top: 20px;
+}
+
+.history-year {
+    display: inline-block;
+    padding: 4px 10px;
+    margin: 2px;
+    background-color: #3a3a3a;
+    color: #66aaff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: bold;
+}
+
+.history-year:hover {
+    background-color: #4a4a4a;
+    color: #88ccff;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(102, 170, 255, 0.3);
+}
+
+#historyTooltip {
+    position: absolute;
+    background-color: rgba(26, 26, 26, 0.98);
+    border: 2px solid #555;
+    border-radius: 8px;
+    padding: 12px 15px;
+    color: #ffffff;
+    font-size: 13px;
+    line-height: 1.6;
+    max-width: 400px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    z-index: 4000;
+    pointer-events: none;
+    word-wrap: break-word;
 }

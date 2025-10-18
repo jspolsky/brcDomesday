@@ -7,6 +7,7 @@ const loadingStatus = document.getElementById('loadingStatus');
 let campOutlines = null;
 let campFidMappings = null; // Maps FID to camp name
 let campsData = null; // Full camp data from camps.json
+let campHistory = null; // Historical camp data
 let showOutlines = false; // Don't display outlines, but keep for hit testing
 
 // Background map image
@@ -396,6 +397,9 @@ async function init() {
     // Load full camp data
     campsData = await loadJSON('data/camps.json');
 
+    // Load camp history
+    campHistory = await loadJSON('data/campHistory.json');
+
     // Load camp outlines
     campOutlines = await loadGeoJSON('data/camp_outlines_2025.geojson');
 
@@ -648,6 +652,126 @@ function updateSidebarContent(campName) {
     updateSidebarCampInfo(campName);
 }
 
+// Build the camp history section
+function buildCampHistorySection(campName) {
+    const historyContainer = document.getElementById('fullCampHistory');
+
+    if (!campHistory || !campHistory[campName]) {
+        historyContainer.innerHTML = '';
+        return;
+    }
+
+    const history = campHistory[campName].history;
+
+    // Check if this is a new camp (only appears in 2025)
+    if (history.length === 1 && history[0].year === 2025) {
+        historyContainer.innerHTML = `
+            <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+            <div style="color: #666; font-style: italic;">This camp was new in 2025</div>
+        `;
+        return;
+    }
+
+    // Camp has history - build the year list (excluding 2025)
+    const historicalYears = history.filter(h => h.year !== 2025);
+
+    if (historicalYears.length === 0) {
+        historyContainer.innerHTML = `
+            <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+            <div style="color: #666; font-style: italic;">This camp was new in 2025</div>
+        `;
+        return;
+    }
+
+    // Build HTML with hoverable years
+    let historyHTML = `
+        <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+        <div style="margin-top: 20px;">
+            <strong>Camp History:</strong>
+    `;
+
+    historicalYears.forEach((yearData, index) => {
+        historyHTML += `<span class="history-year" data-year-info='${JSON.stringify(yearData).replace(/'/g, "&#39;")}'>${yearData.year}</span>`;
+        if (index < historicalYears.length - 1) {
+            historyHTML += ' ';
+        }
+    });
+
+    historyHTML += '</div>';
+    historyContainer.innerHTML = historyHTML;
+
+    // Add event listeners for hover
+    const yearSpans = historyContainer.querySelectorAll('.history-year');
+    yearSpans.forEach(span => {
+        span.addEventListener('mouseenter', showHistoryTooltip);
+        span.addEventListener('mouseleave', hideHistoryTooltip);
+        span.addEventListener('mousemove', moveHistoryTooltip);
+    });
+}
+
+// Show history tooltip
+function showHistoryTooltip(event) {
+    const tooltip = document.getElementById('historyTooltip');
+    const yearData = JSON.parse(event.target.getAttribute('data-year-info'));
+
+    let tooltipContent = `<strong>${yearData.year}</strong><br>`;
+
+    if (yearData.location_string) {
+        tooltipContent += `<strong>Location:</strong> ${yearData.location_string}<br>`;
+    }
+
+    if (yearData.description) {
+        // Truncate long descriptions
+        const desc = yearData.description.length > 1000
+            ? yearData.description.substring(0, 1000) + '...'
+            : yearData.description;
+        tooltipContent += `<strong>Description:</strong> ${desc}<br>`;
+    }
+
+    if (yearData.url) {
+        tooltipContent += `<strong>URL:</strong> <a href="${yearData.url}" target="_blank" style="color: #66aaff;">${yearData.url}</a>`;
+    }
+
+    tooltip.innerHTML = tooltipContent;
+    tooltip.style.display = 'block';
+
+    // Position the tooltip
+    moveHistoryTooltip(event);
+}
+
+// Hide history tooltip
+function hideHistoryTooltip() {
+    const tooltip = document.getElementById('historyTooltip');
+    tooltip.style.display = 'none';
+}
+
+// Move history tooltip with mouse
+function moveHistoryTooltip(event) {
+    const tooltip = document.getElementById('historyTooltip');
+    const offsetX = 15;
+    const offsetY = 15;
+
+    // Position tooltip, making sure it doesn't go off screen
+    let left = event.pageX + offsetX;
+    let top = event.pageY + offsetY;
+
+    // Get tooltip dimensions (it needs to be displayed to measure)
+    const tooltipRect = tooltip.getBoundingClientRect();
+
+    // Adjust if tooltip would go off right edge
+    if (left + tooltipRect.width > window.innerWidth) {
+        left = event.pageX - tooltipRect.width - offsetX;
+    }
+
+    // Adjust if tooltip would go off bottom edge
+    if (top + tooltipRect.height > window.innerHeight) {
+        top = event.pageY - tooltipRect.height - offsetY;
+    }
+
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
+}
+
 // Open full camp information mode
 function openFullCampInfo(campName) {
     const campData = findCampDataByName(campName);
@@ -682,6 +806,9 @@ function openFullCampInfo(campName) {
         }
     }
     document.getElementById('fullCampDetails').innerHTML = details;
+
+    // Build history section
+    buildCampHistorySection(campName);
 
     // Update image
     const img = document.getElementById('fullCampImage');
