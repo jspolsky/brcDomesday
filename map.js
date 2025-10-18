@@ -1240,8 +1240,35 @@ canvas.addEventListener('touchmove', (e) => {
 }, { passive: false });
 
 canvas.addEventListener('touchend', (e) => {
-    if (e.touches.length === 0) {
-        // All fingers lifted - end panning
+    const rect = canvas.getBoundingClientRect();
+
+    if (e.touches.length === 0 && e.changedTouches.length > 0) {
+        // Single finger was lifted - check if it was a tap or drag
+        const touch = e.changedTouches[0];
+        const canvasX = touch.clientX - rect.left;
+        const canvasY = touch.clientY - rect.top;
+
+        // Check if this was a tap (finger didn't move much) vs a drag
+        const dx = canvasX - mouseDownPos.x;
+        const dy = canvasY - mouseDownPos.y;
+        const distanceMoved = Math.sqrt(dx * dx + dy * dy);
+
+        // If finger moved less than 10 pixels, treat it as a tap (more lenient than mouse)
+        if (distanceMoved < 10) {
+            // Check if tapping on a camp
+            const geo = canvasToGeo(canvasX, canvasY);
+            const tappedCamp = findCampAtLocation(geo.lon, geo.lat);
+
+            if (tappedCamp && tappedCamp.properties && tappedCamp.properties.fid) {
+                const fid = tappedCamp.properties.fid;
+                const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
+
+                // On mobile (touch), always go directly to full-page view
+                openFullCampInfo(campName);
+            }
+        }
+
+        // End panning
         isPanning = false;
         lastTouchDistance = 0;
     } else if (e.touches.length < 2) {
