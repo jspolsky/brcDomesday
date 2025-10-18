@@ -1,21 +1,20 @@
 # BRC Domesday Book
 
-An interactive map viewer for Burning Man 2025 theme camps. Requires a desktop web browser... this is too fancy for your little phone, sorry.
+An interactive map viewer for Burning Man 2025 theme camps. Works on desktop and mobile.
 
 (In 1086, William the Conqueror sent his agents to survey every shire in England, to list his holdings and dues owed to him. This became the Domesday book, a great survey of the land in most of England and Wales. I chose this name of the project because Burning Man's official data sets and APIs traditionally store approximate "nearest corner" locations for theme camps but not their actual locations.)
 
 ## Features
 
 **Explore the Map**
-- Pan by clicking and dragging
-- Zoom with mouse wheel or pinching on the trackpad.
-- Click **Zoom to Fit** to reset view
+- Pan by dragging (mouse or touch)
+- Zoom with mouse wheel, trackpad pinch, or two-finger pinch on mobile
+- Click **Zoom to Fit** to reset view (desktop only)
 
 **Discover Camps**
 - **Type** the name or part of the name of any camp to search
-- **Hover** over any camp to see its name and location
-- **Click** once to open a sidebar with camp details
-- **Double-click** for full-screen camp information including:
+- **Desktop**: Hover to see camp info, click for sidebar, double-click for full details
+- **Mobile**: Tap any camp for full details
   - Photos and descriptions
   - Contact information and website
   - Location and landmark details
@@ -23,7 +22,7 @@ An interactive map viewer for Burning Man 2025 theme camps. Requires a desktop w
 
 **Historical Data**
 - View which years each camp has attended Burning Man
-- Hover over any historical year to see that year's location, description, and website
+- Hover (desktop) or tap (mobile) any historical year to see that year's location, description, and website
 - Click historical URLs to view archived snapshots via the Wayback Machine
 
 ## Navigation
