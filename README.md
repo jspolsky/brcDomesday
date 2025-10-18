@@ -12,6 +12,7 @@ An interactive map viewer for Burning Man 2025 theme camps. Requires a desktop w
 - Click **Zoom to Fit** to reset view
 
 **Discover Camps**
+- **Type** the name or part of the name of any camp to search
 - **Hover** over any camp to see its name and location
 - **Click** once to open a sidebar with camp details
 - **Double-click** for full-screen camp information including:
