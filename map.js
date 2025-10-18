@@ -1285,6 +1285,9 @@ function handleSearchKeydown(e) {
 }
 
 function handleSearchFocus() {
+    // Select all text so user can easily type a new search
+    searchInput.select();
+
     if (autocompleteResults.length > 0) {
         showAutocomplete(autocompleteResults, searchInput.value.trim().toLowerCase());
     }
@@ -1437,13 +1440,24 @@ function animateViewport(targetCenterX, targetCenterY, targetScale, onComplete) 
 // Handle window resize
 window.addEventListener('resize', resizeCanvas);
 
-// Handle ESC key to close full camp info or sidebar
+// Handle ESC key to close full camp info or sidebar, and typing to search
 window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         if (fullCampInfoOpen) {
             closeFullCampInfo();
         } else if (sidebarOpen) {
             closeSidebar();
+        }
+    }
+
+    // If a letter/number is typed and search box is not focused, focus it and start searching
+    if (searchInput && document.activeElement !== searchInput) {
+        // Check if it's a single printable character (letter, number, space, etc.)
+        if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            // Focus the search box and clear it
+            searchInput.value = '';
+            searchInput.focus();
+            // The character will be typed into the now-focused input naturally
         }
     }
 });
