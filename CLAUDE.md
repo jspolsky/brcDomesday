@@ -22,21 +22,24 @@ All that code has been moved into a git branch called createcampnames. It's not 
 
 ### Frontend (Vanilla JavaScript)
 The entire application is a single-page HTML/CSS/JavaScript implementation with no build system:
-- `index.html` - Complete interactive map viewer (~650 lines of inline JavaScript)
-- `style.css` - Minimal styling for map canvas and controls
+- `index.html` - HTML structure with map canvas, sidebar, popup, and full-page camp info UI elements
+- `map.js` - Main application logic (~1000 lines): rendering, interaction, coordinate transforms, event handlers
+- `style.css` - Styling for map canvas, status bar, sidebar panels, popups, and overlays
 - Canvas-based rendering using HTML5 Canvas API
 - Custom geographic coordinate system handling (WGS84 lat/lon to canvas pixels)
+- 45-degree rotation transform to orient 12:00 at the top of the map
 
 ### Data Files
-- `data/camp_outlines_2025.geojson` (691KB) - Polygon boundaries for ~1000+ camps, each with unique `fid`
-- `data/camp_names_2025.geojson` (24MB) - Vector text paths for camp names
-- `data/camps.json` (1.5MB) - Full camp metadata from Burning Man API
-- `data/camp_fid_mappings.json` - Human-curated mapping between outline FIDs and camp names
-- `data/BRCMap.pdf` (10MB) - Reference map
+All data files are located in the `data/` subdirectory:
+- `camp_outlines_2025.geojson` (691KB) - Polygon boundaries for ~1000+ camps, each with unique `fid`
+- `camp_names_2025.geojson` (24MB) - Vector text paths for camp names (not currently rendered)
+- `camps.json` (1.5MB) - Full camp metadata from Burning Man API
+- `camp_fid_mappings.json` - Human-curated mapping between outline FIDs and camp names
+- `BRCMap.pdf` (10MB) - Reference PDF map
+- `BRCMapAdj.png` - PNG background image overlay aligned with GeoJSON data
 
-### Python Utilities
-- `find_unclosed.py` - Diagnostic tool to find polygon closure issues in GeoJSON
-- `fix_polygons.py` - Repairs unclosed polygons by appending the first coordinate to close them
+### Additional Assets
+- `firstcamp.jpg` - Sample camp image for display in UI
 
 ## Key Technical Details
 
@@ -48,23 +51,31 @@ The entire application is a single-page HTML/CSS/JavaScript implementation with 
 ### Map Interaction Features
 - **Pan**: Click and drag to pan the map
 - **Zoom**: Mouse wheel to zoom in/out (maintains cursor position)
-- **Hover**: Displays camp FID when mouse hovers over a polygon
+- **Hover**: Displays camp name and location in popup when mouse hovers over a mapped camp
+- **Single click**: Opens sidebar with camp details (name, location, description, image)
+- **Double click**: Opens full-page camp information view
 - **Polygon hit detection**: Ray-casting algorithm (`isPointInPolygon`) for point-in-polygon tests
-- **Visual feedback**: Yellow highlight on hovered camps, red stars mark unclosed polygons
+- **Visual feedback**: Yellow highlight on hovered camps
+- **Background image**: PNG overlay of the official BRC map, rotated 45° and aligned with GeoJSON data
+- **Keyboard shortcuts**: ESC to close sidebar/full-page view, 'b' to toggle background image
 
 ### Core Rendering Flow
-1. Load GeoJSON files asynchronously
-2. Calculate geographic bounds from actual data
-3. Render camp outlines as stroked paths (lightblue)
-4. Optionally render camp names as black vector paths
-5. Highlight unclosed polygons with red star markers at centroids
-6. Update viewport on user interaction (pan/zoom)
+1. Load GeoJSON files and JSON data asynchronously (camp outlines, mappings, camp data)
+2. Load background PNG image and align with geographic coordinates
+3. Calculate geographic bounds from actual data
+4. Render background image (rotated 45°, scaled, and positioned to align with GeoJSON)
+5. Render camp outlines as filled polygons (invisible unless showOutlines is true)
+6. Apply yellow highlight to hovered camp
+7. Handle mouse events for hover detection, popup display, sidebar opening, and full-page view
+8. Update viewport on user interaction (pan/zoom)
 
 ### Data Processing Patterns
-- **Polygon closure validation**: Uses 0.000001 tolerance to check if first/last coordinates match
-- **Centroid calculation**: Simple arithmetic mean of all polygon coordinates
-- **Coordinate transformation**: `geoToCanvas()` and `canvasToGeo()` handle bidirectional conversion
+- **FID to camp name lookup**: `camp_fid_mappings.json` maps outline FIDs to camp names as strings
+- **Camp data lookup**: Camp names are used to find full camp details in `camps.json` (by matching the `name` field)
+- **Coordinate transformation**: `geoToCanvas()` and `canvasToGeo()` handle bidirectional conversion with rotation
+- **Rotation transform**: 45° clockwise rotation applied to all coordinates to orient 12:00 at top
 - **Viewport management**: Maintains center point and scale factor, updates on user interaction
+- **Background image alignment**: Complex transform chain (geographic → canvas → rotation → scale → offset) defined in `BACKGROUND_IMAGE_SETTINGS`
 
 ## Common Development Tasks
 
@@ -72,17 +83,10 @@ The entire application is a single-page HTML/CSS/JavaScript implementation with 
 ```bash
 # No build step required - just open in browser
 open index.html
-# Or use any local server:
+
+# Or use any local server (required for loading local data files in some browsers):
 python3 -m http.server 8000
-```
-
-### Fixing Broken Polygon Data
-```bash
-# Find unclosed polygons
-python3 find_unclosed.py
-
-# Fix specific polygons (edit FID list in script first)
-python3 fix_polygons.py
+# Then navigate to http://localhost:8000
 ```
 
 ### Working with the Data
@@ -114,35 +118,64 @@ The GeoJSON structure is consistent across files:
 }
 ```
 
+### FID Mapping Structure (camp_fid_mappings.json)
+```javascript
+{
+  "1": "Illumination Village",
+  "2": "Shipwreck Tiki Lounge",
+  // Maps outline FID (as string) to exact camp name from camps.json
+}
+```
+
 ## Critical Implementation Notes
 
 ### Canvas Coordinate Math
 - X-axis (longitude): increases westward (negative values become less negative going right)
 - Y-axis (latitude): increases northward, but canvas Y increases downward (requires negation)
 - Scale factor must account for latitude compression using `latScale = cos(centerY * π/180)`
+- **Rotation**: All coordinates rotated 45° clockwise around canvas center using rotation matrix
+- Rotation constants: `COS_ROTATION = cos(-45°)`, `SIN_ROTATION = sin(-45°)`
+- Transform order: geographic → relative position → rotation → canvas position
 
 ### Performance Considerations
-- `camp_names_2025.geojson` is 24MB - loading is async with status indicator
-- Rendering 27,764+ name features can be slow - toggle visibility for performance
-- Point-in-polygon tests run on every mouse move - optimized with early exits
+- `camp_names_2025.geojson` is 24MB - currently not rendered in the main branch
+- Point-in-polygon tests run on every mouse move for hover detection
+- Background image is large (BRCMapAdj.png) - loaded once and cached by browser
+- Camp outlines rendered as invisible hit-test areas unless `showOutlines` is enabled
 
-### Known Issues & Fixes
-- Some camp outline polygons were unclosed (first != last coordinate)
-- Fixed polygons: FIDs 223, 1076, 1274, 1276 (see git history)
-- Fix approach: append first coordinate to end of coordinate array
+### UI State Management
+The application maintains several state variables in `map.js`:
+- `highlightedCamp` - Currently hovered camp (for yellow highlight)
+- `currentPopupCampName` - Camp shown in small hover popup
+- `sidebarOpen` / `currentSidebarCampName` - Sidebar state and content
+- `sidebarOnLeft` - Dynamic sidebar positioning based on mouse position
+- `fullCampInfoOpen` / `currentFullCampName` - Full-page view state
+- `showBackgroundImage` - Toggle for background map visibility
+- `showOutlines` - Toggle for camp outline visibility (debugging)
+
+### Key Functions in map.js
+- `geoToCanvas(lon, lat)` - Converts WGS84 coordinates to canvas pixel position (with rotation)
+- `canvasToGeo(x, y)` - Inverse transform from canvas to geographic coordinates
+- `isPointInPolygon(lon, lat, coords)` - Ray-casting algorithm for hit detection
+- `findCampAtLocation(lon, lat)` - Returns camp FID at given geographic coordinate
+- `getCampByName(name)` - Looks up full camp data from camps.json by name
+- `showCampPopup(campName)` - Displays hover popup with camp name/location
+- `showCampSidebar(campName, mouseX)` - Opens sidebar with camp details (positioned left/right based on mouseX)
+- `showFullCampInfo(campName)` - Opens full-page camp information view
+- `redraw()` - Main render function that draws background, outlines, and highlights
 
 ## Project Context
 
-This tool enables human volunteers to:
-1. Hover over a camp outline on the map
-2. See the FID displayed
-3. Visually identify which camp it is (from context/neighbors)
-4. Manually record the mapping in `camp_fid_mappings.json`
+The main branch now contains a fully functional interactive camp browser that:
+1. Displays all Burning Man 2025 camps on an accurate map
+2. Shows camp details when users hover or click on camp boundaries
+3. Provides three levels of detail: popup (hover), sidebar (click), full-page (double-click)
+4. Uses the completed `camp_fid_mappings.json` to connect outline polygons to camp metadata
 
-The eventual goal is to build a complete mapping that other applications can use to display camp names with their precise boundaries.
+The earlier tool for building the FID mappings has been moved to the `createcampnames` branch.
 
 ## Git Workflow
 
-- Main branch: (not configured - working on `explorer` branch)
-- Recent work: fixing polygon outlines, adding FID display, importing camp mappings
-- Clean working directory with `.gitignore` for `.DS_Store` files
+- **Main branch**: Production-ready interactive camp browser
+- **createcampnames branch**: Historical tool for building FID mappings (archived)
+- `.gitignore` excludes `.DS_Store` files
