@@ -2,6 +2,8 @@
 
 An interactive map viewer for Burning Man 2025 theme camps. Requires a desktop web browser... this is too fancy for your little phone, sorry.
 
+(In 1086, William the Conqueror sent his agents to survey every shire in England, to list his holdings and dues owed to him. This became the Domesday book, a great survey of the land in most of England and Wales. I chose this name of the project because Burning Man's official data sets and APIs traditionally store approximate "nearest corner" locations for theme camps but not their actual locations.)
+
 ## Features
 
 **Explore the Map**

@@ -405,6 +405,9 @@ async function init() {
 
     loadingStatus.style.display = 'none';
 
+    // Initialize search
+    initializeSearch();
+
     // Initial render
     resizeCanvas();
     zoomToFit();
@@ -1193,6 +1196,243 @@ canvas.addEventListener('touchend', (e) => {
         lastTouchDistance = 0;
     }
 });
+
+// Search functionality
+let searchInput = null;
+let searchAutocomplete = null;
+let autocompleteResults = [];
+let selectedAutocompleteIndex = -1;
+
+function initializeSearch() {
+    searchInput = document.getElementById('campSearch');
+    searchAutocomplete = document.getElementById('searchAutocomplete');
+
+    if (!searchInput || !searchAutocomplete) return;
+
+    // Handle input changes
+    searchInput.addEventListener('input', handleSearchInput);
+
+    // Handle keyboard navigation
+    searchInput.addEventListener('keydown', handleSearchKeydown);
+
+    // Handle focus/blur
+    searchInput.addEventListener('focus', handleSearchFocus);
+    searchInput.addEventListener('blur', handleSearchBlur);
+}
+
+function handleSearchInput(e) {
+    const query = e.target.value.trim().toLowerCase();
+
+    if (query.length === 0) {
+        hideAutocomplete();
+        return;
+    }
+
+    // Get all camp names
+    const campNames = Object.keys(campFidMappings || {}).map(fid => campFidMappings[fid]);
+
+    // Filter camps that match the query
+    autocompleteResults = campNames
+        .filter(name => name.toLowerCase().includes(query))
+        .sort((a, b) => {
+            // Prioritize matches at the start of the name
+            const aStarts = a.toLowerCase().startsWith(query);
+            const bStarts = b.toLowerCase().startsWith(query);
+            if (aStarts && !bStarts) return -1;
+            if (!aStarts && bStarts) return 1;
+            return a.localeCompare(b);
+        })
+        .slice(0, 10); // Limit to 10 results
+
+    if (autocompleteResults.length > 0) {
+        showAutocomplete(autocompleteResults, query);
+    } else {
+        hideAutocomplete();
+    }
+}
+
+function handleSearchKeydown(e) {
+    if (!searchAutocomplete || searchAutocomplete.style.display === 'none') {
+        if (e.key === 'Enter' && autocompleteResults.length > 0) {
+            // Search for the first result
+            zoomToCamp(autocompleteResults[0]);
+            searchInput.blur();
+        }
+        return;
+    }
+
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        selectedAutocompleteIndex = Math.min(selectedAutocompleteIndex + 1, autocompleteResults.length - 1);
+        updateAutocompleteSelection();
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        selectedAutocompleteIndex = Math.max(selectedAutocompleteIndex - 1, -1);
+        updateAutocompleteSelection();
+    } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (selectedAutocompleteIndex >= 0) {
+            zoomToCamp(autocompleteResults[selectedAutocompleteIndex]);
+        } else if (autocompleteResults.length > 0) {
+            zoomToCamp(autocompleteResults[0]);
+        }
+        searchInput.blur();
+        hideAutocomplete();
+    } else if (e.key === 'Escape') {
+        hideAutocomplete();
+        searchInput.blur();
+    }
+}
+
+function handleSearchFocus() {
+    if (autocompleteResults.length > 0) {
+        showAutocomplete(autocompleteResults, searchInput.value.trim().toLowerCase());
+    }
+}
+
+function handleSearchBlur() {
+    // Delay hiding to allow click events on autocomplete items
+    setTimeout(() => {
+        hideAutocomplete();
+    }, 200);
+}
+
+function showAutocomplete(results, query) {
+    searchAutocomplete.innerHTML = '';
+    selectedAutocompleteIndex = -1;
+
+    results.forEach((campName, index) => {
+        const item = document.createElement('div');
+        item.className = 'autocomplete-item';
+        item.textContent = campName;
+        item.setAttribute('data-index', index);
+
+        // Highlight matching text
+        const lowerName = campName.toLowerCase();
+        const matchIndex = lowerName.indexOf(query);
+        if (matchIndex >= 0) {
+            const before = campName.substring(0, matchIndex);
+            const match = campName.substring(matchIndex, matchIndex + query.length);
+            const after = campName.substring(matchIndex + query.length);
+            item.innerHTML = `${before}<strong>${match}</strong>${after}`;
+        }
+
+        item.addEventListener('mousedown', (e) => {
+            e.preventDefault(); // Prevent blur
+            zoomToCamp(campName);
+            searchInput.value = campName;
+            hideAutocomplete();
+        });
+
+        searchAutocomplete.appendChild(item);
+    });
+
+    searchAutocomplete.style.display = 'block';
+}
+
+function hideAutocomplete() {
+    if (searchAutocomplete) {
+        searchAutocomplete.style.display = 'none';
+    }
+    selectedAutocompleteIndex = -1;
+}
+
+function updateAutocompleteSelection() {
+    const items = searchAutocomplete.querySelectorAll('.autocomplete-item');
+    items.forEach((item, index) => {
+        if (index === selectedAutocompleteIndex) {
+            item.classList.add('selected');
+        } else {
+            item.classList.remove('selected');
+        }
+    });
+}
+
+function zoomToCamp(campName) {
+    // Find the FID for this camp
+    let targetFid = null;
+    for (const fid in campFidMappings) {
+        if (campFidMappings[fid] === campName) {
+            targetFid = fid;
+            break;
+        }
+    }
+
+    if (!targetFid || !campOutlines) return;
+
+    // Find the camp outline feature
+    const feature = campOutlines.features.find(f => f.properties.fid === parseInt(targetFid));
+    if (!feature || feature.geometry.type !== 'LineString') return;
+
+    const coordinates = feature.geometry.coordinates;
+    if (coordinates.length === 0) return;
+
+    // Calculate bounding box
+    let minLon = Infinity, maxLon = -Infinity;
+    let minLat = Infinity, maxLat = -Infinity;
+
+    coordinates.forEach(coord => {
+        const [lon, lat] = coord;
+        minLon = Math.min(minLon, lon);
+        maxLon = Math.max(maxLon, lon);
+        minLat = Math.min(minLat, lat);
+        maxLat = Math.max(maxLat, lat);
+    });
+
+    // Calculate center
+    const centerLon = (minLon + maxLon) / 2;
+    const centerLat = (minLat + maxLat) / 2;
+
+    // Calculate dimensions
+    const lonSpan = maxLon - minLon;
+    const latSpan = maxLat - minLat;
+
+    // Zoom so the camp takes up about 30% of the screen
+    const latScale = Math.cos(centerLat * Math.PI / 180);
+    const scaleX = (canvas.width * 0.3) / (lonSpan * latScale);
+    const scaleY = (canvas.height * 0.3) / latSpan;
+    const targetScale = Math.min(scaleX, scaleY);
+
+    // Animate to the new position, then highlight the camp
+    animateViewport(centerLon, centerLat, targetScale, () => {
+        // Highlight the camp after animation completes
+        highlightedCamp = feature;
+        redraw();
+    });
+}
+
+function animateViewport(targetCenterX, targetCenterY, targetScale, onComplete) {
+    const startCenterX = viewport.centerX;
+    const startCenterY = viewport.centerY;
+    const startScale = viewport.scale;
+
+    const duration = 500; // milliseconds
+    const startTime = Date.now();
+
+    function animate() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Ease in-out function
+        const eased = progress < 0.5
+            ? 2 * progress * progress
+            : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+        viewport.centerX = startCenterX + (targetCenterX - startCenterX) * eased;
+        viewport.centerY = startCenterY + (targetCenterY - startCenterY) * eased;
+        viewport.scale = startScale + (targetScale - startScale) * eased;
+
+        redraw();
+
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        } else if (onComplete) {
+            onComplete();
+        }
+    }
+
+    animate();
+}
 
 // Handle window resize
 window.addEventListener('resize', resizeCanvas);
