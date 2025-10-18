@@ -67,7 +67,7 @@ Camps are matched across years by their **name** field. The matching algorithm s
 - Camp names must match exactly - no fuzzy matching
 - The `history` array should be sorted by year in descending order (2025 first)
 - Years 2020 and 2021 are excluded (Covid cancellations)
-- Historical data goes back to 2015 (based on API availability)
+- Historical data goes back to 2015 (based on API availability) or 1997 (based on data scraped from burningman.org)
 
 ## Example Entry
 

@@ -32,7 +32,7 @@ An interactive map viewer for Burning Man 2025 theme camps. Works on desktop and
 ## Data
 
 - **Camp Information**: Official Burning Man 2025 camp placement data
-- **Historical Records**: Camp attendance from 2015-2024 (excluding 2020-2021)
+- **Historical Records**: Camp attendance from 1997-2024 
 - **Map Accuracy**: GeoJSON polygon boundaries aligned with official BRC coordinates
 - **Orientation**: 12:00 positioned at the top of the map, rotating 45° from standard north-up orientation
 
