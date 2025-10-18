@@ -1,4 +1,5 @@
 // Canvas and rendering setup
+const demomode = true;
 const canvas = document.getElementById('mapCanvas');
 const ctx = canvas.getContext('2d');
 const loadingStatus = document.getElementById('loadingStatus');
@@ -90,7 +91,7 @@ function isPointInPolygon(lon, lat, coordinates) {
 // Find which camp contains the given geographic coordinate (with diagnostics)
 function findCampAtLocation(lon, lat) {
     lastDiagnostic = ''; // Reset diagnostic message
-    
+
     if (!campOutlines) {
         lastDiagnostic = 'No camp outline data loaded';
         return null;
@@ -104,7 +105,7 @@ function findCampAtLocation(lon, lat) {
 
     for (const feature of campOutlines.features) {
         totalFeatures++;
-        
+
         if (feature.geometry.type === 'LineString') {
             lineStringFeatures++;
             const coordinates = feature.geometry.coordinates;
@@ -120,12 +121,12 @@ function findCampAtLocation(lon, lat) {
 
                 if (isClosed) {
                     closedPolygons++;
-                    
+
                     // Test if point is inside this polygon
                     if (isPointInPolygon(lon, lat, coordinates)) {
                         return feature; // Found it!
                     }
-                    
+
                     // For debugging, track some tested features
                     if (testedFeatures.length < 3) {
                         const fid = feature.properties ? feature.properties.fid : 'unknown';
@@ -142,11 +143,11 @@ function findCampAtLocation(lon, lat) {
     parts.push(`${lineStringFeatures} LineStrings`);
     parts.push(`${validLengthFeatures} valid length`);
     parts.push(`${closedPolygons} closed polygons`);
-    
+
     if (testedFeatures.length > 0) {
         parts.push(`tested: ${testedFeatures.join(', ')}`);
     }
-    
+
     lastDiagnostic = `No match found: ${parts.join(', ')}`;
     return null;
 }
@@ -192,26 +193,26 @@ function fillPolygon(coordinates, color) {
 // Calculate the centroid (geometric center) of a polygon
 function calculateCentroid(coordinates) {
     if (coordinates.length === 0) return null;
-    
+
     let sumLon = 0;
     let sumLat = 0;
-    
+
     for (const coord of coordinates) {
         sumLon += coord[0];
         sumLat += coord[1];
     }
-    
+
     return [sumLon / coordinates.length, sumLat / coordinates.length];
 }
 
 // Draw a star marker at a geographic location
 function drawStarMarker(lon, lat, color = 'red', size = 12) {
     const canvasPoint = geoToCanvas(lon, lat);
-    
+
     // Only draw if the point is visible on canvas
-    if (canvasPoint.x >= 0 && canvasPoint.x <= canvas.width && 
+    if (canvasPoint.x >= 0 && canvasPoint.x <= canvas.width &&
         canvasPoint.y >= 0 && canvasPoint.y <= canvas.height) {
-        
+
         ctx.font = `${size}px Arial`;
         ctx.fillStyle = color;
         ctx.textAlign = 'center';
@@ -231,7 +232,7 @@ function redraw() {
         campOutlines.features.forEach(feature => {
             if (feature.geometry.type === 'LineString') {
                 const coordinates = feature.geometry.coordinates;
-                
+
                 // Fill highlighted camp with yellow background
                 if (highlightedCamp && feature === highlightedCamp) {
                     fillPolygon(coordinates, 'rgba(255, 255, 0, 0.3)');
@@ -250,7 +251,7 @@ function redraw() {
         campOutlines.features.forEach(feature => {
             if (feature.geometry.type === 'LineString') {
                 const coordinates = feature.geometry.coordinates;
-                
+
                 // Check if this polygon is unclosed
                 if (coordinates.length > 3) {
                     const first = coordinates[0];
@@ -258,7 +259,7 @@ function redraw() {
                     const tolerance = 0.000001;
                     const isClosed = Math.abs(first[0] - last[0]) < tolerance &&
                         Math.abs(first[1] - last[1]) < tolerance;
-                    
+
                     // If not closed, draw a red star at the centroid
                     if (!isClosed) {
                         const centroid = calculateCentroid(coordinates);
@@ -315,29 +316,33 @@ async function loadCampNamesDatabase() {
 
 // Load existing FID mappings if available
 async function loadCampMappings() {
-    // First try to load from data/camp_fid_mappings.json (preferred)
-    try {
-        const response = await fetch('data/camp_fid_mappings.json');
-        if (response.ok) {
-            const mappings = await response.json();
-            campMappings = mappings;
-            const loadedCount = Object.keys(mappings).length;
-            console.log(`Loaded ${loadedCount} existing camp mappings from file`);
-            
-            // Update status to show mappings were loaded
-            if (loadedCount > 0) {
-                loadingStatus.textContent = `Loaded ${loadedCount} existing camp mappings from file`;
-                setTimeout(() => {
-                    loadingStatus.textContent = 'Ready';
-                }, 2000);
+
+    if (!demomode) {
+
+        // First try to load from data/camp_fid_mappings.json (preferred)
+        try {
+            const response = await fetch('data/camp_fid_mappings.json');
+            if (response.ok) {
+                const mappings = await response.json();
+                campMappings = mappings;
+                const loadedCount = Object.keys(mappings).length;
+                console.log(`Loaded ${loadedCount} existing camp mappings from file`);
+
+                // Update status to show mappings were loaded
+                if (loadedCount > 0) {
+                    loadingStatus.textContent = `Loaded ${loadedCount} existing camp mappings from file`;
+                    setTimeout(() => {
+                        loadingStatus.textContent = 'Ready';
+                    }, 2000);
+                }
+
+                return mappings;
             }
-            
-            return mappings;
+        } catch (error) {
+            console.log('No camp mappings file found, checking browser storage...');
         }
-    } catch (error) {
-        console.log('No camp mappings file found, checking browser storage...');
     }
-    
+
     // Fallback: try localStorage
     try {
         const storedMappings = localStorage.getItem('brc_camp_mappings');
@@ -346,20 +351,20 @@ async function loadCampMappings() {
             campMappings = mappings;
             const loadedCount = Object.keys(mappings).length;
             console.log(`Loaded ${loadedCount} existing camp mappings from browser storage`);
-            
+
             if (loadedCount > 0) {
                 loadingStatus.textContent = `Loaded ${loadedCount} camp mappings from browser storage`;
                 setTimeout(() => {
                     loadingStatus.textContent = 'Ready';
                 }, 2000);
             }
-            
+
             return mappings;
         }
     } catch (error) {
         console.log('No browser storage mappings found');
     }
-    
+
     console.log('Starting fresh - no existing mappings found');
     return {};
 }
@@ -393,16 +398,16 @@ async function init() {
 
     // Load existing camp FID mappings if available
     await loadCampMappings();
-    
+
     // Extract all FIDs from camp outlines for progress tracking
     if (campOutlines) {
         allFIDs = campOutlines.features.map(f => f.properties.fid).sort((a, b) => a - b);
         console.log(`Found ${allFIDs.length} total camps for naming`);
     }
-    
+
     // Update progress display with loaded mappings
     updateNamingProgress();
-    
+
     const mappedCount = Object.keys(campMappings).length;
     if (mappedCount > 0) {
         console.log(`Found ${mappedCount} existing camp name mappings`);
@@ -502,13 +507,13 @@ function startCampMapping() {
 
     // Extract all FIDs from the data
     allFIDs = campOutlines.features.map(feature => feature.properties.fid).sort((a, b) => a - b);
-    
+
     campNamingMode = true;
     currentNamingFID = findNextUnnamedCamp();
-    
+
     document.getElementById('campNamingSection').style.display = 'block';
     updateNamingProgress();
-    
+
     if (currentNamingFID !== -1) {
         zoomToCamp(currentNamingFID);
     } else {
@@ -564,12 +569,12 @@ function zoomToCamp(fid) {
 
     // Highlight the camp
     highlightedCamp = camp;
-    
+
     // Update UI
     document.getElementById('currentFID').textContent = fid;
     document.getElementById('campNameInput').value = '';
     document.getElementById('campNameInput').focus();
-    
+
     redraw();
 }
 
@@ -583,7 +588,7 @@ function submitCampName() {
     // Save the mapping
     campMappings[currentNamingFID] = campName;
     console.log(`Mapped FID ${currentNamingFID} -> "${campName}"`);
-    
+
     // Auto-save to localStorage as backup
     localStorage.setItem('brc_camp_mappings', JSON.stringify(campMappings));
 
@@ -595,7 +600,7 @@ function skipCamp() {
     // Mark as skipped (empty string)
     campMappings[currentNamingFID] = '';
     console.log(`Skipped FID ${currentNamingFID}`);
-    
+
     // Move to next camp
     moveToNextCamp();
 }
@@ -603,7 +608,7 @@ function skipCamp() {
 function moveToNextCamp() {
     currentNamingFID = findNextUnnamedCamp();
     updateNamingProgress();
-    
+
     if (currentNamingFID !== -1) {
         zoomToCamp(currentNamingFID);
     } else {
@@ -616,28 +621,28 @@ function updateNamingProgress() {
     const named = Object.keys(campMappings).length;
     const total = allFIDs.length;
     const percentage = total > 0 ? Math.round((named / total) * 100) : 0;
-    
+
     let progressText = `Progress: ${named} / ${total} camps processed (${percentage}%)`;
     if (named > 0) {
         progressText += ` • ${named} camps named`;
     }
-    
+
     document.getElementById('campProgress').textContent = progressText;
 }
 
 function saveMappings() {
     const dataStr = JSON.stringify(campMappings, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
-    
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+
     const link = document.createElement('a');
     link.href = URL.createObjectURL(dataBlob);
     link.download = 'camp_fid_mappings.json';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
+
     console.log('Camp mappings saved:', campMappings);
-    
+
     // Show instructions for persistence
     const mappedCount = Object.keys(campMappings).length;
     alert(`Mappings downloaded! (${mappedCount} camps)\n\nTo make these mappings load automatically next time:\n1. Move the downloaded 'camp_fid_mappings.json' file\n2. From your Downloads folder\n3. To: data/camp_fid_mappings.json\n\nThe app will then load your mappings automatically on next visit.`);
@@ -649,27 +654,27 @@ let selectedAutocompleteIndex = -1;
 function showAutocomplete(matches) {
     const dropdown = document.getElementById('autocompleteDropdown');
     dropdown.innerHTML = '';
-    
+
     if (matches.length === 0) {
         dropdown.style.display = 'none';
         return;
     }
-    
+
     // If there's exactly one match, auto-fill the input and select the untyped portion
     if (matches.length === 1) {
         const input = document.getElementById('campNameInput');
         const currentValue = input.value;
         const matchValue = matches[0];
-        
+
         // Set the full match as the value
         input.value = matchValue;
-        
+
         // Select the portion the user didn't type
         // Find where the user's input appears in the match (case-insensitive)
         const userInput = currentValue.toLowerCase();
         const matchLower = matchValue.toLowerCase();
         const matchIndex = matchLower.indexOf(userInput);
-        
+
         if (matchIndex !== -1) {
             // Select from the end of user's input to the end of the match
             const selectionStart = matchIndex + currentValue.length;
@@ -678,38 +683,38 @@ function showAutocomplete(matches) {
             // Fallback: select everything after the current input length
             input.setSelectionRange(currentValue.length, matchValue.length);
         }
-        
+
         dropdown.style.display = 'none';
         selectedAutocompleteIndex = -1;
         return;
     }
-    
+
     matches.slice(0, 10).forEach((match, index) => { // Show max 10 matches
         const item = document.createElement('div');
         item.textContent = match;
         item.style.padding = '8px';
         item.style.cursor = 'pointer';
         item.style.borderBottom = '1px solid #eee';
-        
+
         item.addEventListener('mouseenter', () => {
             clearAutocompleteSelection();
             item.style.backgroundColor = '#e9ecef';
             selectedAutocompleteIndex = index;
         });
-        
+
         item.addEventListener('mouseleave', () => {
             item.style.backgroundColor = '';
         });
-        
+
         item.addEventListener('click', () => {
             document.getElementById('campNameInput').value = match;
             dropdown.style.display = 'none';
             selectedAutocompleteIndex = -1;
         });
-        
+
         dropdown.appendChild(item);
     });
-    
+
     dropdown.style.display = 'block';
 }
 
@@ -723,17 +728,17 @@ function clearAutocompleteSelection() {
 function selectAutocompleteItem(direction) {
     const dropdown = document.getElementById('autocompleteDropdown');
     const items = dropdown.children;
-    
+
     if (items.length === 0) return;
-    
+
     clearAutocompleteSelection();
-    
+
     if (direction === 'down') {
         selectedAutocompleteIndex = (selectedAutocompleteIndex + 1) % items.length;
     } else if (direction === 'up') {
         selectedAutocompleteIndex = selectedAutocompleteIndex <= 0 ? items.length - 1 : selectedAutocompleteIndex - 1;
     }
-    
+
     if (selectedAutocompleteIndex >= 0) {
         items[selectedAutocompleteIndex].style.backgroundColor = '#e9ecef';
     }
@@ -742,7 +747,7 @@ function selectAutocompleteItem(direction) {
 function applySelectedAutocomplete() {
     const dropdown = document.getElementById('autocompleteDropdown');
     const items = dropdown.children;
-    
+
     if (selectedAutocompleteIndex >= 0 && selectedAutocompleteIndex < items.length) {
         const selectedText = items[selectedAutocompleteIndex].textContent;
         document.getElementById('campNameInput').value = selectedText;
@@ -756,36 +761,36 @@ function applySelectedAutocomplete() {
 // Allow Enter key to submit camp name and handle autocomplete navigation
 document.addEventListener('DOMContentLoaded', () => {
     const campNameInput = document.getElementById('campNameInput');
-    
+
     // Handle input changes for autocomplete
     campNameInput.addEventListener('input', (e) => {
         const query = e.target.value.trim().toLowerCase();
-        
+
         if (query.length < 2) {
             document.getElementById('autocompleteDropdown').style.display = 'none';
             return;
         }
-        
+
         // Find matching camp names
-        const matches = allCampNames.filter(name => 
+        const matches = allCampNames.filter(name =>
             name.toLowerCase().includes(query)
         ).slice(0, 10);
-        
+
         showAutocomplete(matches);
         selectedAutocompleteIndex = -1;
     });
-    
+
     // Handle keyboard navigation
     campNameInput.addEventListener('keydown', (e) => {
         const dropdown = document.getElementById('autocompleteDropdown');
-        
+
         if (dropdown.style.display === 'none') {
             if (e.key === 'Enter') {
                 submitCampName();
             }
             return;
         }
-        
+
         switch (e.key) {
             case 'ArrowDown':
                 e.preventDefault();
@@ -807,7 +812,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
         }
     });
-    
+
     // Hide dropdown when clicking outside
     document.addEventListener('click', (e) => {
         if (!campNameInput.contains(e.target) && !document.getElementById('autocompleteDropdown').contains(e.target)) {
@@ -871,11 +876,11 @@ canvas.addEventListener('mousemove', (e) => {
             // Update camp display and diagnostic information
             const campDisplay = document.getElementById('currentCamp');
             const diagnosticDisplay = document.getElementById('diagnostic');
-            
+
             if (highlightedCamp && highlightedCamp.properties && highlightedCamp.properties.fid) {
                 const fid = highlightedCamp.properties.fid;
                 const campName = campMappings[fid];
-                
+
                 if (campName) {
                     campDisplay.textContent = `Camp: ${fid} - "${campName}"`;
                 } else {
