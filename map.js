@@ -652,6 +652,10 @@ function updateSidebarContent(campName) {
     updateSidebarCampInfo(campName);
 }
 
+// Tooltip state management
+let tooltipHideTimer = null;
+let currentTooltipTarget = null;
+
 // Build the camp history section
 function buildCampHistorySection(campName) {
     const historyContainer = document.getElementById('fullCampHistory');
@@ -704,15 +708,28 @@ function buildCampHistorySection(campName) {
     const yearSpans = historyContainer.querySelectorAll('.history-year');
     yearSpans.forEach(span => {
         span.addEventListener('mouseenter', showHistoryTooltip);
-        span.addEventListener('mouseleave', hideHistoryTooltip);
-        span.addEventListener('mousemove', moveHistoryTooltip);
+        span.addEventListener('mouseleave', startTooltipHideTimer);
     });
 }
 
 // Show history tooltip
 function showHistoryTooltip(event) {
+    // Cancel any pending hide timer
+    if (tooltipHideTimer) {
+        clearTimeout(tooltipHideTimer);
+        tooltipHideTimer = null;
+    }
+
     const tooltip = document.getElementById('historyTooltip');
-    const yearData = JSON.parse(event.target.getAttribute('data-year-info'));
+    const target = event.target;
+
+    // If tooltip is already showing for this target, don't recreate it
+    if (currentTooltipTarget === target && tooltip.style.display === 'block') {
+        return;
+    }
+
+    currentTooltipTarget = target;
+    const yearData = JSON.parse(target.getAttribute('data-year-info'));
 
     let tooltipContent = `<strong>${yearData.year}</strong><br>`;
 
@@ -735,41 +752,74 @@ function showHistoryTooltip(event) {
     tooltip.innerHTML = tooltipContent;
     tooltip.style.display = 'block';
 
-    // Position the tooltip
-    moveHistoryTooltip(event);
+    // Position the tooltip below the year pill
+    positionTooltip(target, tooltip);
+
+    // Add hover listeners to the tooltip itself so it stays open when mouse moves to it
+    tooltip.onmouseenter = cancelTooltipHide;
+    tooltip.onmouseleave = startTooltipHideTimer;
+}
+
+// Position tooltip below the target element
+function positionTooltip(target, tooltip) {
+    const targetRect = target.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    const offsetY = 8; // Gap between target and tooltip
+
+    // Start with tooltip below the target, centered
+    let left = targetRect.left + (targetRect.width / 2) - (tooltipRect.width / 2);
+    let top = targetRect.bottom + offsetY;
+
+    // Adjust if tooltip would go off right edge
+    if (left + tooltipRect.width > window.innerWidth - 10) {
+        left = window.innerWidth - tooltipRect.width - 10;
+    }
+
+    // Adjust if tooltip would go off left edge
+    if (left < 10) {
+        left = 10;
+    }
+
+    // Adjust if tooltip would go off bottom edge - show above instead
+    if (top + tooltipRect.height > window.innerHeight - 10) {
+        top = targetRect.top - tooltipRect.height - offsetY;
+    }
+
+    // Add scroll offset since we're using absolute positioning
+    tooltip.style.left = (left + window.scrollX) + 'px';
+    tooltip.style.top = (top + window.scrollY) + 'px';
+}
+
+// Start timer to hide tooltip
+function startTooltipHideTimer() {
+    // Clear any existing timer
+    if (tooltipHideTimer) {
+        clearTimeout(tooltipHideTimer);
+    }
+
+    // Set a delay before hiding (500ms gives time to move mouse to tooltip)
+    tooltipHideTimer = setTimeout(() => {
+        hideHistoryTooltip();
+    }, 300);
+}
+
+// Cancel tooltip hide
+function cancelTooltipHide() {
+    if (tooltipHideTimer) {
+        clearTimeout(tooltipHideTimer);
+        tooltipHideTimer = null;
+    }
 }
 
 // Hide history tooltip
 function hideHistoryTooltip() {
     const tooltip = document.getElementById('historyTooltip');
     tooltip.style.display = 'none';
-}
+    currentTooltipTarget = null;
 
-// Move history tooltip with mouse
-function moveHistoryTooltip(event) {
-    const tooltip = document.getElementById('historyTooltip');
-    const offsetX = 15;
-    const offsetY = 15;
-
-    // Position tooltip, making sure it doesn't go off screen
-    let left = event.pageX + offsetX;
-    let top = event.pageY + offsetY;
-
-    // Get tooltip dimensions (it needs to be displayed to measure)
-    const tooltipRect = tooltip.getBoundingClientRect();
-
-    // Adjust if tooltip would go off right edge
-    if (left + tooltipRect.width > window.innerWidth) {
-        left = event.pageX - tooltipRect.width - offsetX;
-    }
-
-    // Adjust if tooltip would go off bottom edge
-    if (top + tooltipRect.height > window.innerHeight) {
-        top = event.pageY - tooltipRect.height - offsetY;
-    }
-
-    tooltip.style.left = left + 'px';
-    tooltip.style.top = top + 'px';
+    // Remove event listeners
+    tooltip.onmouseenter = null;
+    tooltip.onmouseleave = null;
 }
 
 // Open full camp information mode
