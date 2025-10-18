@@ -95,7 +95,7 @@ def build_camp_history():
 
     # Define the years to check (backwards from 2024, skipping 2020-2021)
     years_to_check = []
-    for year in range(2024, 1999, -1):  # Go back to 2000
+    for year in range(2024, 1996, -1):  # Go back to 1997
         if year not in {2020, 2021}:  # Skip Covid years
             years_to_check.append(year)
 
