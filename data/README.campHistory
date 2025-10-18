@@ -1,0 +1,107 @@
+# campHistory.json Specification
+
+## Overview
+
+`campHistory.json` contains historical attendance data for all camps that appear in the 2025 Burning Man event. This file allows the application to show which camps are returning veterans and provides historical context about their previous appearances.
+
+## Structure
+
+The file is a JSON object where each key is a camp name (as it appears in `camps2025.json`) and each value is an object containing historical data about that camp.
+
+```json
+{
+  "Camp Name": {
+    "name": "Camp Name",
+    "history": [
+      {
+        "year": 2025,
+        "description": "Camp description for 2025...",
+        "location_string": "D & 3:15",
+        "url": "https://example.com"
+      },
+      {
+        "year": 2024,
+        "description": "Camp description for 2024...",
+        "location_string": "C & 3:30",
+        "url": null
+      }
+    ]
+  }
+}
+```
+
+## Field Definitions
+
+### Top Level
+
+- **Key** (string): The exact camp name as it appears in `camps2025.json`. Used for lookups.
+- **Value** (object): Contains `name` and `history` fields.
+
+### Camp Object
+
+- **name** (string): The camp name (duplicated for convenience).
+- **history** (array): Array of historical appearance objects, ordered by year (newest first).
+
+### History Entry Object
+
+Each entry in the `history` array represents one year that the camp attended Burning Man:
+
+- **year** (number): The year of this appearance (e.g., 2025, 2024, etc.).
+- **description** (string): The camp's description for that year. This may change from year to year.
+- **location_string** (string): The camp's location for that year in the format "Street & Time" (e.g., "D & 3:15", "8:30 & B").
+- **url** (string | null): The camp's website URL for that year, or `null` if not provided.
+
+## Matching Logic
+
+Camps are matched across years by their **name** field. The matching algorithm should:
+
+1. Start with all camps from `camps2025.json`
+2. For each camp, search through `camps2024.json`, `camps2023.json`, `camps2022.json`, `camps2019.json`, etc.
+3. Match camps where the `name` field is identical (case-sensitive)
+4. Collect all matching historical entries into the `history` array
+
+## Notes
+
+- Only camps that appear in 2025 will have entries in this file
+- Camps may appear in some years but not others (gaps in attendance are normal)
+- Camp names must match exactly - no fuzzy matching
+- The `history` array should be sorted by year in descending order (2025 first)
+- Years 2020 and 2021 are excluded (Covid cancellations)
+- Historical data goes back to 2015 (based on API availability)
+
+## Example Entry
+
+```json
+{
+  "Bag o' Dicks": {
+    "name": "Bag o' Dicks",
+    "history": [
+      {
+        "year": 2025,
+        "description": "Free spirited camp with good beats, booze, and the friendliest bag o' dicks around!",
+        "location_string": "D & 3:15",
+        "url": null
+      },
+      {
+        "year": 2024,
+        "description": "Come visit our dicks at the playa!",
+        "location_string": "C & 3:00",
+        "url": "https://bagodicks.com"
+      },
+      {
+        "year": 2023,
+        "description": "Friendly neighborhood dick camp",
+        "location_string": "D & 3:30",
+        "url": null
+      }
+    ]
+  }
+}
+```
+
+## File Size Considerations
+
+With ~1000 camps in 2025 and up to 10 years of history each, this file should be:
+- Manageable size (estimated 2-5 MB)
+- Easy to load and parse in the browser
+- Structured for efficient lookups by camp name
