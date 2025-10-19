@@ -681,7 +681,11 @@ function buildCampEventsSection(campName) {
     // Find the 2025 entry
     const entry2025 = history.find(h => h.year === 2025);
 
-    if (!entry2025 || !entry2025.events || entry2025.events.length === 0) {
+    // Check if there are any historical events (before checking 2025 events)
+    const historicalEntries = history.filter(h => h.year !== 2025 && h.events && h.events.length > 0);
+
+    // If no 2025 events AND no historical events, don't show the section at all
+    if ((!entry2025 || !entry2025.events || entry2025.events.length === 0) && historicalEntries.length === 0) {
         eventsContainer.innerHTML = '';
         return;
     }
@@ -690,26 +694,30 @@ function buildCampEventsSection(campName) {
     let eventsHTML = `
         <hr style="margin: 20px 0; border: none; border-top: 1px solid #444;">
         <h2>2025 Events</h2>
-        <div class="events-year-group">
     `;
 
-    entry2025.events.forEach(event => {
-        const eventType = event.event_type ? ` (${escapeHtml(event.event_type)})` : '';
-        eventsHTML += `
-            <div class="event-item">
-                <div>
-                    <span class="event-title">${escapeHtml(event.title)}</span><span class="event-type">${eventType}</span>
+    if (entry2025 && entry2025.events && entry2025.events.length > 0) {
+        eventsHTML += `<div class="events-year-group">`;
+
+        entry2025.events.forEach(event => {
+            const eventType = event.event_type ? ` (${escapeHtml(event.event_type)})` : '';
+            eventsHTML += `
+                <div class="event-item">
+                    <div>
+                        <span class="event-title">${escapeHtml(event.title)}</span><span class="event-type">${eventType}</span>
+                    </div>
+                    <div class="event-description">${escapeHtml(event.description)}</div>
                 </div>
-                <div class="event-description">${escapeHtml(event.description)}</div>
-            </div>
-        `;
-    });
+            `;
+        });
 
-    eventsHTML += `</div>`;
+        eventsHTML += `</div>`;
+    } else {
+        // No 2025 events
+        eventsHTML += `<div style="color: #aaaaaa; font-style: italic; margin-bottom: 15px;">No events listed for 2025</div>`;
+    }
 
-    // Check if there are any historical events
-    const historicalEntries = history.filter(h => h.year !== 2025 && h.events && h.events.length > 0);
-
+    // Add "Show older events" button if there are historical events
     if (historicalEntries.length > 0) {
         // Add "Show older events" button
         eventsHTML += `
