@@ -97,7 +97,13 @@ def extract_history_entry(camp, events_by_camp_uid=None):
 
     # If we have event data, find events for this camp
     if events_by_camp_uid and camp_uid and camp_uid in events_by_camp_uid:
-        events = [extract_event_info(event) for event in events_by_camp_uid[camp_uid]]
+        # Extract event info and deduplicate by title
+        seen_titles = set()
+        for event in events_by_camp_uid[camp_uid]:
+            event_title = event.get("title", "")
+            if event_title and event_title not in seen_titles:
+                seen_titles.add(event_title)
+                events.append(extract_event_info(event))
 
     return {
         "year": camp.get("year"),
