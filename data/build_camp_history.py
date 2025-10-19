@@ -47,10 +47,11 @@ def extract_history_entry(camp):
         camp: Camp object from the JSON data
 
     Returns:
-        Dictionary with year, description, location_string, and url
+        Dictionary with year, uid, description, location_string, and url
     """
     return {
         "year": camp.get("year"),
+        "uid": camp.get("uid"),
         "description": camp.get("description", ""),
         "location_string": camp.get("location_string", ""),
         "url": camp.get("url")
