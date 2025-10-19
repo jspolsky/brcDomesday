@@ -1,3 +1,11 @@
+// HTML escaping utility to prevent XSS injection
+function escapeHtml(text) {
+    if (text == null) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 // Canvas and rendering setup
 const canvas = document.getElementById('mapCanvas');
 const ctx = canvas.getContext('2d');
@@ -660,6 +668,45 @@ let tooltipHideTimer = null;
 let currentTooltipTarget = null;
 
 // Build the camp history section
+function buildCampEventsSection(campName) {
+    const eventsContainer = document.getElementById('fullCampEvents');
+
+    if (!campHistory || !campHistory[campName]) {
+        eventsContainer.innerHTML = '';
+        return;
+    }
+
+    const history = campHistory[campName].history;
+
+    // Find the 2025 entry
+    const entry2025 = history.find(h => h.year === 2025);
+
+    if (!entry2025 || !entry2025.events || entry2025.events.length === 0) {
+        eventsContainer.innerHTML = '';
+        return;
+    }
+
+    // Build events HTML
+    let eventsHTML = `
+        <hr style="margin: 20px 0; border: none; border-top: 1px solid #444;">
+        <h2>2025 Events</h2>
+    `;
+
+    entry2025.events.forEach(event => {
+        const eventType = event.event_type ? ` (${escapeHtml(event.event_type)})` : '';
+        eventsHTML += `
+            <div class="event-item">
+                <div>
+                    <span class="event-title">${escapeHtml(event.title)}</span><span class="event-type">${eventType}</span>
+                </div>
+                <div class="event-description">${escapeHtml(event.description)}</div>
+            </div>
+        `;
+    });
+
+    eventsContainer.innerHTML = eventsHTML;
+}
+
 function buildCampHistorySection(campName) {
     const historyContainer = document.getElementById('fullCampHistory');
 
@@ -737,7 +784,7 @@ function showHistoryTooltip(event) {
     let tooltipContent = `<strong>${yearData.year}</strong><br>`;
 
     if (yearData.location_string) {
-        tooltipContent += `<strong>Location:</strong> ${yearData.location_string}<br>`;
+        tooltipContent += `<strong>Location:</strong> ${escapeHtml(yearData.location_string)}<br>`;
     }
 
     if (yearData.description) {
@@ -745,14 +792,15 @@ function showHistoryTooltip(event) {
         const desc = yearData.description.length > 1000
             ? yearData.description.substring(0, 1000) + '...'
             : yearData.description;
-        tooltipContent += `<strong>Description:</strong> ${desc}<br>`;
+        tooltipContent += `<strong>Description:</strong> ${escapeHtml(desc)}<br>`;
     }
 
     if (yearData.url) {
         // Create Wayback Machine URL for August 1st of the year
         const waybackDate = `${yearData.year}0801`;
-        const waybackUrl = `https://web.archive.org/web/${waybackDate}/${yearData.url}`;
-        tooltipContent += `<strong>Web Archive URL:</strong> <a href="${waybackUrl}" target="_blank" style="color: #66aaff;" title="View on Wayback Machine (Aug 1, ${yearData.year})">${yearData.url}</a>`;
+        const escapedUrl = escapeHtml(yearData.url);
+        const waybackUrl = `https://web.archive.org/web/${waybackDate}/${encodeURIComponent(yearData.url)}`;
+        tooltipContent += `<strong>Web Archive URL:</strong> <a href="${escapeHtml(waybackUrl)}" target="_blank" style="color: #66aaff;" title="View on Wayback Machine (Aug 1, ${yearData.year})">${escapedUrl}</a>`;
     }
 
     tooltip.innerHTML = tooltipContent;
@@ -846,22 +894,26 @@ function openFullCampInfo(campName) {
     let details = '';
     if (campData) {
         if (campData.hometown) {
-            details += `<strong>Hometown:</strong> ${campData.hometown}<br><br>`;
+            details += `<strong>Hometown:</strong> ${escapeHtml(campData.hometown)}<br><br>`;
         }
         if (campData.url) {
-            details += `<strong>Website:</strong> <a href="${campData.url}" target="_blank" style="color: #66aaff;">${campData.url}</a><br><br>`;
+            const escapedUrl = escapeHtml(campData.url);
+            details += `<strong>Website:</strong> <a href="${escapedUrl}" target="_blank" style="color: #66aaff;">${escapedUrl}</a><br><br>`;
         }
         if (campData.contact_email) {
-            details += `<strong>Contact:</strong> ${campData.contact_email}<br><br>`;
+            details += `<strong>Contact:</strong> ${escapeHtml(campData.contact_email)}<br><br>`;
         }
         if (campData.landmark) {
-            details += `<strong>Landmark:</strong> ${campData.landmark}<br><br>`;
+            details += `<strong>Landmark:</strong> ${escapeHtml(campData.landmark)}<br><br>`;
         }
         if (campData.location && campData.location.dimensions) {
-            details += `<strong>Dimensions:</strong> ${campData.location.dimensions}<br><br>`;
+            details += `<strong>Dimensions:</strong> ${escapeHtml(campData.location.dimensions)}<br><br>`;
         }
     }
     document.getElementById('fullCampDetails').innerHTML = details;
+
+    // Build events section
+    buildCampEventsSection(campName);
 
     // Build history section
     buildCampHistorySection(campName);
@@ -1397,7 +1449,7 @@ function showAutocomplete(results, query) {
             const before = campName.substring(0, matchIndex);
             const match = campName.substring(matchIndex, matchIndex + query.length);
             const after = campName.substring(matchIndex + query.length);
-            item.innerHTML = `${before}<strong>${match}</strong>${after}`;
+            item.innerHTML = `${escapeHtml(before)}<strong>${escapeHtml(match)}</strong>${escapeHtml(after)}`;
         }
 
         item.addEventListener('mousedown', (e) => {

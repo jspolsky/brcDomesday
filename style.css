@@ -419,6 +419,38 @@ button:hover {
     padding-top: 20px;
 }
 
+#fullCampEvents {
+    font-size: 14px;
+    color: #cccccc;
+    margin-top: 20px;
+}
+
+#fullCampEvents h2 {
+    font-size: 18px;
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+
+.event-item {
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.event-title {
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.event-type {
+    color: #aaaaaa;
+    font-style: italic;
+}
+
+.event-description {
+    color: #dddddd;
+    margin-top: 3px;
+}
+
 #fullCampHistory {
     font-size: 14px;
     color: #cccccc;
