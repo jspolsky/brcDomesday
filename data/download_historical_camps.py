@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-Download historical Burning Man camp data from the API.
+Download historical Burning Man camp or event data from the API.
 
 Usage:
-    python download_historical_camps.py YOUR_API_KEY
+    python download_historical_camps.py camps YOUR_API_KEY
+    python download_historical_camps.py events YOUR_API_KEY
 
-Downloads camp data from 2025 backwards, skipping 2020-2021 (Covid years),
+Downloads data from 2025 backwards, skipping 2020-2021 (Covid years),
 until the API returns an error indicating no more data is available.
 """
 
@@ -19,31 +20,34 @@ BASE_URL = "https://api.burningman.org"
 SKIP_YEARS = {2020, 2021}  # Covid years
 
 
-def download_camp_data(year, api_key):
+def download_data(year, api_key, data_type):
     """
-    Download camp data for a specific year.
+    Download camp or event data for a specific year.
 
     Args:
         year: The year to download data for
         api_key: The Burning Man API key
+        data_type: Either 'camps' or 'events'
 
     Returns:
         Tuple of (success: bool, data: dict or None, error_message: str or None)
     """
-    url = f"{BASE_URL}/api/camp?year={year}"
+    endpoint = "camp" if data_type == "camps" else "event"
+    url = f"{BASE_URL}/api/{endpoint}?year={year}"
     headers = {
         "Accept": "application/json",
         "X-API-Key": api_key
     }
 
-    print(f"Downloading data for {year}...", end=" ", flush=True)
+    print(f"Downloading {data_type} for {year}...", end=" ", flush=True)
 
     try:
         response = requests.get(url, headers=headers, timeout=30)
 
         if response.status_code == 200:
             data = response.json()
-            print(f"✓ Success ({len(data) if isinstance(data, list) else 'unknown'} camps)")
+            count = len(data) if isinstance(data, list) else 'unknown'
+            print(f"✓ Success ({count} {data_type})")
             return True, data, None
         else:
             error_msg = f"HTTP {response.status_code}"
@@ -62,15 +66,16 @@ def download_camp_data(year, api_key):
         return False, None, error_msg
 
 
-def save_camp_data(year, data):
+def save_data(year, data, data_type):
     """
-    Save camp data to a JSON file.
+    Save camp or event data to a JSON file.
 
     Args:
         year: The year of the data
-        data: The camp data to save
+        data: The data to save
+        data_type: Either 'camps' or 'events'
     """
-    filename = f"camps{year}.json"
+    filename = f"{data_type}{year}.json"
     filepath = Path(__file__).parent / filename
 
     with open(filepath, 'w', encoding='utf-8') as f:
@@ -80,19 +85,25 @@ def save_camp_data(year, data):
 
 
 def main():
-    if len(sys.argv) != 2:
-        print("Error: API key required")
-        print(f"Usage: {sys.argv[0]} YOUR_API_KEY")
+    if len(sys.argv) != 3:
+        print("Error: Data type and API key required")
+        print(f"Usage: {sys.argv[0]} [camps|events] YOUR_API_KEY")
         sys.exit(1)
 
-    api_key = sys.argv[1]
+    data_type = sys.argv[1].lower()
+    api_key = sys.argv[2]
+
+    if data_type not in ['camps', 'events']:
+        print("Error: Data type must be 'camps' or 'events'")
+        print(f"Usage: {sys.argv[0]} [camps|events] YOUR_API_KEY")
+        sys.exit(1)
 
     if not api_key or api_key.strip() == "":
         print("Error: API key cannot be empty")
         sys.exit(1)
 
     print("=" * 60)
-    print("Burning Man Historical Camp Data Downloader")
+    print(f"Burning Man Historical {data_type.capitalize()} Data Downloader")
     print("=" * 60)
     print()
 
@@ -109,10 +120,10 @@ def main():
             continue
 
         # Download data for this year
-        success, data, error = download_camp_data(year, api_key)
+        success, data, error = download_data(year, api_key, data_type)
 
         if success:
-            save_camp_data(year, data)
+            save_data(year, data, data_type)
             total_downloaded += 1
             consecutive_failures = 0
 
