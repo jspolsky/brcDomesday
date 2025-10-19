@@ -434,6 +434,31 @@ button:hover {
 .event-item {
     margin-bottom: 12px;
     line-height: 1.4;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.events-year-group {
+    column-gap: 20px;
+}
+
+/* Responsive column layout based on screen width */
+@media (min-width: 600px) {
+    .events-year-group {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 900px) {
+    .events-year-group {
+        column-count: 3;
+    }
+}
+
+@media (min-width: 1200px) {
+    .events-year-group {
+        column-count: 4;
+    }
 }
 
 .event-title {

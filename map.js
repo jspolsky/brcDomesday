@@ -690,6 +690,7 @@ function buildCampEventsSection(campName) {
     let eventsHTML = `
         <hr style="margin: 20px 0; border: none; border-top: 1px solid #444;">
         <h2>2025 Events</h2>
+        <div class="events-year-group">
     `;
 
     entry2025.events.forEach(event => {
@@ -704,7 +705,59 @@ function buildCampEventsSection(campName) {
         `;
     });
 
+    eventsHTML += `</div>`;
+
+    // Check if there are any historical events
+    const historicalEntries = history.filter(h => h.year !== 2025 && h.events && h.events.length > 0);
+
+    if (historicalEntries.length > 0) {
+        // Add "Show older events" button
+        eventsHTML += `
+            <div style="margin-top: 15px;">
+                <button id="toggleOlderEventsBtn" onclick="toggleOlderEvents('${escapeHtml(campName).replace(/'/g, "\\'")}')">Show older events</button>
+            </div>
+            <div id="olderEventsContainer" style="display: none; margin-top: 15px;">
+        `;
+
+        // Build historical events HTML (sorted by year descending)
+        historicalEntries.sort((a, b) => b.year - a.year);
+
+        historicalEntries.forEach(yearEntry => {
+            eventsHTML += `<h3 style="font-size: 16px; color: #ffffff; margin-top: 20px; margin-bottom: 10px;">${yearEntry.year} Events</h3>`;
+            eventsHTML += `<div class="events-year-group">`;
+
+            yearEntry.events.forEach(event => {
+                const eventType = event.event_type ? ` (${escapeHtml(event.event_type)})` : '';
+                eventsHTML += `
+                    <div class="event-item">
+                        <div>
+                            <span class="event-title">${escapeHtml(event.title)}</span><span class="event-type">${eventType}</span>
+                        </div>
+                        <div class="event-description">${escapeHtml(event.description)}</div>
+                    </div>
+                `;
+            });
+
+            eventsHTML += `</div>`;
+        });
+
+        eventsHTML += `</div>`;
+    }
+
     eventsContainer.innerHTML = eventsHTML;
+}
+
+function toggleOlderEvents(campName) {
+    const olderEventsContainer = document.getElementById('olderEventsContainer');
+    const toggleBtn = document.getElementById('toggleOlderEventsBtn');
+
+    if (olderEventsContainer.style.display === 'none') {
+        olderEventsContainer.style.display = 'block';
+        toggleBtn.textContent = 'Hide older events';
+    } else {
+        olderEventsContainer.style.display = 'none';
+        toggleBtn.textContent = 'Show older events';
+    }
 }
 
 function buildCampHistorySection(campName) {
