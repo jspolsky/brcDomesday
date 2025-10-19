@@ -39,22 +39,73 @@ def load_camp_data(year):
         return None
 
 
-def extract_history_entry(camp):
+def load_event_data(year):
+    """
+    Load event data for a specific year.
+
+    Args:
+        year: The year to load
+
+    Returns:
+        List of event objects, or None if file doesn't exist
+    """
+    filepath = Path(__file__).parent / f"events{year}.json"
+
+    if not filepath.exists():
+        return None
+
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        return data
+    except Exception as e:
+        print(f"Warning: Could not load {filepath}: {e}")
+        return None
+
+
+def extract_event_info(event):
+    """
+    Extract the relevant fields from an event object.
+
+    Args:
+        event: Event object from the JSON data
+
+    Returns:
+        Dictionary with title, description, and event_type label
+    """
+    event_type = event.get("event_type", {})
+    return {
+        "title": event.get("title", ""),
+        "description": event.get("description", ""),
+        "event_type": event_type.get("label") if event_type else None
+    }
+
+
+def extract_history_entry(camp, events_by_camp_uid=None):
     """
     Extract the relevant fields from a camp object for the history array.
 
     Args:
         camp: Camp object from the JSON data
+        events_by_camp_uid: Dictionary mapping camp UIDs to lists of events (optional)
 
     Returns:
-        Dictionary with year, uid, description, location_string, and url
+        Dictionary with year, uid, description, location_string, url, and events
     """
+    camp_uid = camp.get("uid")
+    events = []
+
+    # If we have event data, find events for this camp
+    if events_by_camp_uid and camp_uid and camp_uid in events_by_camp_uid:
+        events = [extract_event_info(event) for event in events_by_camp_uid[camp_uid]]
+
     return {
         "year": camp.get("year"),
-        "uid": camp.get("uid"),
+        "uid": camp_uid,
         "description": camp.get("description", ""),
         "location_string": camp.get("location_string", ""),
-        "url": camp.get("url")
+        "url": camp.get("url"),
+        "events": events
     }
 
 
@@ -78,6 +129,22 @@ def build_camp_history():
 
     print(f"✓ Loaded {len(camps_2025)} camps")
 
+    # Load 2025 events
+    print("Loading 2025 events...", end=" ")
+    events_2025 = load_event_data(2025)
+
+    if events_2025:
+        print(f"✓ Loaded {len(events_2025)} events")
+        # Build lookup dictionary: camp_uid -> list of events
+        events_by_camp_uid_2025 = defaultdict(list)
+        for event in events_2025:
+            camp_uid = event.get("hosted_by_camp")
+            if camp_uid:
+                events_by_camp_uid_2025[camp_uid].append(event)
+    else:
+        print("✗ No event data available")
+        events_by_camp_uid_2025 = {}
+
     # Build a set of all 2025 camp names
     camps_2025_names = {camp["name"] for camp in camps_2025}
 
@@ -88,7 +155,7 @@ def build_camp_history():
         name = camp["name"]
         camp_history[name] = {
             "name": name,
-            "history": [extract_history_entry(camp)]
+            "history": [extract_history_entry(camp, events_by_camp_uid_2025)]
         }
 
     print()
@@ -107,8 +174,20 @@ def build_camp_history():
         historical_camps = load_camp_data(year)
 
         if not historical_camps:
-            print(f"  {year}: No data available, stopping here")
+            print(f"  {year}: No camp data available, stopping here")
             break
+
+        # Load events for this year
+        historical_events = load_event_data(year)
+        events_by_camp_uid = {}
+
+        if historical_events:
+            # Build lookup dictionary: camp_uid -> list of events
+            events_by_camp_uid = defaultdict(list)
+            for event in historical_events:
+                camp_uid = event.get("hosted_by_camp")
+                if camp_uid:
+                    events_by_camp_uid[camp_uid].append(event)
 
         # Build a lookup dictionary by camp name for this year
         camps_by_name = {camp["name"]: camp for camp in historical_camps}
@@ -119,12 +198,13 @@ def build_camp_history():
             if camp_name in camps_by_name:
                 historical_camp = camps_by_name[camp_name]
                 camp_history[camp_name]["history"].append(
-                    extract_history_entry(historical_camp)
+                    extract_history_entry(historical_camp, events_by_camp_uid)
                 )
                 matches += 1
 
         total_matches += matches
-        print(f"  {year}: {len(historical_camps)} camps, {matches} matches with 2025")
+        event_info = f", {len(historical_events)} events" if historical_events else ""
+        print(f"  {year}: {len(historical_camps)} camps{event_info}, {matches} matches with 2025")
 
     print()
     print("Sorting history entries by year...")

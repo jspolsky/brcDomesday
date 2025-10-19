@@ -18,14 +18,27 @@ The file is a JSON object where each key is a camp name (as it appears in `camps
         "uid": "a1b2c3d4e5f6",
         "description": "Camp description for 2025...",
         "location_string": "D & 3:15",
-        "url": "https://example.com"
+        "url": "https://example.com",
+        "events": [
+          {
+            "title": "Sunrise Yoga",
+            "description": "Start your day with gentle yoga",
+            "event_type": "Class/Workshop"
+          },
+          {
+            "title": "Sunset Dance Party",
+            "description": "Dance the night away",
+            "event_type": "Music/Party"
+          }
+        ]
       },
       {
         "year": 2024,
         "uid": "z9y8x7w6v5u4",
         "description": "Camp description for 2024...",
         "location_string": "C & 3:30",
-        "url": null
+        "url": null,
+        "events": []
       }
     ]
   }
@@ -53,6 +66,15 @@ Each entry in the `history` array represents one year that the camp attended Bur
 - **description** (string): The camp's description for that year. This may change from year to year.
 - **location_string** (string): The camp's location for that year in the format "Street & Time" (e.g., "D & 3:15", "8:30 & B").
 - **url** (string | null): The camp's website URL for that year, or `null` if not provided.
+- **events** (array): Array of event objects hosted by this camp in this year. May be empty if the camp hosted no events or if event data is not available for that year.
+
+### Event Object
+
+Each entry in the `events` array represents an event hosted by the camp:
+
+- **title** (string): The name of the event.
+- **description** (string): A description of what the event is about.
+- **event_type** (string | null): The category/type of the event (e.g., "Music/Party", "Class/Workshop", "Performance"), or `null` if not categorized.
 
 ## Matching Logic
 
@@ -70,7 +92,9 @@ Camps are matched across years by their **name** field. The matching algorithm s
 - Camp names must match exactly - no fuzzy matching
 - The `history` array should be sorted by year in descending order (2025 first)
 - Years 2020 and 2021 are excluded (Covid cancellations)
-- Historical data goes back to 2015 (based on API availability) or 1997 (based on data scraped from burningman.org)
+- Historical camp data goes back to 2015 (based on API availability) or 1997 (based on data scraped from burningman.org)
+- Event data is available starting from 2009 (based on API availability). Earlier years will have empty `events` arrays
+- Events are matched to camps by the camp's `uid` for each year using the `hosted_by_camp` field from the event data
 
 ## Example Entry
 
@@ -84,21 +108,41 @@ Camps are matched across years by their **name** field. The matching algorithm s
         "uid": "a1b2c3d4e5f6",
         "description": "Free spirited camp with good beats, booze, and the friendliest bag o' dicks around!",
         "location_string": "D & 3:15",
-        "url": null
+        "url": null,
+        "events": [
+          {
+            "title": "Dick Drawing Workshop",
+            "description": "Learn to draw anatomically correct dicks",
+            "event_type": "Class/Workshop"
+          },
+          {
+            "title": "Happy Hour with Dicks",
+            "description": "Come grab a drink and meet the dicks",
+            "event_type": "Social"
+          }
+        ]
       },
       {
         "year": 2024,
         "uid": "z9y8x7w6v5u4",
         "description": "Come visit our dicks at the playa!",
         "location_string": "C & 3:00",
-        "url": "https://bagodicks.com"
+        "url": "https://bagodicks.com",
+        "events": [
+          {
+            "title": "Dick Parade",
+            "description": "March of the dicks through the playa",
+            "event_type": "Performance"
+          }
+        ]
       },
       {
         "year": 2023,
         "uid": "m3n2o1p4q5r6",
         "description": "Friendly neighborhood dick camp",
         "location_string": "D & 3:30",
-        "url": null
+        "url": null,
+        "events": []
       }
     ]
   }
