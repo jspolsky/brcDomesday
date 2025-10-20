@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
