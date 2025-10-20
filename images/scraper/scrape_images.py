@@ -20,6 +20,8 @@ from urllib.parse import urljoin, urlparse
 from bs4 import BeautifulSoup
 from PIL import Image
 from io import BytesIO
+from multiprocessing import Pool, Manager
+import multiprocessing
 
 # Check for test mode
 TEST_MODE = '--test' in sys.argv
@@ -37,6 +39,7 @@ MAX_IMAGES_PER_CAMP = 128
 MIN_IMAGE_SIZE = 256  # pixels - minimum width AND height for quality images
 MAX_PAGES_PER_SITE = 50  # Maximum number of pages to visit per website
 MAX_CRAWL_DEPTH = 3  # Maximum depth to follow links (1 = only linked pages from homepage)
+MAX_CONCURRENT_CAMPS = 16  # Number of camps to process in parallel
 USER_AGENT = 'BRC-Domesday-Image-Scraper/1.0 (Educational project; contact: see github.com/jspolsky/brcDomesday)'
 
 # Track social media URLs for later processing
@@ -62,7 +65,7 @@ def load_state():
     }
 
 
-def save_state(state):
+def save_state(state, lock=None):
     """Save processing state to file."""
     state["last_updated"] = time.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -78,8 +81,13 @@ def save_state(state):
     state["summary"]["camps_with_no_images"] = sum(1 for c in state["camps"].values() if c.get("status") == "no_images_found")
     state["summary"]["total_images_downloaded"] = sum(c.get("images_downloaded", 0) for c in state["camps"].values())
 
-    with open(STATE_FILE, 'w') as f:
-        json.dump(state, f, indent=2)
+    if lock:
+        with lock:
+            with open(STATE_FILE, 'w') as f:
+                json.dump(state, f, indent=2)
+    else:
+        with open(STATE_FILE, 'w') as f:
+            json.dump(state, f, indent=2)
 
 
 def load_camp_history():
@@ -373,7 +381,17 @@ def crawl_site_for_images(start_url, metadata, camp_record, total_images):
     return total_images
 
 
-def scrape_camp_images(camp_name, urls, state):
+def scrape_camp_images_worker(args):
+    """
+    Worker function for multiprocessing.
+    Takes a tuple of (camp_name, urls) and returns (camp_name, camp_record).
+    """
+    camp_name, urls = args
+    camp_record = scrape_camp_images(camp_name, urls)
+    return (camp_name, camp_record)
+
+
+def scrape_camp_images(camp_name, urls):
     """Scrape images for a single camp from its URLs."""
     print(f"\n{'='*80}")
     print(f"Processing: {camp_name}")
@@ -485,11 +503,8 @@ def scrape_camp_images(camp_name, urls, state):
     else:
         camp_record["status"] = "no_images_found"
 
-    # Save camp record to state
-    state["camps"][camp_name] = camp_record
-
     print(f"\nCompleted {camp_name}: {total_images} images downloaded (status: {camp_record['status']})")
-    return total_images
+    return camp_record
 
 
 def main():
@@ -522,52 +537,73 @@ def main():
     # Create candidates directory
     CANDIDATES_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Process camps
-    if TEST_MODE:
-        # In test mode, only process first N camps that haven't been processed
-        camps_to_process = []
-        for camp_name, urls in camp_urls.items():
-            if camp_name not in state['camps']:
-                camps_to_process.append((camp_name, urls))
-            if len(camps_to_process) >= TEST_CAMP_LIMIT:
-                break
-        camp_items = camps_to_process
-    else:
-        camp_items = list(camp_urls.items())
+    # Filter out already-processed camps
+    camps_to_process = []
+    for camp_name, urls in camp_urls.items():
+        if camp_name not in state['camps']:
+            camps_to_process.append((camp_name, urls))
+        if TEST_MODE and len(camps_to_process) >= TEST_CAMP_LIMIT:
+            break
 
-    total_camps = len(camp_items)
-    processed_count = 0
+    total_camps = len(camps_to_process)
+    print(f"\nCamps to process: {total_camps}")
 
+    if total_camps == 0:
+        print("No camps to process!")
+        return
+
+    # Create multiprocessing lock for state file access
+    manager = Manager()
+    file_lock = manager.Lock()
+
+    # Process camps in parallel
     try:
-        for camp_name, urls in camp_items:
-            if camp_name in state['camps']:
-                continue
+        num_workers = min(MAX_CONCURRENT_CAMPS, total_camps)
+        print(f"Starting {num_workers} worker processes...\n")
 
-            processed_count += 1
-            print(f"\n[{processed_count}/{total_camps}]")
+        with Pool(processes=num_workers) as pool:
+            # Use imap_unordered for better performance and progress tracking
+            results = pool.imap_unordered(scrape_camp_images_worker, camps_to_process)
 
-            images_downloaded = scrape_camp_images(camp_name, urls, state)
+            processed_count = 0
+            for camp_name, camp_record in results:
+                processed_count += 1
+                print(f"\n{'='*80}")
+                print(f"Completed {processed_count}/{total_camps}: {camp_name}")
+                print(f"{'='*80}")
 
-            # State is saved within scrape_camp_images
-            save_state(state)
+                # Update state with this camp's results
+                with file_lock:
+                    # Reload state to get latest from other workers
+                    current_state = load_state()
+                    current_state['camps'][camp_name] = camp_record
+                    save_state(current_state)
 
     except KeyboardInterrupt:
         print("\n\n" + "="*80)
-        print("Interrupted by user")
+        print("Interrupted by user - waiting for current camps to finish...")
         print("="*80)
-        save_state(state)
+        pool.terminate()
+        pool.join()
+        # Reload final state
+        state = load_state()
+
+    # Reload final state to get accurate summary
+    final_state = load_state()
 
     print("\n" + "="*80)
     print("Scraping complete!")
     print("="*80)
-    print(f"Total camps processed: {state['summary']['total_camps_processed']}")
-    print(f"  - With images: {state['summary']['camps_with_images']}")
-    print(f"  - Social media only: {state['summary']['camps_with_social_media_only']}")
-    print(f"  - No images found: {state['summary']['camps_with_no_images']}")
-    print(f"  - Errors: {state['summary']['camps_with_errors']}")
-    print(f"Total images downloaded: {state['summary']['total_images_downloaded']}")
+    print(f"Total camps processed: {final_state['summary']['total_camps_processed']}")
+    print(f"  - With images: {final_state['summary']['camps_with_images']}")
+    print(f"  - Social media only: {final_state['summary']['camps_with_social_media_only']}")
+    print(f"  - No images found: {final_state['summary']['camps_with_no_images']}")
+    print(f"  - Errors: {final_state['summary']['camps_with_errors']}")
+    print(f"Total images downloaded: {final_state['summary']['total_images_downloaded']}")
     print("="*80)
 
 
 if __name__ == "__main__":
+    # Required for multiprocessing on macOS/Windows
+    multiprocessing.set_start_method('spawn', force=True)
     main()

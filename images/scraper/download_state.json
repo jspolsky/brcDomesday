@@ -1,5 +1,631 @@
 {
   "camps": {
+    "3907": {
+      "urls_provided": [
+        "https://www.facebook.com/camp3907"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/camp3907"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/camp3907"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:31:07"
+    },
+    "3SP (Third Space Place)": {
+      "urls_provided": [
+        "https://www.thirdspaceplace.com/",
+        "http://www.facebook.com/groups/3SPThirdSpacePlace/",
+        "https://www.facebook.com/groups/3spthirdspaceplace/",
+        "https://www.facebook.com/groups/3SPThirdSpacePlace"
+      ],
+      "urls_checked": [
+        "https://www.thirdspaceplace.com/",
+        "http://www.facebook.com/groups/3SPThirdSpacePlace/",
+        "https://www.facebook.com/groups/3spthirdspaceplace/",
+        "https://www.facebook.com/groups/3SPThirdSpacePlace"
+      ],
+      "social_media_urls": [
+        "http://www.facebook.com/groups/3SPThirdSpacePlace/",
+        "https://www.facebook.com/groups/3spthirdspaceplace/",
+        "https://www.facebook.com/groups/3SPThirdSpacePlace"
+      ],
+      "error_urls": [
+        {
+          "url": "https://www.thirdspaceplace.com/",
+          "error": "HTTPSConnectionPool(host='www.thirdspaceplace.com', port=443): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x1034ae1c0>: Failed to establish a new connection: [Errno 61] Connection refused'))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:23:39"
+    },
+    "Abraxas Camp": {
+      "urls_provided": [
+        "http://abraxasdragon.com",
+        "https://abraxasdragon.com/",
+        "https://www.instagram.com/abraxasdragon/"
+      ],
+      "urls_checked": [
+        "http://abraxasdragon.com",
+        "https://abraxasdragon.com/",
+        "https://www.instagram.com/abraxasdragon/"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/abraxasdragon/"
+      ],
+      "error_urls": [
+        {
+          "url": "http://abraxasdragon.com",
+          "error": "HTTPConnectionPool(host='abraxasdragon.com', port=80): Max retries exceeded with url: / (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x1015fb220>, 'Connection to abraxasdragon.com timed out. (connect timeout=30)'))"
+        },
+        {
+          "url": "https://abraxasdragon.com/",
+          "error": "HTTPSConnectionPool(host='abraxasdragon.com', port=443): Max retries exceeded with url: / (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x1015fbca0>, 'Connection to abraxasdragon.com timed out. (connect timeout=30)'))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Abstininthe": {
+      "urls_provided": [
+        "https://www.facebook.com/abstininthe/",
+        "http://abstininthe.tribe.net",
+        "http://abstininthe.com"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/abstininthe/",
+        "http://abstininthe.tribe.net",
+        "http://abstininthe.com"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/abstininthe/"
+      ],
+      "error_urls": [
+        {
+          "url": "http://abstininthe.com",
+          "error": "HTTPConnectionPool(host='abstininthe.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x107e351f0>: Failed to resolve 'abstininthe.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {
+        "http://abstininthe.tribe.net": "http://abstininthe.tribe.net/"
+      },
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:23:08"
+    },
+    "AerialKnotics": {
+      "urls_provided": [
+        "https://aerialknotics.com/",
+        "https://aerialknotics.com"
+      ],
+      "urls_checked": [
+        "https://aerialknotics.com/",
+        "https://aerialknotics.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://aerialknotics.com": "https://aerialknotics.com/"
+      },
+      "images_downloaded": 23,
+      "status": "success",
+      "last_processed": "2025-10-19 21:24:22"
+    },
+    "Alter Ego": {
+      "urls_provided": [
+        "https://www.alteregocamp.com",
+        "https://www.campalterego.com",
+        "http://www.campalterego.com"
+      ],
+      "urls_checked": [
+        "https://www.alteregocamp.com",
+        "https://www.campalterego.com",
+        "http://www.campalterego.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "https://www.campalterego.com",
+          "error": "HTTPSConnectionPool(host='www.campalterego.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x1043a5a30>: Failed to resolve 'www.campalterego.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        },
+        {
+          "url": "http://www.campalterego.com",
+          "error": "HTTPConnectionPool(host='www.campalterego.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x1043a5f40>: Failed to resolve 'www.campalterego.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {
+        "https://www.alteregocamp.com": "https://www.alteregocamp.com/"
+      },
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Alternative Energy Zone": {
+      "urls_provided": [
+        "http://www.aez.green",
+        "http://aez.green",
+        "http://www.ae-zone.org"
+      ],
+      "urls_checked": [
+        "http://www.aez.green",
+        "http://aez.green",
+        "http://www.ae-zone.org"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.aez.green": "https://aezone.wixsite.com:443/ae-zone",
+        "http://aez.green": "https://aezone.wixsite.com:443/ae-zone",
+        "http://www.ae-zone.org": "https://ae-zone.org/"
+      },
+      "images_downloaded": 2,
+      "status": "success",
+      "last_processed": "2025-10-19 21:23:03"
+    },
+    "Anonymous Village": {
+      "urls_provided": [
+        "http://www.anonymousvillage.com",
+        "http://burningdesires@p90.net",
+        "https://www.anonymousvillage.org",
+        "http://www.burnanon.org",
+        "http://www.burnanon.org/",
+        "http://anonymousvillage.com",
+        "https://www.burnanon.org/"
+      ],
+      "urls_checked": [
+        "http://www.anonymousvillage.com",
+        "http://burningdesires@p90.net",
+        "https://www.anonymousvillage.org",
+        "http://www.burnanon.org",
+        "http://www.burnanon.org/",
+        "http://anonymousvillage.com",
+        "https://www.burnanon.org/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://burningdesires@p90.net",
+          "error": "HTTP 403"
+        },
+        {
+          "url": "https://www.anonymousvillage.org",
+          "error": "HTTPSConnectionPool(host='www.anonymousvillage.org', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x105a73130>: Failed to resolve 'www.anonymousvillage.org' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        },
+        {
+          "url": "http://www.burnanon.org",
+          "error": "HTTP 404"
+        },
+        {
+          "url": "http://www.burnanon.org/",
+          "error": "HTTP 404"
+        },
+        {
+          "url": "https://www.burnanon.org/",
+          "error": "HTTP 404"
+        }
+      ],
+      "redirected_urls": {
+        "http://www.anonymousvillage.com": "https://www.anonymousvillage.com/",
+        "http://anonymousvillage.com": "https://anonymousvillage.com/"
+      },
+      "images_downloaded": 37,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:53"
+    },
+    "Apotheneum": {
+      "urls_provided": [
+        "https://www.anthonyfieldman.com/architecture#/apotheneum/"
+      ],
+      "urls_checked": [
+        "https://www.anthonyfieldman.com/architecture#/apotheneum/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 128,
+      "status": "success",
+      "last_processed": "2025-10-19 21:25:25"
+    },
+    "AquaZone Intentional Water Bar": {
+      "urls_provided": [
+        "http://smartloftstudio.com/aquazone/",
+        "http://www.aquazonewaterbar.com/"
+      ],
+      "urls_checked": [
+        "http://smartloftstudio.com/aquazone/",
+        "http://www.aquazonewaterbar.com/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://smartloftstudio.com/aquazone/",
+          "error": "HTTP 404"
+        }
+      ],
+      "redirected_urls": {
+        "http://www.aquazonewaterbar.com/": "https://www.aquazonewaterbar.com/"
+      },
+      "images_downloaded": 90,
+      "status": "success",
+      "last_processed": "2025-10-19 21:22:24"
+    },
+    "Astral Outpost": {
+      "urls_provided": [
+        "https://www.astraloutpost.com/"
+      ],
+      "urls_checked": [
+        "https://www.astraloutpost.com/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:20:51"
+    },
+    "Aurora": {
+      "urls_provided": [
+        "http://www.aurorabrc.org"
+      ],
+      "urls_checked": [
+        "http://www.aurorabrc.org"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.aurorabrc.org": "https://www.instagram.com/aurorabrc/"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:25:20"
+    },
+    "Awesomesauce": {
+      "urls_provided": [
+        "http://www.campawesomesauce.org"
+      ],
+      "urls_checked": [
+        "http://www.campawesomesauce.org"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.campawesomesauce.org": "https://www.campawesomesauce.org/"
+      },
+      "images_downloaded": 35,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "BAR MACTROPOLIS": {
+      "urls_provided": [
+        "https://www.facebook.com/barmactropolis/",
+        "https://www.facebook.com/pg/barmactropolis/posts/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/barmactropolis/",
+        "https://www.facebook.com/pg/barmactropolis/posts/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/barmactropolis/",
+        "https://www.facebook.com/pg/barmactropolis/posts/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:51"
+    },
+    "Baconeers": {
+      "urls_provided": [
+        "http://www.thebaconeers.com",
+        "https://www.facebook.com/groups/portapottypigs/"
+      ],
+      "urls_checked": [
+        "http://www.thebaconeers.com",
+        "https://www.facebook.com/groups/portapottypigs/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/portapottypigs/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.thebaconeers.com": "https://thebaconeers.com/"
+      },
+      "images_downloaded": 1,
+      "status": "success",
+      "last_processed": "2025-10-19 21:31:07"
+    },
+    "Bad Boy's Discover Your Kinks": {
+      "urls_provided": [
+        "https://badboysdiscoveryourkinks.wordpress.com/"
+      ],
+      "urls_checked": [
+        "https://badboysdiscoveryourkinks.wordpress.com/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 4,
+      "status": "success",
+      "last_processed": "2025-10-19 21:23:23"
+    },
+    "Badlands Bordello": {
+      "urls_provided": [
+        "https://www.facebook.com/badlandsbordello"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/badlandsbordello"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/badlandsbordello"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:30:45"
+    },
+    "Bike Gods": {
+      "urls_provided": [
+        "http://thebikegods.com"
+      ],
+      "urls_checked": [
+        "http://thebikegods.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://thebikegods.com": "https://thebikegods.com/"
+      },
+      "images_downloaded": 128,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:37"
+    },
+    "Bitchin' Braid Camp": {
+      "urls_provided": [
+        "https://sites.google.com/site/braidcamp/",
+        "https://sites.google.com/site/braidcamp"
+      ],
+      "urls_checked": [
+        "https://sites.google.com/site/braidcamp/",
+        "https://sites.google.com/site/braidcamp"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://sites.google.com/site/braidcamp/": "https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fsites.google.com%2Fsite%2Fbraidcamp%2F&dsh=S-1691768291%3A1760923257206377&followup=https%3A%2F%2Fsites.google.com%2Fsite%2Fbraidcamp%2F&ifkv=AfYwgwWZWU0_6TXol-VhP6263Bvq5KjiPmfoP1YHpEHg1AmKJZokQ_MQLZLMxVkjX0zKK6vKVkHvCw&osid=1&passive=1209600&flowName=WebLiteSignIn&flowEntry=ServiceLogin",
+        "https://sites.google.com/site/braidcamp": "https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fsites.google.com%2Fsite%2Fbraidcamp&dsh=S859120016%3A1760923412086453&followup=https%3A%2F%2Fsites.google.com%2Fsite%2Fbraidcamp&ifkv=AfYwgwUo3IgJEhMn2gQ6IBE48RSopOvyzjRFPH6tUFScZ6psIVcsuU81Typvg3Lb2BPkGv3oetBZ&osid=1&passive=1209600&flowName=WebLiteSignIn&flowEntry=ServiceLogin"
+      },
+      "images_downloaded": 1,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:56"
+    },
+    "Black Rock City Animal Control": {
+      "urls_provided": [
+        "http://www.brcac.com/",
+        "http://www.brcac.com",
+        "http://brcac.com/"
+      ],
+      "urls_checked": [
+        "http://www.brcac.com/",
+        "http://www.brcac.com",
+        "http://brcac.com/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://www.brcac.com/",
+          "error": "HTTP 500"
+        },
+        {
+          "url": "http://www.brcac.com",
+          "error": "HTTP 500"
+        },
+        {
+          "url": "http://brcac.com/",
+          "error": "HTTP 500"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:28:06"
+    },
+    "Black Rock University": {
+      "urls_provided": [
+        "http://www.facebook.com/group.php?gid=98862885803",
+        "http://www.com2020.com/BRUCampPlan2006.JPG",
+        "http://groups.yahoo.com/group/blackrocku/?tab=s"
+      ],
+      "urls_checked": [
+        "http://www.facebook.com/group.php?gid=98862885803",
+        "http://www.com2020.com/BRUCampPlan2006.JPG",
+        "http://groups.yahoo.com/group/blackrocku/?tab=s"
+      ],
+      "social_media_urls": [
+        "http://www.facebook.com/group.php?gid=98862885803"
+      ],
+      "error_urls": [
+        {
+          "url": "http://www.com2020.com/BRUCampPlan2006.JPG",
+          "error": "HTTPConnectionPool(host='www.com2020.com', port=80): Max retries exceeded with url: /BRUCampPlan2006.JPG (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x103d1b8e0>: Failed to resolve 'www.com2020.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {
+        "http://groups.yahoo.com/group/blackrocku/?tab=s": "https://www.yahoo.com/"
+      },
+      "images_downloaded": 128,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:47"
+    },
+    "Brainy Bar": {
+      "urls_provided": [
+        "https://brainy.bar",
+        "http://www.thebrainybar.com"
+      ],
+      "urls_checked": [
+        "https://brainy.bar",
+        "http://www.thebrainybar.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://brainy.bar": "https://brainy.bar/",
+        "http://www.thebrainybar.com": "https://brainy.bar/"
+      },
+      "images_downloaded": 79,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Brand-Ur-Ass N More": {
+      "urls_provided": [
+        "https://www.facebook.com/BrandURAss"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/BrandURAss"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/BrandURAss"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:34"
+    },
+    "Bumpbed": {
+      "urls_provided": [
+        "https://www.instagram.com/bumpbed?igsh=NTc4MTIwNjQ2YQ=="
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/bumpbed?igsh=NTc4MTIwNjQ2YQ=="
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/bumpbed?igsh=NTc4MTIwNjQ2YQ=="
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:32"
+    },
+    "Burning Man Studios": {
+      "urls_provided": [
+        "http://www.burningmanstudios.com"
+      ],
+      "urls_checked": [
+        "http://www.burningmanstudios.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.burningmanstudios.com": "http://www.burningmanstudios.com/"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:23:19"
+    },
+    "Burntown": {
+      "urls_provided": [
+        "http://burntown.net",
+        "http://burntown.ajpn.com/"
+      ],
+      "urls_checked": [
+        "http://burntown.net",
+        "http://burntown.ajpn.com/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://burntown.net",
+          "error": "HTTPConnectionPool(host='burntown.net', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x1030f44c0>: Failed to resolve 'burntown.net' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        },
+        {
+          "url": "http://burntown.ajpn.com/",
+          "error": "HTTPConnectionPool(host='burntown.ajpn.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x1030f4a60>: Failed to resolve 'burntown.ajpn.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:23:11"
+    },
+    "CAMP JUICY": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/988468674542751",
+        "https://www.facebook.com/groups/988468674542751/",
+        "http://www.facebook.com/groups/248451071883689/",
+        "https://www.instagram.com/camp_juicy"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/988468674542751",
+        "https://www.facebook.com/groups/988468674542751/",
+        "http://www.facebook.com/groups/248451071883689/",
+        "https://www.instagram.com/camp_juicy"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/988468674542751",
+        "https://www.facebook.com/groups/988468674542751/",
+        "http://www.facebook.com/groups/248451071883689/",
+        "https://www.instagram.com/camp_juicy"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:25:19"
+    },
+    "CURB": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/BRCU1/",
+        "https://www.facebook.com/BlackRockCenterforUnlearning"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/BRCU1/",
+        "https://www.facebook.com/BlackRockCenterforUnlearning"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/BRCU1/",
+        "https://www.facebook.com/BlackRockCenterforUnlearning"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:28:30"
+    },
+    "Cameltopia": {
+      "urls_provided": [
+        "https://cameltopia.org/",
+        "https://www.facebook.com/hydrationstationcamp",
+        "https://www.facebook.com/hydrationstationcamp/?ref=content_filter",
+        "https://cameltopia.org"
+      ],
+      "urls_checked": [
+        "https://cameltopia.org/",
+        "https://www.facebook.com/hydrationstationcamp",
+        "https://www.facebook.com/hydrationstationcamp/?ref=content_filter",
+        "https://cameltopia.org"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/hydrationstationcamp",
+        "https://www.facebook.com/hydrationstationcamp/?ref=content_filter"
+      ],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://cameltopia.org": "https://cameltopia.org/"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:28:30"
+    },
     "Camp ASL Support Services HUB": {
       "urls_provided": [
         "http://www.playaterps.us"
@@ -36,6 +662,112 @@
       "status": "success",
       "last_processed": "2025-10-19 20:57:35"
     },
+    "Camp DIY": {
+      "urls_provided": [
+        "http://www.campdiy.com/",
+        "http://www.campdiy.com",
+        "https://www.facebook.com/campdiyburningman/"
+      ],
+      "urls_checked": [
+        "http://www.campdiy.com/",
+        "http://www.campdiy.com",
+        "https://www.facebook.com/campdiyburningman/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/campdiyburningman/"
+      ],
+      "error_urls": [
+        {
+          "url": "http://www.campdiy.com/",
+          "error": "HTTPConnectionPool(host='www.campdiy.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x1072ae220>: Failed to resolve 'www.campdiy.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        },
+        {
+          "url": "http://www.campdiy.com",
+          "error": "HTTPConnectionPool(host='www.campdiy.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x10729fbe0>: Failed to resolve 'www.campdiy.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Camp Gotalotgoinon": {
+      "urls_provided": [
+        "https://www.upinsmokeflow.com/gotalotgoinon",
+        "https://www.facebook.com/CampGotalotgoinon"
+      ],
+      "urls_checked": [
+        "https://www.upinsmokeflow.com/gotalotgoinon",
+        "https://www.facebook.com/CampGotalotgoinon"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/CampGotalotgoinon"
+      ],
+      "error_urls": [
+        {
+          "url": "https://www.upinsmokeflow.com/gotalotgoinon",
+          "error": "HTTPSConnectionPool(host='www.upinsmokeflow.com', port=443): Max retries exceeded with url: /gotalotgoinon (Caused by SSLError(CertificateError(\"hostname 'www.upinsmokeflow.com' doesn't match either of '*.squarespace.com', 'squarespace.com', '*.campaign-preferences.com', 'campaign-preferences.com', '*.sqsp.net', 'sqsp.net', '*.sqspcdn.com', 'static1.1.sqspcdn.com', 'static2.1.sqspcdn.com', 'static1.2.sqspcdn.com', 'cdn1.1.sqspcdn.com', 'sqspcdn.com', '*.engage.squarespace-mail.com', 'engage.squarespace-mail.com'\")))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Camp Home": {
+      "urls_provided": [
+        "https://www.facebook.com/CampHome"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/CampHome"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/CampHome"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:30:24"
+    },
+    "Camp Orange Heart": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/3171798249769437/",
+        "https://www.facebook.com/events/4919019888181125?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22group%22%7D]%7D"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/3171798249769437/",
+        "https://www.facebook.com/events/4919019888181125?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22group%22%7D]%7D"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/3171798249769437/",
+        "https://www.facebook.com/events/4919019888181125?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22group%22%7D]%7D"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Camp P3": {
+      "urls_provided": [
+        "http://www.campp3.com"
+      ],
+      "urls_checked": [
+        "http://www.campp3.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://www.campp3.com",
+          "error": "HTTPConnectionPool(host='www.campp3.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x105e28bb0>: Failed to resolve 'www.campp3.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:23:41"
+    },
     "Camp Pendant": {
       "urls_provided": [
         "https://www.facebook.com/camppendant/",
@@ -68,6 +800,87 @@
       "status": "error",
       "last_processed": "2025-10-19 20:57:48"
     },
+    "Camp PlayApology": {
+      "urls_provided": [
+        "https://playapology.com/"
+      ],
+      "urls_checked": [
+        "https://playapology.com/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:25:03"
+    },
+    "Camp Scone Fucker": {
+      "urls_provided": [
+        "https://www.facebook.com/profile.php?id=61555334052330"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/profile.php?id=61555334052330"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/profile.php?id=61555334052330"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:22:47"
+    },
+    "Camp Slow Your Roll": {
+      "urls_provided": [
+        "https://www.instagram.com/campslowyourroll/"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/campslowyourroll/"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/campslowyourroll/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:21:57"
+    },
+    "Camp Touch This": {
+      "urls_provided": [
+        "http://www.vital5productions.com/afwfa/"
+      ],
+      "urls_checked": [
+        "http://www.vital5productions.com/afwfa/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.vital5productions.com/afwfa/": "https://www.vital5productions.com/afwfa/"
+      },
+      "images_downloaded": 128,
+      "status": "success",
+      "last_processed": "2025-10-19 21:27:34"
+    },
+    "Camp VRC": {
+      "urls_provided": [
+        "http://guides.library.unr.edu/burningman"
+      ],
+      "urls_checked": [
+        "http://guides.library.unr.edu/burningman"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://guides.library.unr.edu/burningman",
+          "error": "HTTP 404"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:20:13"
+    },
     "Casa de la Rumba": {
       "urls_provided": [
         "http://casadelarumba.com",
@@ -86,6 +899,46 @@
       "images_downloaded": 0,
       "status": "no_images_found",
       "last_processed": "2025-10-19 20:57:00"
+    },
+    "Castra Ursi": {
+      "urls_provided": [
+        "https://www.jenlewinstudio.com/portfolio/the-ursas-coming-soon/"
+      ],
+      "urls_checked": [
+        "https://www.jenlewinstudio.com/portfolio/the-ursas-coming-soon/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 128,
+      "status": "success",
+      "last_processed": "2025-10-19 21:25:38"
+    },
+    "Celestial Bodies": {
+      "urls_provided": [
+        "http://www.campcelestialbodies.org",
+        "http://campcelestialbodies.org",
+        "http://www.campcelestialbodies.org (currently under construction)"
+      ],
+      "urls_checked": [
+        "http://www.campcelestialbodies.org",
+        "http://campcelestialbodies.org",
+        "http://www.campcelestialbodies.org (currently under construction)"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://www.campcelestialbodies.org (currently under construction)",
+          "error": "HTTPConnectionPool(host='www.campcelestialbodies.org%20(currently%20under%20construction)', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x104348d30>: Failed to resolve 'www.campcelestialbodies.org%20(currently%20under%20construction)' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {
+        "http://www.campcelestialbodies.org": "https://www.campcelestialbodies.org/",
+        "http://campcelestialbodies.org": "https://www.campcelestialbodies.org/"
+      },
+      "images_downloaded": 46,
+      "status": "success",
+      "last_processed": "2025-10-19 21:27:27"
     },
     "Chariot Project": {
       "urls_provided": [
@@ -106,6 +959,41 @@
       "images_downloaded": 22,
       "status": "success",
       "last_processed": "2025-10-19 20:57:06"
+    },
+    "Cheshire Alley": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/CheshireAlley/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/CheshireAlley/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/CheshireAlley/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:21:36"
+    },
+    "Chico Urban Area": {
+      "urls_provided": [
+        "https://www.facebook.com/intergalactictransporter",
+        "https://www.facebook.com/ChicoUrbanArtistsCollective/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/intergalactictransporter",
+        "https://www.facebook.com/ChicoUrbanArtistsCollective/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/intergalactictransporter",
+        "https://www.facebook.com/ChicoUrbanArtistsCollective/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:28:18"
     },
     "Children of Chaos": {
       "urls_provided": [
@@ -135,6 +1023,24 @@
       "status": "success",
       "last_processed": "2025-10-19 20:59:16"
     },
+    "Choo Choo": {
+      "urls_provided": [
+        "https://www.instagram.com/bipolarexpress.artcar?igsh=MWhrZnJsb3c2OHEy",
+        "https://choochoo.camp/"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/bipolarexpress.artcar?igsh=MWhrZnJsb3c2OHEy",
+        "https://choochoo.camp/"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/bipolarexpress.artcar?igsh=MWhrZnJsb3c2OHEy"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:29:02"
+    },
     "Cult of the Magic Lady": {
       "urls_provided": [
         "https://www.facebook.com/CultOfTheMagicLady/",
@@ -161,6 +1067,162 @@
       "status": "error",
       "last_processed": "2025-10-19 20:59:14"
     },
+    "DIPTOWN": {
+      "urls_provided": [
+        "https://shminke.art/diptown/",
+        "https://shminke.art/diptown",
+        "https://diptown.design/"
+      ],
+      "urls_checked": [
+        "https://shminke.art/diptown/",
+        "https://shminke.art/diptown",
+        "https://diptown.design/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "https://shminke.art/diptown/",
+          "error": "HTTPSConnectionPool(host='shminke.art', port=443): Read timed out. (read timeout=30)"
+        },
+        {
+          "url": "https://shminke.art/diptown",
+          "error": "HTTPSConnectionPool(host='shminke.art', port=443): Read timed out. (read timeout=30)"
+        },
+        {
+          "url": "https://diptown.design/",
+          "error": "HTTP 403"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:23:02"
+    },
+    "DeKomodo Dragons": {
+      "urls_provided": [
+        "https://www.facebook.com/dekomododragons"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/dekomododragons"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/dekomododragons"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:25:03"
+    },
+    "DeMentha": {
+      "urls_provided": [
+        "http://www.dementha.com",
+        "http://www.DeMentha.com/",
+        "https://www.facebook.com/MintyGoodness"
+      ],
+      "urls_checked": [
+        "http://www.dementha.com",
+        "http://www.DeMentha.com/",
+        "https://www.facebook.com/MintyGoodness"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/MintyGoodness"
+      ],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.dementha.com": "https://dementha.com/",
+        "http://www.DeMentha.com/": "https://dementha.com/"
+      },
+      "images_downloaded": 11,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:34"
+    },
+    "Deaf Granny's Kitchen": {
+      "urls_provided": [
+        "https://deafgrannyskitchen.org",
+        "https://www.deafgrannyskitchen.org",
+        "http://www.facebook.com/DeafGrannysKitchen",
+        "http://www.deafgrannyskitchen.org"
+      ],
+      "urls_checked": [
+        "https://deafgrannyskitchen.org",
+        "https://www.deafgrannyskitchen.org",
+        "http://www.facebook.com/DeafGrannysKitchen",
+        "http://www.deafgrannyskitchen.org"
+      ],
+      "social_media_urls": [
+        "http://www.facebook.com/DeafGrannysKitchen"
+      ],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://deafgrannyskitchen.org": "https://deafgrannyskitchen.org/",
+        "https://www.deafgrannyskitchen.org": "https://deafgrannyskitchen.org/",
+        "http://www.deafgrannyskitchen.org": "https://deafgrannyskitchen.org/"
+      },
+      "images_downloaded": 1,
+      "status": "success",
+      "last_processed": "2025-10-19 21:26:16"
+    },
+    "Decotoro Social Club": {
+      "urls_provided": [
+        "https://decotoro.com/"
+      ],
+      "urls_checked": [
+        "https://decotoro.com/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 44,
+      "status": "success",
+      "last_processed": "2025-10-19 21:25:57"
+    },
+    "Desert Healers": {
+      "urls_provided": [
+        "http://youarehealer.com/",
+        "http://www.youarehealer.com"
+      ],
+      "urls_checked": [
+        "http://youarehealer.com/",
+        "http://www.youarehealer.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://youarehealer.com/": "http://ww25.youarehealer.com/?subid1=20251020-1228-152e-a351-c6fdc54dae3d",
+        "http://www.youarehealer.com": "http://ww25.youarehealer.com/?subid1=20251020-1228-205b-9fa5-da13fa1d25a9"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:28:15"
+    },
+    "Down Low Club": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/557666564336453/",
+        "https://www.facebook.com/groups/DownLowClub",
+        "https://groups.yahoo.com/neo/groups/BurningManDownLowClub/info",
+        "https://groups.yahoo.com/groups/BurningManDownLowClub/info",
+        "https://www.facebook.com/groups/DownLowClub/",
+        "http://groups.yahoo.com/group/BurningManDownLowClub/",
+        "http://groups.yahoo.com/group/BurningManDownLowClub"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/557666564336453/",
+        "https://www.facebook.com/groups/DownLowClub",
+        "https://groups.yahoo.com/neo/groups/BurningManDownLowClub/info"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/557666564336453/",
+        "https://www.facebook.com/groups/DownLowClub"
+      ],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://groups.yahoo.com/neo/groups/BurningManDownLowClub/info": "https://www.yahoo.com/"
+      },
+      "images_downloaded": 128,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:22"
+    },
     "Duane's Whirld": {
       "urls_provided": [
         "http://DuanesWhirld.com/",
@@ -186,6 +1248,883 @@
       "status": "success",
       "last_processed": "2025-10-19 20:58:42"
     },
+    "Duck Pond": {
+      "urls_provided": [
+        "https://www.instagram.com/duck.pond",
+        "https://www.facebook.com/groups/DuckPondBRC/",
+        "http://duckpondcamp.org"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/duck.pond",
+        "https://www.facebook.com/groups/DuckPondBRC/",
+        "http://duckpondcamp.org"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/duck.pond",
+        "https://www.facebook.com/groups/DuckPondBRC/"
+      ],
+      "error_urls": [
+        {
+          "url": "http://duckpondcamp.org",
+          "error": "Exceeded 30 redirects."
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:30:39"
+    },
+    "Dusty Beavers": {
+      "urls_provided": [
+        "https://www.facebook.com/TheDustyBeavers",
+        "https://www.facebook.com/TheDustyBeavers/",
+        "http://camp.dustybeavers.org",
+        "https://www.facebook.com/thedustybeavers/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/TheDustyBeavers",
+        "https://www.facebook.com/TheDustyBeavers/",
+        "http://camp.dustybeavers.org",
+        "https://www.facebook.com/thedustybeavers/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/TheDustyBeavers",
+        "https://www.facebook.com/TheDustyBeavers/",
+        "https://www.facebook.com/thedustybeavers/"
+      ],
+      "error_urls": [
+        {
+          "url": "http://camp.dustybeavers.org",
+          "error": "HTTPConnectionPool(host='camp.dustybeavers.org', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x106180e80>: Failed to resolve 'camp.dustybeavers.org' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:30:32"
+    },
+    "Dusty Booty Ranch": {
+      "urls_provided": [
+        "http://www.dustybootyranch.com"
+      ],
+      "urls_checked": [
+        "http://www.dustybootyranch.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.dustybootyranch.com": "https://dustybootyranch.com/"
+      },
+      "images_downloaded": 128,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:19"
+    },
+    "Dusty Taint": {
+      "urls_provided": [
+        "http://www.dustytaint.com",
+        "https://www.facebook.com/dustytaintofficial"
+      ],
+      "urls_checked": [
+        "http://www.dustytaint.com",
+        "https://www.facebook.com/dustytaintofficial"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/dustytaintofficial"
+      ],
+      "error_urls": [
+        {
+          "url": "http://www.dustytaint.com",
+          "error": "HTTPConnectionPool(host='www.dustytaint.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x101b221c0>: Failed to resolve 'www.dustytaint.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:21:22"
+    },
+    "Duty Free": {
+      "urls_provided": [
+        "http://thecheekyiguana.tumblr.com/post/129370035465/the-cheeky-iguana-art-car-at-burning-man-2015"
+      ],
+      "urls_checked": [
+        "http://thecheekyiguana.tumblr.com/post/129370035465/the-cheeky-iguana-art-car-at-burning-man-2015"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://thecheekyiguana.tumblr.com/post/129370035465/the-cheeky-iguana-art-car-at-burning-man-2015": "https://thecheekyiguana.tumblr.com/post/129370035465/the-cheeky-iguana-art-car-at-burning-man-2015"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Dye With Dignity": {
+      "urls_provided": [
+        "http://www.dyewithdignity.com",
+        "https://www.facebook.com/dyewithdignity/",
+        "http://dyewithdignity.com",
+        "https://www.facebook.com/dyewithdignity"
+      ],
+      "urls_checked": [
+        "http://www.dyewithdignity.com",
+        "https://www.facebook.com/dyewithdignity/",
+        "http://dyewithdignity.com",
+        "https://www.facebook.com/dyewithdignity"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/dyewithdignity/",
+        "https://www.facebook.com/dyewithdignity"
+      ],
+      "error_urls": [
+        {
+          "url": "http://www.dyewithdignity.com",
+          "error": "HTTP 500"
+        },
+        {
+          "url": "http://dyewithdignity.com",
+          "error": "HTTP 500"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:21:40"
+    },
+    "Electric Kool-Aid Balloon Room": {
+      "urls_provided": [
+        "http://fb.com/ekavq"
+      ],
+      "urls_checked": [
+        "http://fb.com/ekavq"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://fb.com/ekavq": "https://www.facebook.com/ekavq"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:29:26"
+    },
+    "Elemental Studios": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/elementalstudios/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/elementalstudios/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/elementalstudios/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:30:34"
+    },
+    "Empire of Dirt": {
+      "urls_provided": [
+        "http://formandreform.com/empire-of-dirt/",
+        "https://formandreform.com/empire-of-dirt/",
+        "https://www.aerospacepunk.com",
+        "http://theempireofdirt.com",
+        "http://www.aerospacepunk.com/",
+        "http://www.oilpunk.com"
+      ],
+      "urls_checked": [
+        "http://formandreform.com/empire-of-dirt/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://formandreform.com/empire-of-dirt/": "https://formandreform.com/empire-of-dirt/"
+      },
+      "images_downloaded": 128,
+      "status": "success",
+      "last_processed": "2025-10-19 21:24:19"
+    },
+    "Enrichment.Institute": {
+      "urls_provided": [
+        "http://cybr.space"
+      ],
+      "urls_checked": [
+        "http://cybr.space"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://cybr.space",
+          "error": "HTTPConnectionPool(host='cybr.space', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x102eb0f70>: Failed to resolve 'cybr.space' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:28:28"
+    },
+    "F.U.Ego Stage Bar & Lounge": {
+      "urls_provided": [
+        "https://www.facebook.com/campfuegoburningman/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/campfuegoburningman/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/campfuegoburningman/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:15"
+    },
+    "FL Man Fanboat Camp": {
+      "urls_provided": [
+        "https://www.instagram.com/flmanfanboat"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/flmanfanboat"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/flmanfanboat"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:24:22"
+    },
+    "Fake Moon Factory": {
+      "urls_provided": [
+        "https://www.instagram.com/fake.moon.factory?igsh=MXE0amRtdTM3N3N0Ng=="
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/fake.moon.factory?igsh=MXE0amRtdTM3N3N0Ng=="
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/fake.moon.factory?igsh=MXE0amRtdTM3N3N0Ng=="
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:28:30"
+    },
+    "Freedom": {
+      "urls_provided": [
+        "https://www.instagram.com/freedomcampbm"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/freedomcampbm"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/freedomcampbm"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:23:14"
+    },
+    "Fusion Valley": {
+      "urls_provided": [
+        "http://www.fusionvalley.org",
+        "https://fusionvalley.net/",
+        "http://www.armory.com/~fv/",
+        "http://www.fusionvalley.net/"
+      ],
+      "urls_checked": [
+        "http://www.fusionvalley.org",
+        "https://fusionvalley.net/",
+        "http://www.armory.com/~fv/",
+        "http://www.fusionvalley.net/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.fusionvalley.org": "http://www.armory.com/~fv/",
+        "http://www.fusionvalley.net/": "https://fusionvalley.net/"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:22:14"
+    },
+    "Future Turtles": {
+      "urls_provided": [
+        "https://futureturtles.com"
+      ],
+      "urls_checked": [
+        "https://futureturtles.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://futureturtles.com": "https://futureturtles.com/"
+      },
+      "images_downloaded": 128,
+      "status": "success",
+      "last_processed": "2025-10-19 21:21:03"
+    },
+    "Galactic Cruzaders": {
+      "urls_provided": [
+        "https://www.facebook.com/platybusandtheband?fref=ts",
+        "https://soundcloud.com/the-galactic-cruzader",
+        "http://www.platybusandtheband.org",
+        "https://www.facebook.com/groups/1624030311180020/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/platybusandtheband?fref=ts",
+        "https://soundcloud.com/the-galactic-cruzader",
+        "http://www.platybusandtheband.org",
+        "https://www.facebook.com/groups/1624030311180020/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/platybusandtheband?fref=ts",
+        "https://www.facebook.com/groups/1624030311180020/"
+      ],
+      "error_urls": [
+        {
+          "url": "http://www.platybusandtheband.org",
+          "error": "HTTPConnectionPool(host='www.platybusandtheband.org', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x105e2c5e0>: Failed to resolve 'www.platybusandtheband.org' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 58,
+      "status": "success",
+      "last_processed": "2025-10-19 21:28:04"
+    },
+    "George's Glorious Anarchy": {
+      "urls_provided": [
+        "http://goldenguyalley.com/"
+      ],
+      "urls_checked": [
+        "http://goldenguyalley.com/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://goldenguyalley.com/": "https://goldenguyalley.com/"
+      },
+      "images_downloaded": 60,
+      "status": "success",
+      "last_processed": "2025-10-19 21:21:36"
+    },
+    "Gigsville": {
+      "urls_provided": [
+        "http://www.Gigsville.org",
+        "http://gigsville.org",
+        "http://gigsville.org/",
+        "http://www.gigsville.org",
+        "http://www.laburningman.com/theme-camps/gigsville/",
+        "www.gigsville.org"
+      ],
+      "urls_checked": [
+        "http://www.Gigsville.org",
+        "http://gigsville.org",
+        "http://gigsville.org/",
+        "http://www.gigsville.org",
+        "http://www.laburningman.com/theme-camps/gigsville/",
+        "www.gigsville.org"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://www.laburningman.com/theme-camps/gigsville/",
+          "error": "HTTP 404"
+        },
+        {
+          "url": "www.gigsville.org",
+          "error": "Invalid URL 'www.gigsville.org': No scheme supplied. Perhaps you meant https://www.gigsville.org?"
+        }
+      ],
+      "redirected_urls": {
+        "http://www.Gigsville.org": "https://gigsville.org/",
+        "http://gigsville.org": "https://gigsville.org/",
+        "http://gigsville.org/": "https://gigsville.org/",
+        "http://www.gigsville.org": "https://gigsville.org/"
+      },
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:23:51"
+    },
+    "Glamour + Shots": {
+      "urls_provided": [
+        "https://www.instagram.com/glamourplusshots/"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/glamourplusshots/"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/glamourplusshots/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Great Vibrations": {
+      "urls_provided": [
+        "https://www.instagram.com/greatvibrationsbm"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/greatvibrationsbm"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/greatvibrationsbm"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:31:48"
+    },
+    "Gypsy Monkey Carnival": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/GypsyNebula/",
+        "https://www.facebook.com/groups/GypsyNebula/permalink/806098426168637/?comment_id=811823032262843&notif_t=group_comment"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/GypsyNebula/",
+        "https://www.facebook.com/groups/GypsyNebula/permalink/806098426168637/?comment_id=811823032262843&notif_t=group_comment"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/GypsyNebula/",
+        "https://www.facebook.com/groups/GypsyNebula/permalink/806098426168637/?comment_id=811823032262843&notif_t=group_comment"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "HAVANA NIGHTS": {
+      "urls_provided": [
+        "https://www.facebook.com/HavanaNightsParty",
+        "https://www.facebook.com/HavanaNightsParty/",
+        "https://www.facebook.com/havananightsparty"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/HavanaNightsParty",
+        "https://www.facebook.com/HavanaNightsParty/",
+        "https://www.facebook.com/havananightsparty"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/HavanaNightsParty",
+        "https://www.facebook.com/HavanaNightsParty/",
+        "https://www.facebook.com/havananightsparty"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:30:39"
+    },
+    "Hakuna Matata": {
+      "urls_provided": [
+        "https://www.instagram.com/hakuna_matata_bm"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/hakuna_matata_bm"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/hakuna_matata_bm"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:26"
+    },
+    "Halloween Camp": {
+      "urls_provided": [
+        "https://instagram.com/halloweencampbm"
+      ],
+      "urls_checked": [
+        "https://instagram.com/halloweencampbm"
+      ],
+      "social_media_urls": [
+        "https://instagram.com/halloweencampbm"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:30:39"
+    },
+    "Hang-Out, the": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/150704538339546/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/150704538339546/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/150704538339546/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:28:06"
+    },
+    "Harmonic Convergence Camp": {
+      "urls_provided": [
+        "https://www.facebook.com/HarmonicConvergenceCamp/",
+        "https://www.facebook.com/HarmonicConvergenceCamp"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/HarmonicConvergenceCamp/",
+        "https://www.facebook.com/HarmonicConvergenceCamp"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/HarmonicConvergenceCamp/",
+        "https://www.facebook.com/HarmonicConvergenceCamp"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:34"
+    },
+    "HeckleBerries": {
+      "urls_provided": [
+        "https://www.instagram.com/heckle.berries/"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/heckle.berries/"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/heckle.berries/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:28:55"
+    },
+    "Homebrew 4A Homebrew": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/476024835926123/",
+        "https://www.facebook.com/groups/476024835926123"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/476024835926123/",
+        "https://www.facebook.com/groups/476024835926123"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/476024835926123/",
+        "https://www.facebook.com/groups/476024835926123"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:28:55"
+    },
+    "Honey Puddle": {
+      "urls_provided": [
+        "http://honeypuddle.info",
+        "http://www.honeypuddle.info/",
+        "https://www.honeypuddle.info/"
+      ],
+      "urls_checked": [
+        "http://honeypuddle.info",
+        "http://www.honeypuddle.info/",
+        "https://www.honeypuddle.info/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://honeypuddle.info",
+          "error": "HTTPConnectionPool(host='honeypuddle.info', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x102bb1790>: Failed to resolve 'honeypuddle.info' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        },
+        {
+          "url": "http://www.honeypuddle.info/",
+          "error": "HTTPConnectionPool(host='www.honeypuddle.info', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x103028940>: Failed to resolve 'www.honeypuddle.info' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        },
+        {
+          "url": "https://www.honeypuddle.info/",
+          "error": "HTTPSConnectionPool(host='www.honeypuddle.info', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x10302dbb0>: Failed to resolve 'www.honeypuddle.info' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:22:00"
+    },
+    "Hot Ass Trash": {
+      "urls_provided": [
+        "http://dumpster.life"
+      ],
+      "urls_checked": [
+        "http://dumpster.life"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://dumpster.life": "https://www.dumpster.life/"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:24:14"
+    },
+    "Hot Mayo": {
+      "urls_provided": [
+        "https://www.facebook.com/Camphotmayo/?ref=aymt_homepage_panel",
+        "https://www.facebook.com/Camp-Hot-Mayo-283651174985176/",
+        "https://www.facebook.com/camphotmayo/",
+        "https://www.facebook.com/pages/Camp-Hot-Mayo/283651174985176"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/Camphotmayo/?ref=aymt_homepage_panel",
+        "https://www.facebook.com/Camp-Hot-Mayo-283651174985176/",
+        "https://www.facebook.com/camphotmayo/",
+        "https://www.facebook.com/pages/Camp-Hot-Mayo/283651174985176"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/Camphotmayo/?ref=aymt_homepage_panel",
+        "https://www.facebook.com/Camp-Hot-Mayo-283651174985176/",
+        "https://www.facebook.com/camphotmayo/",
+        "https://www.facebook.com/pages/Camp-Hot-Mayo/283651174985176"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:31:48"
+    },
+    "Hot Noodz": {
+      "urls_provided": [
+        "https://www.facebook.com/walkover.camp"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/walkover.camp"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/walkover.camp"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:34"
+    },
+    "I'm OK, You're OK Corral": {
+      "urls_provided": [
+        "http://www.imokyok.com"
+      ],
+      "urls_checked": [
+        "http://www.imokyok.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://www.imokyok.com",
+          "error": "HTTPConnectionPool(host='www.imokyok.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x1068be850>: Failed to resolve 'www.imokyok.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:27:16"
+    },
+    "IKIGAI": {
+      "urls_provided": [
+        "https://www.instagram.com/ikigaicamp/",
+        "https://www.instagram.com/ikigaicamp"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/ikigaicamp/",
+        "https://www.instagram.com/ikigaicamp"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/ikigaicamp/",
+        "https://www.instagram.com/ikigaicamp"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Infinite Community": {
+      "urls_provided": [
+        "https://www.mattelson.com"
+      ],
+      "urls_checked": [
+        "https://www.mattelson.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://www.mattelson.com": "https://www.mattelson.com/"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:20:17"
+    },
+    "Irrelephant Bird Camp": {
+      "urls_provided": [
+        "https://www.chakras.horse/",
+        "https://www.facebook.com/elephantbirdcamp",
+        "https://www.facebook.com/elephantbirdcamp/?fref=ts",
+        "http://www.facebook.com/elephantbirdcamp"
+      ],
+      "urls_checked": [
+        "https://www.chakras.horse/",
+        "https://www.facebook.com/elephantbirdcamp",
+        "https://www.facebook.com/elephantbirdcamp/?fref=ts",
+        "http://www.facebook.com/elephantbirdcamp"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/elephantbirdcamp",
+        "https://www.facebook.com/elephantbirdcamp/?fref=ts",
+        "http://www.facebook.com/elephantbirdcamp"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 9,
+      "status": "success",
+      "last_processed": "2025-10-19 21:22:45"
+    },
+    "Jail of Hedone": {
+      "urls_provided": [
+        "https://www.JailOfHedone.com",
+        "https://www.facebook.com/groups/1208442877228491"
+      ],
+      "urls_checked": [
+        "https://www.JailOfHedone.com",
+        "https://www.facebook.com/groups/1208442877228491"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/1208442877228491"
+      ],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://www.JailOfHedone.com": "https://www.jailofhedone.com/"
+      },
+      "images_downloaded": 10,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Joyism Artcar Support Camp": {
+      "urls_provided": [
+        "http://www.joyism.org"
+      ],
+      "urls_checked": [
+        "http://www.joyism.org"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.joyism.org": "http://www.joyism.org/"
+      },
+      "images_downloaded": 4,
+      "status": "success",
+      "last_processed": "2025-10-19 21:21:24"
+    },
+    "KAHVE": {
+      "urls_provided": [
+        "https://www.instagram.com/campkahve/"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/campkahve/"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/campkahve/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:17"
+    },
+    "KAIF": {
+      "urls_provided": [
+        "https://www.instagram.com/public_kaif_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/public_kaif_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/public_kaif_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:29:27"
+    },
+    "Kamp Suckie Fuckaye": {
+      "urls_provided": [
+        "http://Kampsuckiefuckaye.com",
+        "http://www.garnishfire.com",
+        "http://kampsuckiefuckaye.com"
+      ],
+      "urls_checked": [
+        "http://Kampsuckiefuckaye.com",
+        "http://www.garnishfire.com",
+        "http://kampsuckiefuckaye.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://Kampsuckiefuckaye.com",
+          "error": "HTTPConnectionPool(host='kampsuckiefuckaye.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x1043350a0>: Failed to resolve 'kampsuckiefuckaye.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        },
+        {
+          "url": "http://www.garnishfire.com",
+          "error": "HTTPConnectionPool(host='www.garnishfire.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x1043256d0>: Failed to resolve 'www.garnishfire.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        },
+        {
+          "url": "http://kampsuckiefuckaye.com",
+          "error": "HTTPConnectionPool(host='kampsuckiefuckaye.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x10453c0d0>: Failed to resolve 'kampsuckiefuckaye.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Kelly's": {
+      "urls_provided": [
+        "https://www.CampKelly.Net"
+      ],
+      "urls_checked": [
+        "https://www.CampKelly.Net"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "https://www.CampKelly.Net",
+          "error": "HTTPSConnectionPool(host='www.campkelly.net', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x1091a8040>: Failed to resolve 'www.campkelly.net' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:25:57"
+    },
+    "Kentucky Fried Camp": {
+      "urls_provided": [
+        "http://kentuckyfriedcamp.com",
+        "http://www.kentuckyfriedcamp.com"
+      ],
+      "urls_checked": [
+        "http://kentuckyfriedcamp.com",
+        "http://www.kentuckyfriedcamp.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://kentuckyfriedcamp.com": "https://www.facebook.com/KentuckyFriedCamp",
+        "http://www.kentuckyfriedcamp.com": "https://www.facebook.com/KentuckyFriedCamp"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:27:24"
+    },
     "Khaleeya": {
       "urls_provided": [
         "https://khaleeya.org/",
@@ -208,6 +2147,235 @@
       "status": "success",
       "last_processed": "2025-10-19 20:58:20"
     },
+    "Kidsville": {
+      "urls_provided": [
+        "http://blackrockkids.org",
+        "http://www.blackrockkids.org",
+        "http://www.kidsville.org",
+        "http://www.burningkids.com",
+        "http://kidsville.org"
+      ],
+      "urls_checked": [
+        "http://blackrockkids.org",
+        "http://www.blackrockkids.org",
+        "http://www.kidsville.org",
+        "http://www.burningkids.com",
+        "http://kidsville.org"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://blackrockkids.org": "http://ww25.blackrockkids.org/?subid1=20251020-1221-06cf-aa90-24b00f8c7c6d",
+        "http://www.blackrockkids.org": "http://ww25.blackrockkids.org/?subid1=20251020-1221-114a-b704-c761a6a6e5b0",
+        "http://www.kidsville.org": "https://kidsvilleburn.org/",
+        "http://www.burningkids.com": "http://www.burningkids.com/",
+        "http://kidsville.org": "https://kidsvilleburn.org/"
+      },
+      "images_downloaded": 2,
+      "status": "success",
+      "last_processed": "2025-10-19 21:21:06"
+    },
+    "Kuker Camp": {
+      "urls_provided": [
+        "https://www.facebook.com/kukerartcar/",
+        "https://www.facebook.com/KukerArtCar"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/kukerartcar/",
+        "https://www.facebook.com/KukerArtCar"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/kukerartcar/",
+        "https://www.facebook.com/KukerArtCar"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:21:22"
+    },
+    "Kurenivka": {
+      "urls_provided": [
+        "https://kurenivka.ua",
+        "https://uburners.com/en/kurenivka-camp/",
+        "http://kurenivka.tilda.ws"
+      ],
+      "urls_checked": [
+        "https://kurenivka.ua",
+        "https://uburners.com/en/kurenivka-camp/",
+        "http://kurenivka.tilda.ws"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "https://uburners.com/en/kurenivka-camp/",
+          "error": "HTTP 404"
+        },
+        {
+          "url": "http://kurenivka.tilda.ws",
+          "error": "HTTP 403"
+        }
+      ],
+      "redirected_urls": {
+        "https://kurenivka.ua": "https://kurenivka.ua/"
+      },
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:29:13"
+    },
+    "LAF Lazy-Ass Fuckers": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/388666604579319/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/388666604579319/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/388666604579319/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Lands Beyond": {
+      "urls_provided": [
+        "http://www.landsbeyond.life"
+      ],
+      "urls_checked": [
+        "http://www.landsbeyond.life"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.landsbeyond.life": "https://www.landsbeyond.life/"
+      },
+      "images_downloaded": 8,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Lazy Skool Daze": {
+      "urls_provided": [
+        "http://facebook.com/lazyskooldaze",
+        "https://www.facebook.com/LazySkoolDaze",
+        "https://www.facebook.com/LazySkoolDaze/"
+      ],
+      "urls_checked": [
+        "http://facebook.com/lazyskooldaze",
+        "https://www.facebook.com/LazySkoolDaze",
+        "https://www.facebook.com/LazySkoolDaze/"
+      ],
+      "social_media_urls": [
+        "http://facebook.com/lazyskooldaze",
+        "https://www.facebook.com/LazySkoolDaze",
+        "https://www.facebook.com/LazySkoolDaze/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:23:02"
+    },
+    "Leopard Martini Lounge": {
+      "urls_provided": [
+        "http://www.upwarp.com/lml/",
+        "http://www.upwarp.com/lml/index.htm",
+        "http://www.bitethe.com/LML",
+        "http://www.bitethe.com/lml"
+      ],
+      "urls_checked": [
+        "http://www.upwarp.com/lml/",
+        "http://www.upwarp.com/lml/index.htm",
+        "http://www.bitethe.com/LML",
+        "http://www.bitethe.com/lml"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://www.upwarp.com/lml/",
+          "error": "HTTP 404"
+        },
+        {
+          "url": "http://www.upwarp.com/lml/index.htm",
+          "error": "HTTP 404"
+        },
+        {
+          "url": "http://www.bitethe.com/LML",
+          "error": "HTTP 404"
+        }
+      ],
+      "redirected_urls": {
+        "http://www.bitethe.com/lml": "http://www.bitethe.com/lml/"
+      },
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:30:34"
+    },
+    "Lingerie Lounge": {
+      "urls_provided": [
+        "https://www.facebook.com/Lingerie-Lounge-792471524242693/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/Lingerie-Lounge-792471524242693/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/Lingerie-Lounge-792471524242693/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:30:24"
+    },
+    "Lollypopolus": {
+      "urls_provided": [
+        "https://www.facebook.com/Lollypopolus"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/Lollypopolus"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/Lollypopolus"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:22:47"
+    },
+    "Lost Highway": {
+      "urls_provided": [
+        "http://www.losthighwaythemecamp.com"
+      ],
+      "urls_checked": [
+        "http://www.losthighwaythemecamp.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.losthighwaythemecamp.com": "http://losthighwaythemecamp.org/"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:28:24"
+    },
+    "Lucid Dreams": {
+      "urls_provided": [
+        "https://www.luciddreamscamp.ca"
+      ],
+      "urls_checked": [
+        "https://www.luciddreamscamp.ca"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://www.luciddreamscamp.ca": "https://www.luciddreamscamp.ca/"
+      },
+      "images_downloaded": 5,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:13"
+    },
     "Ludus Symposium": {
       "urls_provided": [
         "http://www.ludussymposium.com",
@@ -225,6 +2393,676 @@
       "status": "social_media_only",
       "last_processed": "2025-10-19 20:58:42"
     },
+    "LuvClub": {
+      "urls_provided": [
+        "https://luvclub.org"
+      ],
+      "urls_checked": [
+        "https://luvclub.org"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "https://luvclub.org",
+          "error": "HTTPSConnectionPool(host='luvclub.org', port=443): Max retries exceeded with url: / (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x1034b1460>, 'Connection to luvclub.org timed out. (connect timeout=30)'))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:23:44"
+    },
+    "MISFITS MMXXV": {
+      "urls_provided": [
+        "https://vimeo.com/profilesindust",
+        "https://www.facebook.com/MysfitMultiverseVillageMM22/"
+      ],
+      "urls_checked": [
+        "https://vimeo.com/profilesindust",
+        "https://www.facebook.com/MysfitMultiverseVillageMM22/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/MysfitMultiverseVillageMM22/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Mellow Mountain": {
+      "urls_provided": [
+        "https://photos.app.goo.gl/vG6Tfu7DUQZQyvEg7",
+        "https://photos.app.goo.gl/De7avpwUroHpi2q3A",
+        "http://www.mellowmountain.com",
+        "https://flic.kr/s/aHsmbJ4aEg"
+      ],
+      "urls_checked": [
+        "https://photos.app.goo.gl/vG6Tfu7DUQZQyvEg7",
+        "https://photos.app.goo.gl/De7avpwUroHpi2q3A",
+        "http://www.mellowmountain.com",
+        "https://flic.kr/s/aHsmbJ4aEg"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://photos.app.goo.gl/vG6Tfu7DUQZQyvEg7": "https://photos.google.com/share/AF1QipNrDJfRwpOI4gFz-PnU86270XKxpFIHQs7psH63FC2De9iNH1MYS0a8WSZeUpa58g?key=M0NRZFJuYzJXdG9rY3VWTmU4WVhMQ2lmTUd6U0lB",
+        "https://photos.app.goo.gl/De7avpwUroHpi2q3A": "https://photos.google.com/share/AF1QipPNzHx1Gk3tAQI1QMfviD_qHuC_y6aS_5dg5agGAYi3kN9sgAt20h-hQ6jP8kbykw?key=X3lnelp0NHZSemRqVTU5T25BT0VQb1l1THhMZGhn",
+        "http://www.mellowmountain.com": "http://www.mellowmountain.com/",
+        "https://flic.kr/s/aHsmbJ4aEg": "https://www.flickr.com/photos/128366823@N02/sets/72157691008928583/"
+      },
+      "images_downloaded": 128,
+      "status": "success",
+      "last_processed": "2025-10-19 21:23:43"
+    },
+    "Misfit Island": {
+      "urls_provided": [
+        "http://misfit-island.com",
+        "https://www.facebook.com/misfitburner"
+      ],
+      "urls_checked": [
+        "http://misfit-island.com",
+        "https://www.facebook.com/misfitburner"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/misfitburner"
+      ],
+      "error_urls": [
+        {
+          "url": "http://misfit-island.com",
+          "error": "HTTPConnectionPool(host='misfit-island.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x1031f9910>: Failed to resolve 'misfit-island.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:23:17"
+    },
+    "Museum of One": {
+      "urls_provided": [
+        "https://moo.camp"
+      ],
+      "urls_checked": [
+        "https://moo.camp"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://moo.camp": "https://moo.camp/"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:30:10"
+    },
+    "Mycodelic Forest": {
+      "urls_provided": [
+        "http://www.burners.mycodelicforest.org",
+        "https://mycodelicforest.org",
+        "http://mycodelicforest.org"
+      ],
+      "urls_checked": [
+        "http://www.burners.mycodelicforest.org",
+        "https://mycodelicforest.org",
+        "http://mycodelicforest.org"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://www.burners.mycodelicforest.org",
+          "error": "HTTPConnectionPool(host='www.burners.mycodelicforest.org', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x107b3fa00>: Failed to resolve 'www.burners.mycodelicforest.org' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {
+        "https://mycodelicforest.org": "https://mycodelicforest.org/",
+        "http://mycodelicforest.org": "https://mycodelicforest.org/"
+      },
+      "images_downloaded": 4,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:15"
+    },
+    "Nipple Crime": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/1597975180414108/?ref=bookmarks",
+        "https://www.facebook.com/groups/1597975180414108/?ref=br_tf",
+        "https://www.facebook.com/groups/1597975180414108/",
+        "https://nipplecrime.org/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/1597975180414108/?ref=bookmarks",
+        "https://www.facebook.com/groups/1597975180414108/?ref=br_tf",
+        "https://www.facebook.com/groups/1597975180414108/",
+        "https://nipplecrime.org/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/1597975180414108/?ref=bookmarks",
+        "https://www.facebook.com/groups/1597975180414108/?ref=br_tf",
+        "https://www.facebook.com/groups/1597975180414108/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 8,
+      "status": "success",
+      "last_processed": "2025-10-19 21:28:11"
+    },
+    "No Holes Barred Comedy Club": {
+      "urls_provided": [
+        "https://www.instagram.com/noholesbarred_comedyclub/"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/noholesbarred_comedyclub/"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/noholesbarred_comedyclub/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:34"
+    },
+    "Nomad Collective": {
+      "urls_provided": [
+        "https://www.instagram.com/nomadcollectivecamp"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/nomadcollectivecamp"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/nomadcollectivecamp"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "OHM HOME": {
+      "urls_provided": [
+        "http://ohmkar.com"
+      ],
+      "urls_checked": [
+        "http://ohmkar.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://ohmkar.com": "https://ohmkar.com/"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Ofosho": {
+      "urls_provided": [
+        "https://www.instagram.com/camp.ofosho?igsh=NTc4MTIwNjQ2YQ==",
+        "http://www.campofosho.com",
+        "http://www.campofosho.com/"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/camp.ofosho?igsh=NTc4MTIwNjQ2YQ==",
+        "http://www.campofosho.com",
+        "http://www.campofosho.com/"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/camp.ofosho?igsh=NTc4MTIwNjQ2YQ=="
+      ],
+      "error_urls": [
+        {
+          "url": "http://www.campofosho.com",
+          "error": "HTTPConnectionPool(host='www.campofosho.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x1043bb610>: Failed to resolve 'www.campofosho.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        },
+        {
+          "url": "http://www.campofosho.com/",
+          "error": "HTTPConnectionPool(host='www.campofosho.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x1043bbf70>: Failed to resolve 'www.campofosho.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:20:32"
+    },
+    "Oh No You Didn't!": {
+      "urls_provided": [
+        "https://www.facebook.com/camp.oh.no.you.didnt/",
+        "https://www.facebook.com/pages/Camp-Oh-No-You-Didnt/108649105843013",
+        "https://www.facebook.com/camp.oh.no.you.didnt"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/camp.oh.no.you.didnt/",
+        "https://www.facebook.com/pages/Camp-Oh-No-You-Didnt/108649105843013",
+        "https://www.facebook.com/camp.oh.no.you.didnt"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/camp.oh.no.you.didnt/",
+        "https://www.facebook.com/pages/Camp-Oh-No-You-Didnt/108649105843013",
+        "https://www.facebook.com/camp.oh.no.you.didnt"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:27:28"
+    },
+    "Opulent Chill": {
+      "urls_provided": [
+        "http://opulenttemple.org",
+        "http://opulentchill.org",
+        "http://www.opulentchill.org",
+        "http://www.opulenttemple.org",
+        "http://www.opulenttemple.org/",
+        "http://opulentchill.org/"
+      ],
+      "urls_checked": [
+        "http://opulenttemple.org"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://opulenttemple.org": "https://www.opulenttemple.org/"
+      },
+      "images_downloaded": 128,
+      "status": "success",
+      "last_processed": "2025-10-19 21:21:57"
+    },
+    "Pandora's Lounge & Fix-it Shoppe": {
+      "urls_provided": [
+        "https://sites.google.com/site/pandorascamp/"
+      ],
+      "urls_checked": [
+        "https://sites.google.com/site/pandorascamp/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Patsy's Hangout": {
+      "urls_provided": [
+        "https://www.patsyshangout.org",
+        "https://www.patsyshangout.org/"
+      ],
+      "urls_checked": [
+        "https://www.patsyshangout.org",
+        "https://www.patsyshangout.org/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://www.patsyshangout.org": "https://www.patsyshangout.org/"
+      },
+      "images_downloaded": 7,
+      "status": "success",
+      "last_processed": "2025-10-19 21:25:49"
+    },
+    "Penguin Place": {
+      "urls_provided": [
+        "https://www.instagram.com/penguinplace_brc"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/penguinplace_brc"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/penguinplace_brc"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:23:41"
+    },
+    "Penny Smashing Point": {
+      "urls_provided": [
+        "http://www.obolensky.us",
+        "http://www.obolensky.us/"
+      ],
+      "urls_checked": [
+        "http://www.obolensky.us",
+        "http://www.obolensky.us/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://www.obolensky.us",
+          "error": "HTTP 404"
+        },
+        {
+          "url": "http://www.obolensky.us/",
+          "error": "HTTP 404"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Phantasmagoria Camp": {
+      "urls_provided": [
+        "https://instagram.com/hot_mess_camp",
+        "https://m.facebook.com/groups/1432940710113020",
+        "https://www.instagram.com/phantasmagoria_camp/profilecard/?igsh=eTdjZjVmZnR1MnIy"
+      ],
+      "urls_checked": [
+        "https://instagram.com/hot_mess_camp",
+        "https://m.facebook.com/groups/1432940710113020",
+        "https://www.instagram.com/phantasmagoria_camp/profilecard/?igsh=eTdjZjVmZnR1MnIy"
+      ],
+      "social_media_urls": [
+        "https://instagram.com/hot_mess_camp",
+        "https://m.facebook.com/groups/1432940710113020",
+        "https://www.instagram.com/phantasmagoria_camp/profilecard/?igsh=eTdjZjVmZnR1MnIy"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:30:45"
+    },
+    "Plaisance": {
+      "urls_provided": [
+        "http://facebook.com/plaisancecamp",
+        "https://www.facebook.com/plaisancecamp/",
+        "https://www.facebook.com/plaisancecamp",
+        "https://www.facebook.com/groups/PlaisanceCamp/"
+      ],
+      "urls_checked": [
+        "http://facebook.com/plaisancecamp",
+        "https://www.facebook.com/plaisancecamp/",
+        "https://www.facebook.com/plaisancecamp",
+        "https://www.facebook.com/groups/PlaisanceCamp/"
+      ],
+      "social_media_urls": [
+        "http://facebook.com/plaisancecamp",
+        "https://www.facebook.com/plaisancecamp/",
+        "https://www.facebook.com/plaisancecamp",
+        "https://www.facebook.com/groups/PlaisanceCamp/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:30:15"
+    },
+    "Planet Palm Tree": {
+      "urls_provided": [
+        "https://www.facebook.com/Palm-Tree-Country-Club-1296876547074778/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/Palm-Tree-Country-Club-1296876547074778/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/Palm-Tree-Country-Club-1296876547074778/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:29:27"
+    },
+    "Planned Playahood": {
+      "urls_provided": [
+        "https://www.facebook.com/plannedplayahood/",
+        "http://debocceri.com",
+        "http://www.plannedplayahood.org/",
+        "http://www.debocceri.com",
+        "http://plannedplayahood.org"
+      ],
+      "urls_checked": [
+        "http://debocceri.com",
+        "http://www.plannedplayahood.org/",
+        "http://plannedplayahood.org"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://debocceri.com": "http://debocceri.com/",
+        "http://plannedplayahood.org": "http://www.plannedplayahood.org/"
+      },
+      "images_downloaded": 20,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "PlayAlchemist": {
+      "urls_provided": [
+        "https://www.playalchemist.com/",
+        "https://www.playalchemist.com"
+      ],
+      "urls_checked": [
+        "https://www.playalchemist.com/",
+        "https://www.playalchemist.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://www.playalchemist.com": "https://www.playalchemist.com/"
+      },
+      "images_downloaded": 112,
+      "status": "success",
+      "last_processed": "2025-10-19 21:27:28"
+    },
+    "Playa Jazz Cafe": {
+      "urls_provided": [
+        "http://groups.yahoo.com/group/PlayaJazz/",
+        "http://www.playajazz.com/",
+        "http://www.playajazz.com",
+        "http://groups.google.com/group/playajazz",
+        "https://www.facebook.com/PlayaJazzCafe/",
+        "https://www.playajazz.com",
+        "http://www.facebook.com/PlayaJazzCafe"
+      ],
+      "urls_checked": [
+        "http://groups.yahoo.com/group/PlayaJazz/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://groups.yahoo.com/group/PlayaJazz/": "https://www.yahoo.com/"
+      },
+      "images_downloaded": 128,
+      "status": "success",
+      "last_processed": "2025-10-19 21:28:18"
+    },
+    "Playa Party Patrol": {
+      "urls_provided": [
+        "https://playapartypatrol.com"
+      ],
+      "urls_checked": [
+        "https://playapartypatrol.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://playapartypatrol.com": "https://www.playapartypatrol.com/"
+      },
+      "images_downloaded": 1,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:34"
+    },
+    "Playa Paul's Concierge Service": {
+      "urls_provided": [
+        "https://playapaul.com/"
+      ],
+      "urls_checked": [
+        "https://playapaul.com/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 19,
+      "status": "success",
+      "last_processed": "2025-10-19 21:21:40"
+    },
+    "Playa Penthouse": {
+      "urls_provided": [
+        "https://www.facebook.com/PlayaPenthouse"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/PlayaPenthouse"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/PlayaPenthouse"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "Playasos!": {
+      "urls_provided": [
+        "http://www.playasos.com/",
+        "http://www.playasos.com",
+        "https://www.instagram.com/playasos.slide/"
+      ],
+      "urls_checked": [
+        "http://www.playasos.com/",
+        "http://www.playasos.com",
+        "https://www.instagram.com/playasos.slide/"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/playasos.slide/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.playasos.com/": "https://www.facebook.com/CampPlayasos",
+        "http://www.playasos.com": "https://www.facebook.com/CampPlayasos"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:25:46"
+    },
+    "Pretty Pickle": {
+      "urls_provided": [
+        "http://www.prettypicklecamp.tk/",
+        "http://prettypicklecamp.p1r8.net",
+        "https://prettypicklecamp.p1r8.net/"
+      ],
+      "urls_checked": [
+        "http://www.prettypicklecamp.tk/",
+        "http://prettypicklecamp.p1r8.net"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://www.prettypicklecamp.tk/",
+          "error": "HTTPConnectionPool(host='www.prettypicklecamp.tk', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x103021910>: Failed to resolve 'www.prettypicklecamp.tk' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {
+        "http://prettypicklecamp.p1r8.net": "http://prettypicklecamp.p1r8.net/"
+      },
+      "images_downloaded": 128,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:40"
+    },
+    "Pussy Avalanche": {
+      "urls_provided": [
+        "https://pussyavalanche.net"
+      ],
+      "urls_checked": [
+        "https://pussyavalanche.net"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://pussyavalanche.net": "https://pussyavalanche.net/"
+      },
+      "images_downloaded": 10,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:13"
+    },
+    "RIPPERS ROW": {
+      "urls_provided": [
+        "https://www.instagram.com/rippers_row/"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/rippers_row/"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/rippers_row/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:17"
+    },
+    "Red Nose District": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/152872281529293/",
+        "https://www.facebook.com/RedNoseDistrict",
+        "https://www.facebook.com/RedNoseDistrict/",
+        "https://www.rednosedistrict.com",
+        "http://www.rednosedistrict.org",
+        "http://www.rednosedistrict.com"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/152872281529293/",
+        "https://www.facebook.com/RedNoseDistrict",
+        "https://www.facebook.com/RedNoseDistrict/",
+        "https://www.rednosedistrict.com",
+        "http://www.rednosedistrict.org",
+        "http://www.rednosedistrict.com"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/152872281529293/",
+        "https://www.facebook.com/RedNoseDistrict",
+        "https://www.facebook.com/RedNoseDistrict/"
+      ],
+      "error_urls": [
+        {
+          "url": "https://www.rednosedistrict.com",
+          "error": "HTTPSConnectionPool(host='www.rednosedistrict.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x1068bedc0>: Failed to resolve 'www.rednosedistrict.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        },
+        {
+          "url": "http://www.rednosedistrict.org",
+          "error": "HTTPConnectionPool(host='www.rednosedistrict.org', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x106884730>: Failed to resolve 'www.rednosedistrict.org' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        },
+        {
+          "url": "http://www.rednosedistrict.com",
+          "error": "HTTPConnectionPool(host='www.rednosedistrict.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x10688b0d0>: Failed to resolve 'www.rednosedistrict.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:28:06"
+    },
+    "Robotronia": {
+      "urls_provided": [
+        "https://robotronia.com/"
+      ],
+      "urls_checked": [
+        "https://robotronia.com/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://robotronia.com/": "https://www.robotronia.com/"
+      },
+      "images_downloaded": 8,
+      "status": "success",
+      "last_processed": "2025-10-19 21:22:06"
+    },
+    "Rumor Mill": {
+      "urls_provided": [
+        "https://www.prototopiacamp.org/",
+        "https://prototopiacamp.org"
+      ],
+      "urls_checked": [
+        "https://www.prototopiacamp.org/",
+        "https://prototopiacamp.org"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://prototopiacamp.org": "https://www.prototopiacamp.org/"
+      },
+      "images_downloaded": 33,
+      "status": "success",
+      "last_processed": "2025-10-19 21:24:16"
+    },
     "Sepia Lux Homebase": {
       "urls_provided": [
         "https://www.instagram.com/sepialux/"
@@ -241,6 +3079,296 @@
       "status": "social_media_only",
       "last_processed": "2025-10-19 20:59:14"
     },
+    "Skinny Kitty Teahouse": {
+      "urls_provided": [
+        "http://skinnykittyteahouse.com/",
+        "http://skinnykittyteahouse.com"
+      ],
+      "urls_checked": [
+        "http://skinnykittyteahouse.com/",
+        "http://skinnykittyteahouse.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://skinnykittyteahouse.com": "http://skinnykittyteahouse.com/"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:27:54"
+    },
+    "So Far So Good": {
+      "urls_provided": [
+        "https://paulkarpenko.com/pages/bm/"
+      ],
+      "urls_checked": [
+        "https://paulkarpenko.com/pages/bm/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:22:49"
+    },
+    "Sockdrawer": {
+      "urls_provided": [
+        "https://sockdrawerevents.com/"
+      ],
+      "urls_checked": [
+        "https://sockdrawerevents.com/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://sockdrawerevents.com/": "https://www.sockdrawerevents.com/"
+      },
+      "images_downloaded": 18,
+      "status": "success",
+      "last_processed": "2025-10-19 21:22:45"
+    },
+    "Sonic Soul Tribe": {
+      "urls_provided": [
+        "https://www.facebook.com/SonicSoulTribes/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/SonicSoulTribes/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/SonicSoulTribes/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:27:34"
+    },
+    "Soulshakers": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/979146872219547",
+        "https://www.facebook.com/groups/979146872219547/members/",
+        "http://www.facebook.com/soulshakersburningman"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/979146872219547",
+        "https://www.facebook.com/groups/979146872219547/members/",
+        "http://www.facebook.com/soulshakersburningman"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/979146872219547",
+        "https://www.facebook.com/groups/979146872219547/members/",
+        "http://www.facebook.com/soulshakersburningman"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:21:23"
+    },
+    "Sovereign Nation of Farkovia": {
+      "urls_provided": [
+        "https://co-reality.co/"
+      ],
+      "urls_checked": [
+        "https://co-reality.co/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 102,
+      "status": "success",
+      "last_processed": "2025-10-19 21:22:30"
+    },
+    "Sozo Experience": {
+      "urls_provided": [
+        "https://sozoxpcamp.wordpress.com/"
+      ],
+      "urls_checked": [
+        "https://sozoxpcamp.wordpress.com/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 13,
+      "status": "success",
+      "last_processed": "2025-10-19 21:28:30"
+    },
+    "Spinny's Playground": {
+      "urls_provided": [
+        "https://brc.lastbetmotel.com/"
+      ],
+      "urls_checked": [
+        "https://brc.lastbetmotel.com/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "https://brc.lastbetmotel.com/",
+          "error": "HTTPSConnectionPool(host='brc.lastbetmotel.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x1034a4400>: Failed to resolve 'brc.lastbetmotel.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:23:37"
+    },
+    "Spoonful of Friends": {
+      "urls_provided": [
+        "https://elated-rubidium-d8e.notion.site/Spoonful-of-Friends-0023f57fdfac4e619d8f41c07878074c"
+      ],
+      "urls_checked": [
+        "https://elated-rubidium-d8e.notion.site/Spoonful-of-Friends-0023f57fdfac4e619d8f41c07878074c"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:21:17"
+    },
+    "Stimulation Station": {
+      "urls_provided": [
+        "http://www.elevantrising.com"
+      ],
+      "urls_checked": [
+        "http://www.elevantrising.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://www.elevantrising.com",
+          "error": "HTTPConnectionPool(host='www.elevantrising.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x108be9820>: Failed to resolve 'www.elevantrising.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:22:47"
+    },
+    "Stoop": {
+      "urls_provided": [
+        "https://www.instagram.com/thetravelingstoop/"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/thetravelingstoop/"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/thetravelingstoop/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:32"
+    },
+    "Sunrise Diner": {
+      "urls_provided": [
+        "http://sunrisedinerbrc.com",
+        "http://www.facebook.com/SunriseDinerBRC",
+        "https://www.facebook.com/SunriseDinerBRC/"
+      ],
+      "urls_checked": [
+        "http://sunrisedinerbrc.com",
+        "http://www.facebook.com/SunriseDinerBRC",
+        "https://www.facebook.com/SunriseDinerBRC/"
+      ],
+      "social_media_urls": [
+        "http://www.facebook.com/SunriseDinerBRC",
+        "https://www.facebook.com/SunriseDinerBRC/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://sunrisedinerbrc.com": "https://sites.google.com/view/sunrise-diner/home"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:29:32"
+    },
+    "Swag of Burning Man": {
+      "urls_provided": [
+        "http://swagofburningman.com"
+      ],
+      "urls_checked": [
+        "http://swagofburningman.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://swagofburningman.com": "http://www.swagofburningman.com/"
+      },
+      "images_downloaded": 128,
+      "status": "success",
+      "last_processed": "2025-10-19 21:21:23"
+    },
+    "TRYST": {
+      "urls_provided": [
+        "http://www.trystcamp.com"
+      ],
+      "urls_checked": [
+        "http://www.trystcamp.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.trystcamp.com": "https://trystcamp.com/"
+      },
+      "images_downloaded": 3,
+      "status": "success",
+      "last_processed": "2025-10-19 21:23:14"
+    },
+    "Tarwater": {
+      "urls_provided": [
+        "http://www.camptarwater.com",
+        "http://home.comcast.net/~retawrat/site/?/page/Tarwater/&PHPSESSID=48d2591ec384559766db47d231edcf2b",
+        "http://home.comcast.net/~retawrat/site/",
+        "http://home.comcast.net/~retawrat/site/?/home/"
+      ],
+      "urls_checked": [
+        "http://www.camptarwater.com",
+        "http://home.comcast.net/~retawrat/site/?/page/Tarwater/&PHPSESSID=48d2591ec384559766db47d231edcf2b",
+        "http://home.comcast.net/~retawrat/site/",
+        "http://home.comcast.net/~retawrat/site/?/home/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://www.camptarwater.com",
+          "error": "HTTPConnectionPool(host='www.camptarwater.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x103015df0>: Failed to resolve 'www.camptarwater.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        },
+        {
+          "url": "http://home.comcast.net/~retawrat/site/?/page/Tarwater/&PHPSESSID=48d2591ec384559766db47d231edcf2b",
+          "error": "HTTP 504"
+        },
+        {
+          "url": "http://home.comcast.net/~retawrat/site/",
+          "error": "HTTP 504"
+        },
+        {
+          "url": "http://home.comcast.net/~retawrat/site/?/home/",
+          "error": "HTTP 504"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:20:28"
+    },
+    "Teddies": {
+      "urls_provided": [
+        "http://teddiesburn.com"
+      ],
+      "urls_checked": [
+        "http://teddiesburn.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://teddiesburn.com": "https://www.teddiesburn.com/"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:27:18"
+    },
     "The Airship": {
       "urls_provided": [
         "https://www.facebook.com/groups/924159559350213/"
@@ -256,15 +3384,351 @@
       "images_downloaded": 0,
       "status": "social_media_only",
       "last_processed": "2025-10-19 20:58:20"
+    },
+    "The Assless Chapel": {
+      "urls_provided": [
+        "https://www.theasslesschapel.com/"
+      ],
+      "urls_checked": [
+        "https://www.theasslesschapel.com/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 15,
+      "status": "success",
+      "last_processed": "2025-10-19 21:23:14"
+    },
+    "The Dusty Nuts Tavern": {
+      "urls_provided": [
+        "http://www.dustynutstavern.com/",
+        "http://www.dustynutstavern.com"
+      ],
+      "urls_checked": [
+        "http://www.dustynutstavern.com/",
+        "http://www.dustynutstavern.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.dustynutstavern.com/": "https://www.dustynutstavern.com/",
+        "http://www.dustynutstavern.com": "https://www.dustynutstavern.com/"
+      },
+      "images_downloaded": 1,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:18"
+    },
+    "The Last Starfighters": {
+      "urls_provided": [
+        "https://www.solarlibrary.info/",
+        "https://www.solarlibrary.info"
+      ],
+      "urls_checked": [
+        "https://www.solarlibrary.info/",
+        "https://www.solarlibrary.info"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://www.solarlibrary.info": "https://www.solarlibrary.info/"
+      },
+      "images_downloaded": 33,
+      "status": "success",
+      "last_processed": "2025-10-19 21:25:59"
+    },
+    "The Melon Motel": {
+      "urls_provided": [
+        "https://www.instagram.com/melonmotel/"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/melonmotel/"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/melonmotel/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:27:28"
+    },
+    "The New Barbarians": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/533672460021972/",
+        "https://www.facebook.com/jurassicporkofficial/",
+        "https://www.facebook.com/jurassicporkofficial"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/533672460021972/",
+        "https://www.facebook.com/jurassicporkofficial/",
+        "https://www.facebook.com/jurassicporkofficial"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/533672460021972/",
+        "https://www.facebook.com/jurassicporkofficial/",
+        "https://www.facebook.com/jurassicporkofficial"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:28:28"
+    },
+    "The Pleasure Dairy": {
+      "urls_provided": [
+        "https://www.instagram.com/pleasuredairybm/"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/pleasuredairybm/"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/pleasuredairybm/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:28:30"
+    },
+    "Tierra Bomba": {
+      "urls_provided": [
+        "http://www.tierrabomba.com",
+        "https://www.tierrabomba.com"
+      ],
+      "urls_checked": [
+        "http://www.tierrabomba.com",
+        "https://www.tierrabomba.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.tierrabomba.com": "https://www.tierrabomba.com/",
+        "https://www.tierrabomba.com": "https://www.tierrabomba.com/"
+      },
+      "images_downloaded": 8,
+      "status": "success",
+      "last_processed": "2025-10-19 21:28:12"
+    },
+    "Tour de Chance": {
+      "urls_provided": [
+        "http://www.facebook.com/dustyd2016"
+      ],
+      "urls_checked": [
+        "http://www.facebook.com/dustyd2016"
+      ],
+      "social_media_urls": [
+        "http://www.facebook.com/dustyd2016"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:24:22"
+    },
+    "Treble Makers": {
+      "urls_provided": [
+        "https://johmathe.github.io/camp.html"
+      ],
+      "urls_checked": [
+        "https://johmathe.github.io/camp.html"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 56,
+      "status": "success",
+      "last_processed": "2025-10-19 21:20:26"
+    },
+    "Two Lanterns": {
+      "urls_provided": [
+        "http://www.ebold.com/~bobo/",
+        "https://www.facebook.com/twolanternsthemecamp/",
+        "http://www.skyhighway.com/~bobo/",
+        "http://www.taintedpackets.com/",
+        "https://www.facebook.com/twolanternsthemecamp",
+        "https://www.facebook.com/twolanternsthemecamp/?ref=aymt_homepage_panel"
+      ],
+      "urls_checked": [
+        "http://www.ebold.com/~bobo/",
+        "https://www.facebook.com/twolanternsthemecamp/",
+        "http://www.skyhighway.com/~bobo/",
+        "http://www.taintedpackets.com/",
+        "https://www.facebook.com/twolanternsthemecamp",
+        "https://www.facebook.com/twolanternsthemecamp/?ref=aymt_homepage_panel"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/twolanternsthemecamp/",
+        "https://www.facebook.com/twolanternsthemecamp",
+        "https://www.facebook.com/twolanternsthemecamp/?ref=aymt_homepage_panel"
+      ],
+      "error_urls": [
+        {
+          "url": "http://www.ebold.com/~bobo/",
+          "error": "HTTP 404"
+        },
+        {
+          "url": "http://www.skyhighway.com/~bobo/",
+          "error": "HTTP 404"
+        },
+        {
+          "url": "http://www.taintedpackets.com/",
+          "error": "HTTPConnectionPool(host='www.taintedpackets.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x105e82bb0>: Failed to resolve 'www.taintedpackets.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 21:31:01"
+    },
+    "U.F.O.": {
+      "urls_provided": [
+        "https://www.facebook.com/uforesponseteamBM/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/uforesponseteamBM/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/uforesponseteamBM/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:21:36"
+    },
+    "UnStable": {
+      "urls_provided": [
+        "https://www.instagram.com/chesteronfire/?utm_medium=copy_link"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/chesteronfire/?utm_medium=copy_link"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/chesteronfire/?utm_medium=copy_link"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:23:44"
+    },
+    "Vamp Camp": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/VampCamp",
+        "http://www.facebook.com/groups/VampCamp/",
+        "http://www.facebook.com/profile.php?id=1030300218#!/group.php?gid=119105074647",
+        "https://www.facebook.com/groups/VampCamp/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/VampCamp",
+        "http://www.facebook.com/groups/VampCamp/",
+        "http://www.facebook.com/profile.php?id=1030300218#!/group.php?gid=119105074647",
+        "https://www.facebook.com/groups/VampCamp/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/VampCamp",
+        "http://www.facebook.com/groups/VampCamp/",
+        "http://www.facebook.com/profile.php?id=1030300218#!/group.php?gid=119105074647",
+        "https://www.facebook.com/groups/VampCamp/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:17"
+    },
+    "Vessels of Love": {
+      "urls_provided": [
+        "http://www.vesselsoflove.net"
+      ],
+      "urls_checked": [
+        "http://www.vesselsoflove.net"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.vesselsoflove.net": "https://www.vesselsoflove.net/"
+      },
+      "images_downloaded": 9,
+      "status": "success",
+      "last_processed": "2025-10-19 21:28:06"
+    },
+    "Vines Without Borders": {
+      "urls_provided": [
+        "http://www.vineswithoutborders.com"
+      ],
+      "urls_checked": [
+        "http://www.vineswithoutborders.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.vineswithoutborders.com": "http://www.vineswithoutborders.com/"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:27:54"
+    },
+    "Vulcan Empire": {
+      "urls_provided": [
+        "https://vulcanempire.org",
+        "http://www.facebook.com/VulcanEmpire"
+      ],
+      "urls_checked": [
+        "https://vulcanempire.org",
+        "http://www.facebook.com/VulcanEmpire"
+      ],
+      "social_media_urls": [
+        "http://www.facebook.com/VulcanEmpire"
+      ],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://vulcanempire.org": "https://vulcanempire.org/"
+      },
+      "images_downloaded": 98,
+      "status": "success",
+      "last_processed": "2025-10-19 21:22:54"
+    },
+    "Wetspot": {
+      "urls_provided": [
+        "http://www.campwetspot.com"
+      ],
+      "urls_checked": [
+        "http://www.campwetspot.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.campwetspot.com": "http://www.campwetspot.com/"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 21:25:52"
+    },
+    "Wild Child": {
+      "urls_provided": [
+        "https://www.instagram.com/wildchildbm?igsh=anRrbWt6aDZ2cmVh"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/wildchildbm?igsh=anRrbWt6aDZ2cmVh"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/wildchildbm?igsh=anRrbWt6aDZ2cmVh"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 21:20:13"
     }
   },
   "summary": {
-    "total_camps_processed": 12,
-    "camps_with_images": 5,
-    "camps_with_social_media_only": 3,
-    "camps_with_errors": 2,
-    "camps_with_no_images": 2,
-    "total_images_downloaded": 71
+    "total_camps_processed": 185,
+    "camps_with_images": 61,
+    "camps_with_social_media_only": 62,
+    "camps_with_errors": 34,
+    "camps_with_no_images": 28,
+    "total_images_downloaded": 2971
   },
-  "last_updated": "2025-10-19 20:59:58"
+  "last_updated": "2025-10-19 21:31:48"
 }

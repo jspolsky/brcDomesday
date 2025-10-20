@@ -27,12 +27,13 @@ The script will:
 
 ## Features
 
+- **Parallel processing**: Processes up to 16 camps simultaneously for much faster scraping
 - **Resumable**: Press Ctrl+C to stop, run again to resume
 - **Site crawling**: Follows links within websites to discover subpages with images
   - Crawls up to 50 pages per site
   - Follows links up to 3 levels deep
   - Stays within the same domain
-- **Rate limiting**: 2 second delay between requests
+- **Rate limiting**: 2 second delay between requests to same site (but works on 16 sites in parallel)
 - **Smart filtering**: Skips small images (< 256x256px) and non-photos
 - **Social media handling**: Tracks Facebook/Instagram URLs separately
 - **Metadata tracking**: Records source URLs, image dimensions, download dates
