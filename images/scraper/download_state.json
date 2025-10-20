@@ -1,27 +1,270 @@
 {
-  "processed_camps": [
-    "Camp ASL Support Services HUB",
-    "Chariot Project",
-    "Camp Bird of Paradise",
-    "Camp Pendant",
-    "The Airship",
-    "Khaleeya",
-    "Ludus Symposium",
-    "Duane's Whirld",
-    "Sepia Lux Homebase",
-    "Cult of the Magic Lady",
-    "Children of Chaos",
-    "Planned Playahood",
-    "Casa de la Rumba",
-    "Duty Free",
-    "Nomad Collective",
-    "OHM HOME",
-    "LAF Lazy-Ass Fuckers",
-    "Brainy Bar",
-    "MISFITS MMXXV",
-    "Camp Gotalotgoinon",
-    "Camp Orange Heart",
-    "Playa Penthouse"
-  ],
-  "last_updated": "2025-10-19 20:36:29"
+  "camps": {
+    "Camp ASL Support Services HUB": {
+      "urls_provided": [
+        "http://www.playaterps.us"
+      ],
+      "urls_checked": [
+        "http://www.playaterps.us"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://www.playaterps.us": "http://www.playaterps.us/"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 20:56:58"
+    },
+    "Camp Bird of Paradise": {
+      "urls_provided": [
+        "https://flickr.com/photos/165576499@N02/sets/72157713040734963",
+        "https://www.flickr.com/photos/165576499@N02/shares/c5Y1RN54Q2",
+        "http://www.instagram.com/campbirdofparadise"
+      ],
+      "urls_checked": [
+        "https://flickr.com/photos/165576499@N02/sets/72157713040734963",
+        "https://www.flickr.com/photos/165576499@N02/shares/c5Y1RN54Q2",
+        "http://www.instagram.com/campbirdofparadise"
+      ],
+      "social_media_urls": [
+        "http://www.instagram.com/campbirdofparadise"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 9,
+      "status": "success",
+      "last_processed": "2025-10-19 20:57:35"
+    },
+    "Camp Pendant": {
+      "urls_provided": [
+        "https://www.facebook.com/camppendant/",
+        "https://www.facebook.com/CampPendant",
+        "http://web.me.com/rob.lyons/CampPendant/Camp_Pendant_2009.html",
+        "https://www.facebook.com/CampPendant/",
+        "http://www.facebook.com/group.php?gid=133288841980"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/camppendant/",
+        "https://www.facebook.com/CampPendant",
+        "http://web.me.com/rob.lyons/CampPendant/Camp_Pendant_2009.html",
+        "https://www.facebook.com/CampPendant/",
+        "http://www.facebook.com/group.php?gid=133288841980"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/camppendant/",
+        "https://www.facebook.com/CampPendant",
+        "https://www.facebook.com/CampPendant/",
+        "http://www.facebook.com/group.php?gid=133288841980"
+      ],
+      "error_urls": [
+        {
+          "url": "http://web.me.com/rob.lyons/CampPendant/Camp_Pendant_2009.html",
+          "error": "HTTPConnectionPool(host='web.me.com', port=80): Max retries exceeded with url: /rob.lyons/CampPendant/Camp_Pendant_2009.html (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x10380ea00>, 'Connection to web.me.com timed out. (connect timeout=30)'))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 20:57:48"
+    },
+    "Casa de la Rumba": {
+      "urls_provided": [
+        "http://casadelarumba.com",
+        "https://casadelarumba.com"
+      ],
+      "urls_checked": [
+        "http://casadelarumba.com",
+        "https://casadelarumba.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://casadelarumba.com": "https://casadelarumba.notion.site:443/",
+        "https://casadelarumba.com": "https://casadelarumba.notion.site:443/"
+      },
+      "images_downloaded": 0,
+      "status": "no_images_found",
+      "last_processed": "2025-10-19 20:57:00"
+    },
+    "Chariot Project": {
+      "urls_provided": [
+        "http://goldiesponies.com/",
+        "https://burningchariots.com/",
+        "https://goldiesponies.com"
+      ],
+      "urls_checked": [
+        "http://goldiesponies.com/",
+        "https://burningchariots.com/",
+        "https://goldiesponies.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://goldiesponies.com": "https://goldiesponies.com/"
+      },
+      "images_downloaded": 22,
+      "status": "success",
+      "last_processed": "2025-10-19 20:57:06"
+    },
+    "Children of Chaos": {
+      "urls_provided": [
+        "https://chaoscamp.wordpress.com",
+        "http://home.comcast.net/~imstevens/chaos_camp.html",
+        "http://chaoscamp.wordpress.com/",
+        "https://chaoscamp.wordpress.com/"
+      ],
+      "urls_checked": [
+        "https://chaoscamp.wordpress.com",
+        "http://home.comcast.net/~imstevens/chaos_camp.html",
+        "http://chaoscamp.wordpress.com/",
+        "https://chaoscamp.wordpress.com/"
+      ],
+      "social_media_urls": [],
+      "error_urls": [
+        {
+          "url": "http://home.comcast.net/~imstevens/chaos_camp.html",
+          "error": "HTTP 504"
+        }
+      ],
+      "redirected_urls": {
+        "https://chaoscamp.wordpress.com": "https://chaoscamp.wordpress.com/",
+        "http://chaoscamp.wordpress.com/": "https://chaoscamp.wordpress.com/"
+      },
+      "images_downloaded": 11,
+      "status": "success",
+      "last_processed": "2025-10-19 20:59:16"
+    },
+    "Cult of the Magic Lady": {
+      "urls_provided": [
+        "https://www.facebook.com/CultOfTheMagicLady/",
+        "https://www.facebook.com/cultofthemagiclady/",
+        "http://www.cultofthemagiclady.com/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/CultOfTheMagicLady/",
+        "https://www.facebook.com/cultofthemagiclady/",
+        "http://www.cultofthemagiclady.com/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/CultOfTheMagicLady/",
+        "https://www.facebook.com/cultofthemagiclady/"
+      ],
+      "error_urls": [
+        {
+          "url": "http://www.cultofthemagiclady.com/",
+          "error": "HTTPConnectionPool(host='www.cultofthemagiclady.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError(\"<urllib3.connection.HTTPConnection object at 0x103c4c1c0>: Failed to resolve 'www.cultofthemagiclady.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+        }
+      ],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "error",
+      "last_processed": "2025-10-19 20:59:14"
+    },
+    "Duane's Whirld": {
+      "urls_provided": [
+        "http://DuanesWhirld.com/",
+        "http://duaneswhirld.com/",
+        "http://www.duaneswhirld.com",
+        "http://duaneswhirld.com"
+      ],
+      "urls_checked": [
+        "http://DuanesWhirld.com/",
+        "http://duaneswhirld.com/",
+        "http://www.duaneswhirld.com",
+        "http://duaneswhirld.com"
+      ],
+      "social_media_urls": [],
+      "error_urls": [],
+      "redirected_urls": {
+        "http://DuanesWhirld.com/": "https://duaneswhirld.com/",
+        "http://duaneswhirld.com/": "https://duaneswhirld.com/",
+        "http://www.duaneswhirld.com": "https://duaneswhirld.com/",
+        "http://duaneswhirld.com": "https://duaneswhirld.com/"
+      },
+      "images_downloaded": 23,
+      "status": "success",
+      "last_processed": "2025-10-19 20:58:42"
+    },
+    "Khaleeya": {
+      "urls_provided": [
+        "https://khaleeya.org/",
+        "https://www.instagram.com/teahivelounge/",
+        "https://teahive.org/"
+      ],
+      "urls_checked": [
+        "https://khaleeya.org/",
+        "https://www.instagram.com/teahivelounge/",
+        "https://teahive.org/"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/teahivelounge/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {
+        "https://teahive.org/": "https://khaleeya.org"
+      },
+      "images_downloaded": 6,
+      "status": "success",
+      "last_processed": "2025-10-19 20:58:20"
+    },
+    "Ludus Symposium": {
+      "urls_provided": [
+        "http://www.ludussymposium.com",
+        "https://www.facebook.com/LudusSymposium"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/LudusSymposium"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/LudusSymposium"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 20:58:42"
+    },
+    "Sepia Lux Homebase": {
+      "urls_provided": [
+        "https://www.instagram.com/sepialux/"
+      ],
+      "urls_checked": [
+        "https://www.instagram.com/sepialux/"
+      ],
+      "social_media_urls": [
+        "https://www.instagram.com/sepialux/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 20:59:14"
+    },
+    "The Airship": {
+      "urls_provided": [
+        "https://www.facebook.com/groups/924159559350213/"
+      ],
+      "urls_checked": [
+        "https://www.facebook.com/groups/924159559350213/"
+      ],
+      "social_media_urls": [
+        "https://www.facebook.com/groups/924159559350213/"
+      ],
+      "error_urls": [],
+      "redirected_urls": {},
+      "images_downloaded": 0,
+      "status": "social_media_only",
+      "last_processed": "2025-10-19 20:58:20"
+    }
+  },
+  "summary": {
+    "total_camps_processed": 12,
+    "camps_with_images": 5,
+    "camps_with_social_media_only": 3,
+    "camps_with_errors": 2,
+    "camps_with_no_images": 2,
+    "total_images_downloaded": 71
+  },
+  "last_updated": "2025-10-19 20:59:58"
 }

@@ -23,8 +23,8 @@ from io import BytesIO
 
 # Check for test mode
 TEST_MODE = '--test' in sys.argv
-TEST_CAMP_LIMIT = 10 if TEST_MODE else None
-TEST_IMAGE_LIMIT_PER_CAMP = 10 if TEST_MODE else None
+TEST_CAMP_LIMIT = 5 if TEST_MODE else None
+TEST_IMAGE_LIMIT_PER_CAMP = 5 if TEST_MODE else None
 
 # Configuration
 CAMP_HISTORY_PATH = Path(__file__).parent.parent.parent / "data" / "campHistory.json"
@@ -47,7 +47,15 @@ def load_state():
         with open(STATE_FILE, 'r') as f:
             return json.load(f)
     return {
-        "processed_camps": [],
+        "camps": {},
+        "summary": {
+            "total_camps_processed": 0,
+            "camps_with_images": 0,
+            "camps_with_social_media_only": 0,
+            "camps_with_errors": 0,
+            "camps_with_no_images": 0,
+            "total_images_downloaded": 0
+        },
         "last_updated": None
     }
 
@@ -55,6 +63,19 @@ def load_state():
 def save_state(state):
     """Save processing state to file."""
     state["last_updated"] = time.strftime("%Y-%m-%d %H:%M:%S")
+
+    # Sort camps alphabetically
+    sorted_camps = dict(sorted(state["camps"].items()))
+    state["camps"] = sorted_camps
+
+    # Update summary counts
+    state["summary"]["total_camps_processed"] = len(state["camps"])
+    state["summary"]["camps_with_images"] = sum(1 for c in state["camps"].values() if c.get("images_downloaded", 0) > 0)
+    state["summary"]["camps_with_social_media_only"] = sum(1 for c in state["camps"].values() if c.get("status") == "social_media_only")
+    state["summary"]["camps_with_errors"] = sum(1 for c in state["camps"].values() if c.get("status") == "error")
+    state["summary"]["camps_with_no_images"] = sum(1 for c in state["camps"].values() if c.get("status") == "no_images_found")
+    state["summary"]["total_images_downloaded"] = sum(c.get("images_downloaded", 0) for c in state["camps"].values())
+
     with open(STATE_FILE, 'w') as f:
         json.dump(state, f, indent=2)
 
@@ -186,6 +207,18 @@ def scrape_camp_images(camp_name, urls, state):
     print(f"Processing: {camp_name}")
     print(f"URLs to check: {len(urls)}")
 
+    # Initialize camp record in state
+    camp_record = {
+        "urls_provided": urls,
+        "urls_checked": [],
+        "social_media_urls": [],
+        "error_urls": [],
+        "redirected_urls": {},
+        "images_downloaded": 0,
+        "status": None,
+        "last_processed": time.strftime("%Y-%m-%d %H:%M:%S")
+    }
+
     # Create camp directory
     camp_dir = CANDIDATES_DIR / camp_name
     camp_dir.mkdir(parents=True, exist_ok=True)
@@ -216,8 +249,8 @@ def scrape_camp_images(camp_name, urls, state):
             print(f"  Social media URL (skipping): {url}")
             metadata["social_media_urls"].append(url)
             metadata["urls_checked"].append(url)
-            if camp_name not in SOCIAL_MEDIA_CAMPS:
-                SOCIAL_MEDIA_CAMPS.append(camp_name)
+            camp_record["social_media_urls"].append(url)
+            camp_record["urls_checked"].append(url)
             continue
 
         print(f"  Fetching: {url}")
@@ -229,12 +262,15 @@ def scrape_camp_images(camp_name, urls, state):
             if response.status_code != 200:
                 print(f"    Failed: HTTP {response.status_code}")
                 metadata["urls_checked"].append(url)
+                camp_record["urls_checked"].append(url)
+                camp_record["error_urls"].append({"url": url, "error": f"HTTP {response.status_code}"})
                 continue
 
             # Check if we were redirected
             final_url = response.url
             if final_url != url:
                 print(f"    Redirected to: {final_url}")
+                camp_record["redirected_urls"][url] = final_url
 
             # Extract image URLs using the final URL as the base
             image_urls = extract_image_urls(response.text, final_url)
@@ -284,6 +320,7 @@ def scrape_camp_images(camp_name, urls, state):
                 time.sleep(0.5)
 
             metadata["urls_checked"].append(url)
+            camp_record["urls_checked"].append(url)
 
             # Save metadata after each URL
             with open(metadata_file, 'w') as f:
@@ -292,6 +329,8 @@ def scrape_camp_images(camp_name, urls, state):
         except Exception as e:
             print(f"    Error processing URL: {e}")
             metadata["urls_checked"].append(url)
+            camp_record["urls_checked"].append(url)
+            camp_record["error_urls"].append({"url": url, "error": str(e)})
 
         # Rate limiting between URLs
         time.sleep(REQUEST_DELAY)
@@ -303,7 +342,22 @@ def scrape_camp_images(camp_name, urls, state):
     with open(metadata_file, 'w') as f:
         json.dump(metadata, f, indent=2)
 
-    print(f"\nCompleted {camp_name}: {total_images} images downloaded")
+    # Determine status
+    camp_record["images_downloaded"] = total_images
+
+    if len(camp_record["social_media_urls"]) > 0 and len(camp_record["urls_checked"]) == len(camp_record["social_media_urls"]):
+        camp_record["status"] = "social_media_only"
+    elif len(camp_record["error_urls"]) > 0 and total_images == 0:
+        camp_record["status"] = "error"
+    elif total_images > 0:
+        camp_record["status"] = "success"
+    else:
+        camp_record["status"] = "no_images_found"
+
+    # Save camp record to state
+    state["camps"][camp_name] = camp_record
+
+    print(f"\nCompleted {camp_name}: {total_images} images downloaded (status: {camp_record['status']})")
     return total_images
 
 
@@ -326,7 +380,13 @@ def main():
 
     # Load state
     state = load_state()
-    print(f"Previously processed: {len(state['processed_camps'])} camps")
+    print(f"Previously processed: {len(state['camps'])} camps")
+    if state.get('summary'):
+        print(f"  - With images: {state['summary']['camps_with_images']}")
+        print(f"  - Social media only: {state['summary']['camps_with_social_media_only']}")
+        print(f"  - No images found: {state['summary']['camps_with_no_images']}")
+        print(f"  - Errors: {state['summary']['camps_with_errors']}")
+        print(f"  - Total images: {state['summary']['total_images_downloaded']}")
 
     # Create candidates directory
     CANDIDATES_DIR.mkdir(parents=True, exist_ok=True)
@@ -336,7 +396,7 @@ def main():
         # In test mode, only process first N camps that haven't been processed
         camps_to_process = []
         for camp_name, urls in camp_urls.items():
-            if camp_name not in state['processed_camps']:
+            if camp_name not in state['camps']:
                 camps_to_process.append((camp_name, urls))
             if len(camps_to_process) >= TEST_CAMP_LIMIT:
                 break
@@ -349,7 +409,7 @@ def main():
 
     try:
         for camp_name, urls in camp_items:
-            if camp_name in state['processed_camps']:
+            if camp_name in state['camps']:
                 continue
 
             processed_count += 1
@@ -357,8 +417,7 @@ def main():
 
             images_downloaded = scrape_camp_images(camp_name, urls, state)
 
-            # Mark as processed
-            state['processed_camps'].append(camp_name)
+            # State is saved within scrape_camp_images
             save_state(state)
 
     except KeyboardInterrupt:
@@ -367,19 +426,15 @@ def main():
         print("="*80)
         save_state(state)
 
-    # Save social media camps list
-    if SOCIAL_MEDIA_CAMPS:
-        social_media_file = Path(__file__).parent / "social_media_camps.json"
-        with open(social_media_file, 'w') as f:
-            json.dump({
-                "camps_with_social_media_urls": sorted(SOCIAL_MEDIA_CAMPS),
-                "count": len(SOCIAL_MEDIA_CAMPS)
-            }, f, indent=2)
-        print(f"\nSaved {len(SOCIAL_MEDIA_CAMPS)} camps with social media URLs")
-
     print("\n" + "="*80)
     print("Scraping complete!")
-    print(f"Processed {len(state['processed_camps'])} camps")
+    print("="*80)
+    print(f"Total camps processed: {state['summary']['total_camps_processed']}")
+    print(f"  - With images: {state['summary']['camps_with_images']}")
+    print(f"  - Social media only: {state['summary']['camps_with_social_media_only']}")
+    print(f"  - No images found: {state['summary']['camps_with_no_images']}")
+    print(f"  - Errors: {state['summary']['camps_with_errors']}")
+    print(f"Total images downloaded: {state['summary']['total_images_downloaded']}")
     print("="*80)
 
 
