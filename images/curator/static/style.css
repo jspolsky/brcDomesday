@@ -1,0 +1,210 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.status {
+    color: #666;
+    font-size: 14px;
+}
+
+.complete-message {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.complete-message h2 {
+    color: #4CAF50;
+    margin-bottom: 10px;
+}
+
+.camp-header {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.camp-header h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.camp-header a {
+    color: #2196F3;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.camp-header a:hover {
+    text-decoration: underline;
+}
+
+.camp-description {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.controls {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 10px;
+}
+
+.bottom-controls {
+    margin-top: 20px;
+    margin-bottom: 0;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.btn-primary {
+    background-color: #2196F3;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #1976D2;
+}
+
+.btn-secondary {
+    background-color: #666;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #555;
+}
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 1200px) {
+    .image-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .image-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.image-item {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.image-item:hover {
+    transform: scale(1.02);
+}
+
+.image-item.rejected {
+    opacity: 0.5;
+}
+
+.image-item img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+.image-item .reject-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 48px;
+    display: none;
+    pointer-events: none;
+}
+
+.image-item.rejected .reject-badge {
+    display: block;
+}
+
+.image-info {
+    padding: 10px;
+    font-size: 12px;
+    color: #666;
+    border-top: 1px solid #eee;
+}
+
+.image-info .filename {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.image-info .dimensions {
+    color: #999;
+}
+
+.image-info .source {
+    margin-top: 5px;
+    word-break: break-all;
+}
+
+.image-info .source a {
+    color: #2196F3;
+    text-decoration: none;
+}
+
+.image-info .source a:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRC Domesday Image Curator</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>BRC Domesday Image Curator</h1>
+            <div class="status" id="status">Loading...</div>
+        </header>
+
+        <div id="complete-message" class="complete-message" style="display: none;">
+            <h2>All Done!</h2>
+            <p>All camps have been curated. Great work!</p>
+        </div>
+
+        <div id="camp-content" style="display: none;">
+            <div class="camp-header">
+                <h2 id="camp-name"></h2>
+                <a id="camp-url" href="" target="_blank" rel="noopener">Visit camp website →</a>
+            </div>
+
+            <div class="camp-description" id="camp-description"></div>
+
+            <div class="controls">
+                <button id="submit-btn" class="btn btn-primary">Submit Curation →</button>
+                <button id="reject-all-btn" class="btn btn-secondary">Reject All</button>
+                <button id="accept-all-btn" class="btn btn-secondary">Accept All</button>
+            </div>
+
+            <div class="image-grid" id="image-grid">
+                <!-- Images will be loaded here dynamically -->
+            </div>
+
+            <div class="controls bottom-controls">
+                <button id="submit-btn-bottom" class="btn btn-primary">Submit Curation →</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/curator.js"></script>
+</body>
+</html>
