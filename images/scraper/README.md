@@ -28,8 +28,12 @@ The script will:
 ## Features
 
 - **Resumable**: Press Ctrl+C to stop, run again to resume
+- **Site crawling**: Follows links within websites to discover subpages with images
+  - Crawls up to 50 pages per site
+  - Follows links up to 3 levels deep
+  - Stays within the same domain
 - **Rate limiting**: 2 second delay between requests
-- **Smart filtering**: Skips small images (< 100px) and non-photos
+- **Smart filtering**: Skips small images (< 256x256px) and non-photos
 - **Social media handling**: Tracks Facebook/Instagram URLs separately
 - **Metadata tracking**: Records source URLs, image dimensions, download dates
 
@@ -46,5 +50,5 @@ Global files:
 ## Limits
 
 - Maximum 128 images per camp
-- Minimum 100x100 pixels per image
+- Minimum 256x256 pixels per image (both width AND height)
 - Only downloads PNG and JPEG (no GIFs, videos, or animations)

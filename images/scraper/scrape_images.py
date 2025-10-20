@@ -34,7 +34,9 @@ LOG_FILE = Path(__file__).parent.parent / "candidates" / "download_log.json"
 
 REQUEST_DELAY = 2  # Seconds between requests to same domain
 MAX_IMAGES_PER_CAMP = 128
-MIN_IMAGE_SIZE = 100  # pixels - smaller images are likely icons/UI
+MIN_IMAGE_SIZE = 256  # pixels - minimum width AND height for quality images
+MAX_PAGES_PER_SITE = 50  # Maximum number of pages to visit per website
+MAX_CRAWL_DEPTH = 3  # Maximum depth to follow links (1 = only linked pages from homepage)
 USER_AGENT = 'BRC-Domesday-Image-Scraper/1.0 (Educational project; contact: see github.com/jspolsky/brcDomesday)'
 
 # Track social media URLs for later processing
@@ -121,6 +123,58 @@ def is_likely_image_url(url):
     return any(parsed.path.endswith(ext) for ext in image_extensions)
 
 
+def is_same_domain(url1, url2):
+    """Check if two URLs are on the same domain."""
+    domain1 = urlparse(url1).netloc.lower()
+    domain2 = urlparse(url2).netloc.lower()
+    # Remove 'www.' prefix for comparison
+    domain1 = domain1.replace('www.', '')
+    domain2 = domain2.replace('www.', '')
+    return domain1 == domain2
+
+
+def extract_page_links(html_content, base_url):
+    """Extract all HTML page links from content (not image links)."""
+    soup = BeautifulSoup(html_content, 'html.parser')
+    page_links = set()
+
+    for link in soup.find_all('a'):
+        href = link.get('href')
+        if not href:
+            continue
+
+        # Convert to absolute URL
+        absolute_url = urljoin(base_url, href)
+
+        # Skip if it's an image link
+        if is_likely_image_url(absolute_url):
+            continue
+
+        # Skip if it's not the same domain
+        if not is_same_domain(absolute_url, base_url):
+            continue
+
+        # Skip fragments and just anchors
+        parsed = urlparse(absolute_url)
+        if parsed.fragment and not parsed.path:
+            continue
+
+        # Remove fragment for deduplication
+        clean_url = absolute_url.split('#')[0]
+
+        # Only add HTML-like URLs
+        path_lower = parsed.path.lower()
+        # Skip common non-page files
+        skip_extensions = ['.pdf', '.zip', '.tar', '.gz', '.doc', '.docx', '.xls', '.xlsx',
+                          '.ppt', '.pptx', '.mp4', '.mov', '.avi', '.mp3', '.wav']
+        if any(path_lower.endswith(ext) for ext in skip_extensions):
+            continue
+
+        page_links.add(clean_url)
+
+    return list(page_links)
+
+
 def extract_image_urls(html_content, base_url):
     """Extract image URLs from HTML content."""
     soup = BeautifulSoup(html_content, 'html.parser')
@@ -201,6 +255,124 @@ def download_image(image_url, output_path):
         return False, 0, 0, 0
 
 
+def crawl_site_for_images(start_url, metadata, camp_record, total_images):
+    """
+    Crawl a website starting from start_url, following links to discover images.
+
+    Args:
+        start_url: The URL to start crawling from
+        metadata: The camp metadata dict to update
+        camp_record: The camp record dict for state tracking
+        total_images: Current count of images downloaded
+
+    Returns:
+        Updated total_images count
+    """
+    visited_pages = set()
+    pages_to_visit = [(start_url, 0)]  # (url, depth)
+    pages_visited_count = 0
+
+    while pages_to_visit and pages_visited_count < MAX_PAGES_PER_SITE:
+        if total_images >= MAX_IMAGES_PER_CAMP:
+            break
+
+        if TEST_MODE and total_images >= TEST_IMAGE_LIMIT_PER_CAMP:
+            break
+
+        current_url, depth = pages_to_visit.pop(0)
+
+        # Skip if already visited
+        if current_url in visited_pages:
+            continue
+
+        visited_pages.add(current_url)
+        pages_visited_count += 1
+
+        print(f"    Crawling page {pages_visited_count} (depth {depth}): {current_url[:80]}...")
+
+        try:
+            headers = {'User-Agent': USER_AGENT}
+            response = requests.get(current_url, headers=headers, timeout=30, allow_redirects=True)
+
+            if response.status_code != 200:
+                print(f"      Failed: HTTP {response.status_code}")
+                continue
+
+            final_url = response.url
+            if final_url != current_url and final_url not in visited_pages:
+                visited_pages.add(final_url)
+
+            # Extract images from this page
+            image_urls = extract_image_urls(response.text, final_url)
+            print(f"      Found {len(image_urls)} images on this page")
+
+            # Download images
+            for img_url in image_urls:
+                max_images = TEST_IMAGE_LIMIT_PER_CAMP if TEST_MODE else MAX_IMAGES_PER_CAMP
+                if total_images >= max_images:
+                    break
+
+                # Check if already downloaded
+                already_downloaded = any(
+                    img['image_url'] == img_url for img in metadata["images"]
+                )
+                if already_downloaded:
+                    continue
+
+                # Generate filename
+                image_num = len(metadata["images"]) + 1
+                ext = os.path.splitext(urlparse(img_url).path)[1] or '.jpg'
+
+                # Create camp directory if needed
+                camp_dir = CANDIDATES_DIR / metadata["camp_name"]
+                camp_dir.mkdir(parents=True, exist_ok=True)
+
+                filename = f"image_{image_num:05d}{ext}"
+                output_path = camp_dir / filename
+
+                print(f"      Downloading image {image_num}: {img_url[:60]}...")
+                success, width, height, size_bytes = download_image(img_url, output_path)
+
+                if success:
+                    print(f"        ✓ Saved: {width}x{height}, {size_bytes} bytes")
+                    metadata["images"].append({
+                        "filename": filename,
+                        "image_url": img_url,
+                        "source_page_url": final_url,
+                        "original_url": start_url,
+                        "width": width,
+                        "height": height,
+                        "size_bytes": size_bytes,
+                        "download_date": time.strftime("%Y-%m-%d %H:%M:%S")
+                    })
+                    total_images += 1
+                else:
+                    print(f"        ✗ Skipped (too small or invalid)")
+
+                # Rate limiting between images
+                time.sleep(0.5)
+
+            # If we haven't reached max depth, extract page links to visit
+            if depth < MAX_CRAWL_DEPTH:
+                page_links = extract_page_links(response.text, final_url)
+                print(f"      Found {len(page_links)} page links to explore")
+
+                # Add new pages to visit queue
+                for link in page_links:
+                    if link not in visited_pages:
+                        pages_to_visit.append((link, depth + 1))
+
+            # Rate limiting between pages
+            time.sleep(REQUEST_DELAY)
+
+        except Exception as e:
+            print(f"      Error crawling page: {e}")
+            continue
+
+    print(f"    Crawl complete: visited {pages_visited_count} pages, found {total_images} total images")
+    return total_images
+
+
 def scrape_camp_images(camp_name, urls, state):
     """Scrape images for a single camp from its URLs."""
     print(f"\n{'='*80}")
@@ -253,9 +425,10 @@ def scrape_camp_images(camp_name, urls, state):
             camp_record["urls_checked"].append(url)
             continue
 
-        print(f"  Fetching: {url}")
+        print(f"  Starting crawl from: {url}")
 
         try:
+            # First check if URL is accessible and handle redirects
             headers = {'User-Agent': USER_AGENT}
             response = requests.get(url, headers=headers, timeout=30, allow_redirects=True)
 
@@ -271,53 +444,11 @@ def scrape_camp_images(camp_name, urls, state):
             if final_url != url:
                 print(f"    Redirected to: {final_url}")
                 camp_record["redirected_urls"][url] = final_url
+            else:
+                final_url = url
 
-            # Extract image URLs using the final URL as the base
-            image_urls = extract_image_urls(response.text, final_url)
-            print(f"    Found {len(image_urls)} image URLs")
-
-            # Download images
-            image_limit = TEST_IMAGE_LIMIT_PER_CAMP if TEST_MODE else len(image_urls)
-            for img_url in image_urls[:image_limit]:
-                max_images = TEST_IMAGE_LIMIT_PER_CAMP if TEST_MODE else MAX_IMAGES_PER_CAMP
-                if total_images >= max_images:
-                    print(f"    Reached limit of {max_images} images")
-                    break
-
-                # Check if already downloaded
-                already_downloaded = any(
-                    img['image_url'] == img_url for img in metadata["images"]
-                )
-                if already_downloaded:
-                    continue
-
-                # Generate filename
-                image_num = len(metadata["images"]) + 1
-                ext = os.path.splitext(urlparse(img_url).path)[1] or '.jpg'
-                filename = f"image_{image_num:05d}{ext}"
-                output_path = camp_dir / filename
-
-                print(f"    Downloading image {image_num}: {img_url[:80]}...")
-                success, width, height, size_bytes = download_image(img_url, output_path)
-
-                if success:
-                    print(f"      ✓ Saved: {width}x{height}, {size_bytes} bytes")
-                    metadata["images"].append({
-                        "filename": filename,
-                        "image_url": img_url,
-                        "source_page_url": final_url,  # Use final URL after redirects
-                        "original_url": url,  # Keep original URL too
-                        "width": width,
-                        "height": height,
-                        "size_bytes": size_bytes,
-                        "download_date": time.strftime("%Y-%m-%d %H:%M:%S")
-                    })
-                    total_images += 1
-                else:
-                    print(f"      ✗ Skipped (too small or invalid)")
-
-                # Rate limiting
-                time.sleep(0.5)
+            # Crawl the site starting from this URL
+            total_images = crawl_site_for_images(final_url, metadata, camp_record, total_images)
 
             metadata["urls_checked"].append(url)
             camp_record["urls_checked"].append(url)
