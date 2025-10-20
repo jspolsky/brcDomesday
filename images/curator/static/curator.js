@@ -1,6 +1,7 @@
 // Current camp data
 let currentCamp = null;
 let imageDecisions = {}; // filename -> 'approved' or 'rejected'
+let rejectedHidden = false; // Track whether rejected images are hidden
 
 // DOM elements
 const statusEl = document.getElementById('status');
@@ -13,7 +14,11 @@ const imageGridEl = document.getElementById('image-grid');
 const submitBtn = document.getElementById('submit-btn');
 const submitBtnBottom = document.getElementById('submit-btn-bottom');
 const rejectAllBtn = document.getElementById('reject-all-btn');
+const rejectAllBtnBottom = document.getElementById('reject-all-btn-bottom');
 const acceptAllBtn = document.getElementById('accept-all-btn');
+const acceptAllBtnBottom = document.getElementById('accept-all-btn-bottom');
+const toggleRejectedBtn = document.getElementById('toggle-rejected-btn');
+const toggleRejectedBtnBottom = document.getElementById('toggle-rejected-btn-bottom');
 
 // Initialize
 async function init() {
@@ -38,6 +43,9 @@ async function loadNextCamp() {
 
         currentCamp = data;
         imageDecisions = {};
+        rejectedHidden = false;
+        toggleRejectedBtn.textContent = 'Hide Rejected';
+        toggleRejectedBtnBottom.textContent = 'Hide Rejected';
 
         // Initialize all images as approved
         data.images.forEach(img => {
@@ -169,6 +177,25 @@ function acceptAll() {
     });
 }
 
+// Toggle visibility of rejected images
+function toggleRejectedVisibility() {
+    rejectedHidden = !rejectedHidden;
+
+    document.querySelectorAll('.image-item').forEach(item => {
+        if (item.classList.contains('rejected')) {
+            if (rejectedHidden) {
+                item.style.display = 'none';
+            } else {
+                item.style.display = 'inline-block';
+            }
+        }
+    });
+
+    // Update button text
+    toggleRejectedBtn.textContent = rejectedHidden ? 'Show Rejected' : 'Hide Rejected';
+    toggleRejectedBtnBottom.textContent = rejectedHidden ? 'Show Rejected' : 'Hide Rejected';
+}
+
 // Submit curation decisions
 async function submitCuration() {
     if (!currentCamp) return;
@@ -215,23 +242,18 @@ async function submitCuration() {
 submitBtn.addEventListener('click', submitCuration);
 submitBtnBottom.addEventListener('click', submitCuration);
 rejectAllBtn.addEventListener('click', rejectAll);
+rejectAllBtnBottom.addEventListener('click', rejectAll);
 acceptAllBtn.addEventListener('click', acceptAll);
+acceptAllBtnBottom.addEventListener('click', acceptAll);
+toggleRejectedBtn.addEventListener('click', toggleRejectedVisibility);
+toggleRejectedBtnBottom.addEventListener('click', toggleRejectedVisibility);
 
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
-    // Enter to submit
+    // Enter to submit (only with Cmd/Ctrl modifier to avoid conflicts)
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
         submitCuration();
-    }
-    // R to reject all
-    if (e.key === 'r' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        rejectAll();
-    }
-    // A to accept all
-    if (e.key === 'a' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        acceptAll();
     }
 });
 

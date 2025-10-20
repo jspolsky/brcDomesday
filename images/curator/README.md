@@ -35,8 +35,6 @@ Then open http://localhost:8080 in your web browser.
 ## Keyboard Shortcuts
 
 - **Cmd/Ctrl + Enter**: Submit curation
-- **Cmd/Ctrl + R**: Reject all images
-- **Cmd/Ctrl + A**: Accept all images
 
 ## What Gets Saved
 

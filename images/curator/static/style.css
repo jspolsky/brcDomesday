@@ -123,21 +123,20 @@ header h1 {
 }
 
 .image-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    column-count: 3;
+    column-gap: 20px;
     margin-bottom: 20px;
 }
 
 @media (max-width: 1200px) {
     .image-grid {
-        grid-template-columns: repeat(2, 1fr);
+        column-count: 2;
     }
 }
 
 @media (max-width: 768px) {
     .image-grid {
-        grid-template-columns: 1fr;
+        column-count: 1;
     }
 }
 
@@ -149,6 +148,11 @@ header h1 {
     cursor: pointer;
     position: relative;
     transition: transform 0.2s;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 20px;
+    display: inline-block;
+    width: 100%;
 }
 
 .image-item:hover {
@@ -161,8 +165,7 @@ header h1 {
 
 .image-item img {
     width: 100%;
-    height: 300px;
-    object-fit: cover;
+    height: auto;
     display: block;
 }
 
