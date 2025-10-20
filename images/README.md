@@ -62,23 +62,25 @@ The BRC Domesday application currently has limited image coverage:
 **Purpose**: Allow human review and approval of candidate images
 
 **Key Features**:
-- **Simple UI**: Show one image at a time with camp context and where the image came from 
-- **Quick decisions**: Keyboard shortcuts for approve/reject
+- **Simple UI**: Show all the uncurated candidate images for one camp at a time with camp context and where the image came from 
+- **Quick decisions**: Keyboard shortcuts or mouse click to remove images from the list that are not appropriate
 - **Progress tracking**: Show how many images reviewed, remaining
 - **Context display**: Show camp name, year, source URL
 - **Resume capability**: Remember which images have been reviewed
 
 **Workflow**:
-1. Display candidate image
-2. Show camp name and other context
-3. User decides: Approve, Reject, or Skip (decide later)
-4. If the image was approved, add it to the approved image dataset.
-5. If the image was approved and it is > 25MB, scale it by reducing the resolution or increasing the compression to get it under 25MB.
-6. Move to next image
+1. Find the next camp that has more than one image in the candidates directory
+2. Display to the user a page containing: 
+      1. the name of the camp and a link to its 2025 URL
+      2. the 2025 description of the camp
+      3. all the candidate images that were downloaded, in three columns
+3. Images are assumed to be accepted. The user clicks on any image that they want to exclude. When they do so, that image appears 50% transparent with a red 🚫 in the corner. If they click by mistake, they can click again to re-accept the image.
+4. There is also a button called Reject All which applies the 🚫 to every image in the set. There is also a button called Accept All which removes all the 🚫 from every image.
+5. When the user is finished reviewing the images, they click on a submit button at the top or bottom of the page. 
 
 **Output**:
-- Curated list of approved images with camp associations
-- Updated camp image dataset ready for integration into main app
+- Update the scraper/download_state.json file to add a new field for the camp "last_curated": "timestamp" which can be used to see that the camp has been curated since it was last downloaded by the scraper. (That way if the scraper scrapes again, we'll know that it needs to be curated again)
+- Update the metadata.json file in the candidates/[camp name] subfolder to mark each image by adding "curated_date" with the timestamp of the curation and "curation_result" with "approved" or "rejected"
 
 ## Data Organization
 
@@ -100,11 +102,6 @@ images/
 │   ├── curator.js                # JavaScript for curation UI
 │   ├── style.css                 # Styling
 │   └── curation_state.json       # Tracks review progress
-└── approved/
-    ├── camp_images.json          # Final approved image dataset
-    └── [camp_name]/               # Approved images (or symlinks)
-        ├── image_00001.jpg
-        └── image_00002.jpg
 ```
 
 ## Workflow
@@ -125,12 +122,10 @@ images/
 
 1. Open curator web app: `file:///.../images/curator/index.html`
 2. App loads candidate images from `candidates/` directory
-3. For each image:
-   - Display image
+3. For each camp not-yet-curated camp:
+   - Display camps images
    - Show camp name and source
-   - User clicks Approve, Reject, or Skip
-   - State saved to `curation_state.json`
-4. Approved images recorded in `approved/camp_images.json`
+   - User clicks on any images that should be deleted
 
 ### Phase 3: Integration
 
