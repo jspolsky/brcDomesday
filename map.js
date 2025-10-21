@@ -1677,6 +1677,11 @@ window.addEventListener('keydown', (e) => {
         }
     }
 
+    // Don't interfere with keyboard navigation when full camp info is open
+    if (fullCampInfoOpen) {
+        return;
+    }
+
     // If a letter/number is typed and search box is not focused, focus it and start searching
     if (searchInput && document.activeElement !== searchInput) {
         // Check if it's a single printable character (letter, number, space, etc.)
