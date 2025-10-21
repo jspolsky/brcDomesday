@@ -937,6 +937,45 @@ function hideHistoryTooltip() {
     tooltip.onmouseleave = null;
 }
 
+// Build the camp gallery section
+function buildCampGallerySection(campName) {
+    const galleryContainer = document.getElementById('fullCampGallery');
+
+    if (!campHistory || !campHistory[campName] || !campHistory[campName].images || campHistory[campName].images.length === 0) {
+        galleryContainer.innerHTML = '';
+        return;
+    }
+
+    const images = campHistory[campName].images;
+
+    // Build gallery HTML
+    let galleryHTML = `
+        <hr style="margin: 20px 0; border: none; border-top: 1px solid #444;">
+        <h2 style="font-size: 18px; color: #ffffff; margin-bottom: 15px;">Camp Images</h2>
+        <div class="gallery-container">
+    `;
+
+    images.forEach(image => {
+        const escapedUrl = escapeHtml(image.url);
+        const escapedSourceUrl = escapeHtml(image.source_page_url);
+
+        galleryHTML += `
+            <div class="gallery-item">
+                <a href="${escapedSourceUrl}" target="_blank" rel="noopener noreferrer">
+                    <img src="${escapedUrl}"
+                         alt="Camp image"
+                         loading="lazy"
+                         width="${image.width}"
+                         height="${image.height}">
+                </a>
+            </div>
+        `;
+    });
+
+    galleryHTML += `</div>`;
+    galleryContainer.innerHTML = galleryHTML;
+}
+
 // Open full camp information mode
 function openFullCampInfo(campName) {
     const campData = findCampDataByName(campName);
@@ -978,6 +1017,9 @@ function openFullCampInfo(campName) {
 
     // Build history section
     buildCampHistorySection(campName);
+
+    // Build image gallery section
+    buildCampGallerySection(campName);
 
     // Update image
     const img = document.getElementById('fullCampImage');
