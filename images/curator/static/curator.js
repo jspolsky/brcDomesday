@@ -149,6 +149,12 @@ function toggleImageRejection(imageItem, filename) {
     if (currentDecision === 'approved') {
         imageDecisions[filename] = 'rejected';
         imageItem.classList.add('rejected');
+
+        // If we're in hiding mode, change button to "Rehide Rejected"
+        if (rejectedHidden) {
+            toggleRejectedBtn.textContent = 'Rehide Rejected';
+            toggleRejectedBtnBottom.textContent = 'Rehide Rejected';
+        }
     } else {
         imageDecisions[filename] = 'approved';
         imageItem.classList.remove('rejected');
@@ -179,6 +185,23 @@ function acceptAll() {
 
 // Toggle visibility of rejected images
 function toggleRejectedVisibility() {
+    const currentButtonText = toggleRejectedBtn.textContent;
+
+    // If button says "Rehide Rejected", just hide all rejected images
+    // and change back to "Show Rejected" without toggling rejectedHidden
+    if (currentButtonText === 'Rehide Rejected') {
+        document.querySelectorAll('.image-item').forEach(item => {
+            if (item.classList.contains('rejected')) {
+                item.style.display = 'none';
+            }
+        });
+        toggleRejectedBtn.textContent = 'Show Rejected';
+        toggleRejectedBtnBottom.textContent = 'Show Rejected';
+        // rejectedHidden remains true
+        return;
+    }
+
+    // Normal toggle behavior
     rejectedHidden = !rejectedHidden;
 
     document.querySelectorAll('.image-item').forEach(item => {
