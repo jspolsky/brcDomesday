@@ -43,9 +43,7 @@ const BACKGROUND_IMAGE_SETTINGS = {
 // Camp highlighting
 let highlightedCamp = null;
 let currentPopupCampName = null; // Track which camp is currently shown in popup
-let sidebarOpen = false; // Track if sidebar is open
 let currentSidebarCampName = null; // Track which camp is in sidebar
-let sidebarOnLeft = false; // Track which side the sidebar is on
 let fullCampInfoOpen = false; // Track if full camp info is open
 let currentFullCampName = null; // Track which camp is in full info mode
 
@@ -470,6 +468,17 @@ function zoomToFit() {
     viewport.centerX = (bounds.maxLon + bounds.minLon) / 2;
     viewport.centerY = (bounds.maxLat + bounds.minLat) / 2;
 
+    // Adjust for sidebar covering part of the canvas
+    const sidebar = document.getElementById('campSidebar');
+    if (sidebar && window.getComputedStyle(sidebar).display !== 'none') {
+        const sidebarWidth = sidebar.offsetWidth;
+        // Pan left by half the sidebar width to center the visible area
+        // Convert pixels to geographic offset
+        const latScale = Math.cos(viewport.centerY * Math.PI / 180);
+        const halfSidebarOffset = (sidebarWidth / 2) / (viewport.scale * latScale);
+        viewport.centerX += halfSidebarOffset;
+    }
+
     redraw();
 }
 
@@ -582,6 +591,44 @@ function updateSidebarCampInfo(campName) {
     document.getElementById('sidebarCampLocation').textContent = campData ? (campData.location_string || '') : '';
     document.getElementById('sidebarCampDescription').textContent = campData ? (campData.description || 'No description available.') : 'No description available.';
 
+    // Calculate statistics for the hint
+    const stats = calculateCampStats(campName);
+    const hintElement = document.getElementById('sidebarHint');
+
+    if (stats.hasData) {
+        let hintText = 'Click for ';
+        const parts = [];
+
+        if (stats.yearsOfHistory > 0) {
+            parts.push(`${stats.yearsOfHistory} year${stats.yearsOfHistory !== 1 ? 's' : ''} of history`);
+        }
+
+        if (stats.totalEvents > 0) {
+            parts.push(`${stats.totalEvents} event${stats.totalEvents !== 1 ? 's' : ''}`);
+        }
+
+        if (stats.imageCount > 0) {
+            parts.push(`${stats.imageCount} photo${stats.imageCount !== 1 ? 's' : ''}`);
+        }
+
+        if (parts.length > 0) {
+            // Join with commas and "and" for the last item
+            if (parts.length === 1) {
+                hintText += parts[0];
+            } else if (parts.length === 2) {
+                hintText += parts[0] + ' and ' + parts[1];
+            } else {
+                hintText += parts.slice(0, -1).join(', ') + ', and ' + parts[parts.length - 1];
+            }
+        } else {
+            hintText = 'Click for more information about this camp.';
+        }
+
+        hintElement.textContent = hintText;
+    } else {
+        hintElement.textContent = 'Click for more information about this camp.';
+    }
+
     // Update image
     const img = document.getElementById('sidebarCampImage');
 
@@ -605,7 +652,7 @@ function updateSidebarCampInfo(campName) {
             const highResImg = new Image();
             highResImg.onload = () => {
                 // Only update if we're still showing the same camp
-                if (currentSidebarCampName === campName && sidebarOpen) {
+                if (currentSidebarCampName === campName) {
                     img.src = highResUrl;
                 }
             };
@@ -617,50 +664,48 @@ function updateSidebarCampInfo(campName) {
     }
 }
 
-// Open sidebar with camp details
-function openSidebar(campName, mouseX) {
-    const sidebar = document.getElementById('campSidebar');
+// Calculate statistics about camp history, events, and images
+function calculateCampStats(campName) {
+    const stats = {
+        yearsOfHistory: 0,
+        totalEvents: 0,
+        imageCount: 0,
+        hasData: false
+    };
 
-    sidebarOpen = true;
-
-    // Determine which side to show the sidebar based on mouse position
-    const isRightHalf = mouseX > canvas.width / 2;
-
-    // Remove all sidebar position classes
-    sidebar.classList.remove('sidebar-left', 'sidebar-right');
-
-    // Add appropriate position class
-    if (isRightHalf) {
-        sidebar.classList.add('sidebar-left');
-        sidebarOnLeft = true;
-    } else {
-        sidebar.classList.add('sidebar-right');
-        sidebarOnLeft = false;
+    if (!campHistory || !campHistory[campName]) {
+        return stats;
     }
 
-    // Update sidebar content
+    const history = campHistory[campName].history;
+
+    // Count years of history (excluding 2025)
+    const historicalYears = history.filter(h => h.year !== 2025);
+    stats.yearsOfHistory = historicalYears.length;
+
+    // Count total events across all years
+    history.forEach(yearEntry => {
+        if (yearEntry.events && yearEntry.events.length > 0) {
+            stats.totalEvents += yearEntry.events.length;
+        }
+    });
+
+    // Count images
+    if (campHistory[campName].images && campHistory[campName].images.length > 0) {
+        stats.imageCount = campHistory[campName].images.length;
+    }
+
+    // Check if we have any data to show
+    stats.hasData = stats.yearsOfHistory > 0 || stats.totalEvents > 0 || stats.imageCount > 0;
+
+    return stats;
+}
+
+// Update sidebar with camp details
+function updateSidebarWithCamp(campName) {
+    if (currentSidebarCampName === campName || fullCampInfoOpen) return;
     updateSidebarCampInfo(campName);
-
-    // Show sidebar
-    sidebar.classList.remove('sidebar-hidden');
-
-    // Hide the small popup
     hideCampPopup();
-}
-
-// Close sidebar
-function closeSidebar() {
-    const sidebar = document.getElementById('campSidebar');
-    sidebar.classList.add('sidebar-hidden');
-    sidebarOpen = false;
-    currentSidebarCampName = null;
-    sidebarOnLeft = false;
-}
-
-// Update sidebar content when hovering over different camp
-function updateSidebarContent(campName) {
-    if (!sidebarOpen || currentSidebarCampName === campName || fullCampInfoOpen) return;
-    updateSidebarCampInfo(campName);
 }
 
 // Tooltip state management
@@ -1054,9 +1099,6 @@ function openFullCampInfo(campName) {
 
     // Reset scroll position to top
     fullInfo.scrollTop = 0;
-
-    // Hide sidebar
-    closeSidebar();
 }
 
 // Close full camp information mode
@@ -1149,27 +1191,13 @@ canvas.addEventListener('mousemove', (e) => {
                 const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
                 campDisplay.textContent = campName;
 
-                // If sidebar is open, update it; otherwise show popup
-                if (sidebarOpen) {
-                    updateSidebarContent(campName);
-                } else {
-                    showCampPopup(campName, canvasX, canvasY);
-                }
+                // Update sidebar with camp info
+                updateSidebarWithCamp(campName);
             } else {
                 campDisplay.textContent = '';
-                if (!sidebarOpen) {
-                    hideCampPopup();
-                }
             }
 
             redraw();
-        } else if (highlightedCamp) {
-            // Camp hasn't changed but mouse moved - update popup position (only if sidebar not open)
-            if (!sidebarOpen) {
-                const fid = highlightedCamp.properties.fid;
-                const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
-                showCampPopup(campName, canvasX, canvasY);
-            }
         }
     }
 });
@@ -1194,42 +1222,8 @@ canvas.addEventListener('mouseup', (e) => {
             const fid = clickedCamp.properties.fid;
             const campName = campFidMappings && campFidMappings[fid] ? campFidMappings[fid] : `FID ${fid}`;
 
-            const currentTime = Date.now();
-            const timeSinceLastClick = currentTime - lastClickTime;
-
-            // Check for double-click (within 300ms and same camp)
-            const isDoubleClick = timeSinceLastClick < 300 && lastClickedCamp === campName;
-
-            if (isDoubleClick) {
-                // Double-click detected: cancel any pending single-click and go to full info
-                if (singleClickTimer) {
-                    clearTimeout(singleClickTimer);
-                    singleClickTimer = null;
-                }
-                openFullCampInfo(campName);
-                // Reset to prevent triple-click from triggering
-                lastClickTime = 0;
-                lastClickedCamp = null;
-            } else if (sidebarOpen && currentSidebarCampName === campName) {
-                // Click on same camp while sidebar is already open: go to full info immediately
-                openFullCampInfo(campName);
-            } else {
-                // Potential single click: delay action to see if double-click follows
-                // Clear any existing timer first
-                if (singleClickTimer) {
-                    clearTimeout(singleClickTimer);
-                }
-
-                // Set a timer to open/switch sidebar after double-click window
-                singleClickTimer = setTimeout(() => {
-                    openSidebar(campName, canvasX);
-                    singleClickTimer = null;
-                }, 300);
-
-                // Track this click for double-click detection
-                lastClickTime = currentTime;
-                lastClickedCamp = campName;
-            }
+            // Click on any camp opens full info
+            openFullCampInfo(campName);
         }
     }
 
@@ -1675,13 +1669,11 @@ function animateViewport(targetCenterX, targetCenterY, targetScale, onComplete) 
 // Handle window resize
 window.addEventListener('resize', resizeCanvas);
 
-// Handle ESC key to close full camp info or sidebar, and typing to search
+// Handle ESC key to close full camp info, and typing to search
 window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         if (fullCampInfoOpen) {
             closeFullCampInfo();
-        } else if (sidebarOpen) {
-            closeSidebar();
         }
     }
 

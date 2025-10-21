@@ -197,67 +197,15 @@ button:hover {
 
 #campSidebar {
     position: absolute;
-    top: 10%;
-    width: 35%;
-    height: 80%;
+    top: 0;
+    right: 0;
+    width: 23%;
+    height: 100%;
     background-color: #2b2b2b;
-    border: 2px solid #444;
+    border-left: 2px solid #444;
     overflow-y: auto;
     z-index: 2000;
-    transition: transform 0.3s ease-in-out;
-}
-
-#campSidebar.sidebar-right {
-    right: 0;
-    border-right: none;
-    border-radius: 8px 0 0 8px;
     box-shadow: -4px 0 12px rgba(0, 0, 0, 0.5);
-}
-
-#campSidebar.sidebar-left {
-    left: 0;
-    border-left: none;
-    border-radius: 0 8px 8px 0;
-    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.5);
-}
-
-#campSidebar.sidebar-hidden.sidebar-right {
-    transform: translateX(100%);
-}
-
-#campSidebar.sidebar-hidden.sidebar-left {
-    transform: translateX(-100%);
-}
-
-#closeSidebar {
-    position: fixed;
-    top: calc(10% + 10px);
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    font-size: 14px;
-    line-height: 30px;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    z-index: 2001;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#campSidebar.sidebar-right #closeSidebar {
-    right: calc(35% + 10px);
-}
-
-#campSidebar.sidebar-left #closeSidebar {
-    left: calc(35% + 10px);
-}
-
-#closeSidebar:hover {
-    background-color: #c82333;
 }
 
 #sidebarContent {
@@ -573,6 +521,11 @@ button:hover {
 
 /* Mobile/small screen responsive styles */
 @media (max-width: 768px) {
+    /* Hide sidebar on mobile */
+    #campSidebar {
+        display: none;
+    }
+
     /* Hide unnecessary status bar items on mobile */
     #appName,
     #coordinates,
