@@ -56,6 +56,7 @@ The file is a JSON object where each key is a camp name (as it appears in `camps
 
 - **name** (string): The camp name (duplicated for convenience).
 - **history** (array): Array of historical appearance objects, ordered by year (newest first).
+- **images** (array, optional): Array of curated camp images. Only present if the camp has approved images from the curation process.
 
 ### History Entry Object
 
@@ -75,6 +76,15 @@ Each entry in the `events` array represents an event hosted by the camp:
 - **title** (string): The name of the event.
 - **description** (string): A description of what the event is about.
 - **event_type** (string | null): The category/type of the event (e.g., "Music/Party", "Class/Workshop", "Performance"), or `null` if not categorized.
+
+### Image Object
+
+Each entry in the `images` array (if present) represents a curated camp image:
+
+- **url** (string): The original URL of the image on the web.
+- **width** (number): The width of the image in pixels.
+- **height** (number): The height of the image in pixels.
+- **source_page_url** (string): The URL of the web page where the image was found.
 
 ## Matching Logic
 
@@ -102,6 +112,20 @@ Camps are matched across years by their **name** field. The matching algorithm s
 {
   "Bag o' Dicks": {
     "name": "Bag o' Dicks",
+    "images": [
+      {
+        "url": "https://example.com/images/camp-photo1.jpg",
+        "width": 1920,
+        "height": 1080,
+        "source_page_url": "https://bagodicks.com/gallery"
+      },
+      {
+        "url": "https://example.com/images/camp-photo2.jpg",
+        "width": 1200,
+        "height": 800,
+        "source_page_url": "https://bagodicks.com/gallery"
+      }
+    ],
     "history": [
       {
         "year": 2025,

@@ -87,21 +87,25 @@ The BRC Domesday application currently has limited image coverage:
 ```
 images/
 ├── README.md                      # This file
+├── add_images_to_history.py      # Integration script to add approved images to campHistory.json
 ├── scraper/
 │   ├── scrape_images.py          # Main scraper script
 │   ├── download_state.json       # Tracks which camps processed
+│   ├── social_media_camps.json   # Camps with Facebook/Instagram URLs
 │   └── requirements.txt          # Python dependencies
 ├── candidates/
 │   ├── [camp_name]/               # One directory per camp
 │   │   ├── image_00001.jpg
 │   │   ├── image_00002.jpg
-│   │   └── metadata.json         # Source URLs, download dates
+│   │   └── metadata.json         # Source URLs, download dates, curation results
 │   └── download_log.json         # Overall download metadata
 ├── curator/
-│   ├── index.html                # Curation web app
-│   ├── curator.js                # JavaScript for curation UI
-│   ├── style.css                 # Styling
-│   └── curation_state.json       # Tracks review progress
+│   ├── curator_server.py         # Flask backend server
+│   ├── requirements.txt          # Python dependencies
+│   └── static/
+│       ├── index.html            # Curation web app UI
+│       ├── curator.js            # JavaScript for curation interaction
+│       └── style.css             # Styling with responsive grid
 ```
 
 ## Workflow
@@ -129,9 +133,12 @@ images/
 
 ### Phase 3: Integration
 
-1. Integrate approved images into main BRC Domesday app
-2. Update image loading logic to check local approved images
-3. Fall back to API thumbnail URLs when available
+1. Run the integration script to add approved images to campHistory.json:
+   ```bash
+   python3 add_images_to_history.py
+   ```
+2. The script updates `campHistory.json` to include an `images` array for each camp with approved images
+3. The main BRC Domesday app displays these images in a responsive gallery at the bottom of the full camp info page
 
 ## Image Selection Heuristics
 

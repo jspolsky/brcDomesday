@@ -29,8 +29,12 @@ Then open http://localhost:8080 in your web browser.
 5. **Click again** to un-reject (toggle behavior)
 6. Use **Reject All** button to mark all images for rejection
 7. Use **Accept All** button to clear all rejections
-8. Click **Submit Curation** when done
-9. The app automatically loads the next camp
+8. Use **Hide Rejected** button to hide all rejected images for easier review
+   - If you reject more images while in hiding mode, the button changes to **Rehide Rejected**
+   - Click **Rehide Rejected** to hide the newly rejected images
+   - Click **Show Rejected** to see all images again
+9. Click **Submit Curation** when done
+10. The app automatically loads the next camp
 
 ## Keyboard Shortcuts
 
