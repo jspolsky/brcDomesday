@@ -48,48 +48,63 @@ body {
 }
 
 #searchContainer {
-    position: relative;
-    margin-left: auto;
-    flex-shrink: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 23%;
+    padding: 15px;
+    background-color: #1a1a1a;
+    border-bottom: 2px solid #444;
+    border-right: 2px solid #444;
+    box-sizing: border-box;
+    z-index: 2001;
 }
 
 #campSearch {
-    width: 200px;
-    padding: 4px 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 13px;
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #444;
+    border-radius: 6px;
+    font-size: 15px;
     font-family: Arial, sans-serif;
+    background-color: #2b2b2b;
+    color: #ffffff;
+    box-sizing: border-box;
+}
+
+#campSearch::placeholder {
+    color: #888;
 }
 
 #campSearch:focus {
     outline: none;
     border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
 }
 
 #searchAutocomplete {
     display: none;
     position: absolute;
-    bottom: 100%;
-    left: 0;
-    right: 0;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-bottom: none;
-    border-radius: 4px 4px 0 0;
+    top: 100%;
+    left: 15px;
+    right: 15px;
+    background-color: #2b2b2b;
+    border: 2px solid #444;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
     max-height: 300px;
     overflow-y: auto;
-    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     z-index: 2100;
-    margin-bottom: 1px;
+    margin-top: -2px;
 }
 
 .autocomplete-item {
-    padding: 8px 12px;
+    padding: 10px 12px;
     cursor: pointer;
-    font-size: 13px;
-    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    border-bottom: 1px solid #444;
+    color: #dddddd;
 }
 
 .autocomplete-item:last-child {
@@ -98,16 +113,16 @@ body {
 
 .autocomplete-item:hover,
 .autocomplete-item.selected {
-    background-color: #f0f0f0;
+    background-color: #3a3a3a;
 }
 
 .autocomplete-item strong {
-    color: #007bff;
+    color: #66aaff;
     font-weight: bold;
 }
 
 #statusBarButtons {
-    margin-left: 10px;
+    margin-left: auto;
     display: flex;
     gap: 5px;
     flex-shrink: 0;
@@ -206,10 +221,18 @@ button:hover {
     overflow-y: auto;
     z-index: 2000;
     box-shadow: 4px 0 12px rgba(0, 0, 0, 0.5);
+    padding-top: 75px;
+    box-sizing: border-box;
 }
 
 #sidebarContent {
     padding: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#sidebarContent:hover {
+    background-color: #333333;
 }
 
 #sidebarCampName {
@@ -526,17 +549,33 @@ button:hover {
         display: none;
     }
 
+    /* Float search box above map when sidebar is hidden */
+    #searchContainer {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        right: 15px;
+        width: auto;
+        padding: 10px;
+        background-color: rgba(26, 26, 26, 0.95);
+        border: 2px solid #444;
+        border-bottom: 2px solid #444;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        z-index: 1500;
+    }
+
+    #searchAutocomplete {
+        left: 10px;
+        right: 10px;
+    }
+
     /* Hide unnecessary status bar items on mobile */
     #appName,
     #coordinates,
     #currentCamp,
     #statusBarButtons button:not(#infoButton) {
         display: none;
-    }
-
-    /* Make search box smaller on mobile */
-    #campSearch {
-        width: 150px;
     }
 
     /* Adjust status bar layout for mobile */

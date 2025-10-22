@@ -1648,6 +1648,9 @@ function zoomToCamp(campName) {
         // Highlight the camp after animation completes
         highlightedCamp = feature;
         redraw();
+
+        // Show camp details in sidebar
+        updateSidebarCampInfo(campName);
     });
 }
 
@@ -1686,6 +1689,13 @@ function animateViewport(targetCenterX, targetCenterY, targetScale, onComplete) 
 
 // Handle window resize
 window.addEventListener('resize', resizeCanvas);
+
+// Handle clicking on sidebar to open full camp info
+document.getElementById('sidebarContent').addEventListener('click', () => {
+    if (currentSidebarCampName && !fullCampInfoOpen) {
+        openFullCampInfo(currentSidebarCampName);
+    }
+});
 
 // Handle ESC key to close full camp info, and typing to search
 window.addEventListener('keydown', (e) => {
