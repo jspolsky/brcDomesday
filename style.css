@@ -144,6 +144,56 @@ body {
     background-color: #2b2b2b;
 }
 
+.autocomplete-search-action {
+    background-color: #1a3a5a;
+    border-top: 2px solid #66aaff;
+    font-weight: 500;
+}
+
+.autocomplete-search-action:hover {
+    background-color: #2a4a6a;
+}
+
+/* Search results in sidebar */
+#searchResultsList {
+    margin-top: 10px;
+}
+
+.search-result-item {
+    padding: 12px;
+    margin-bottom: 10px;
+    background-color: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.search-result-item:hover {
+    background-color: #2a2a2a;
+    border-color: #66aaff;
+    transform: translateX(3px);
+}
+
+.search-result-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.search-result-location {
+    font-size: 13px;
+    color: #66aaff;
+    margin-bottom: 6px;
+}
+
+.search-result-snippet {
+    font-size: 13px;
+    color: #aaa;
+    line-height: 1.4;
+}
+
 #statusBarButtons {
     margin-left: auto;
     display: flex;
