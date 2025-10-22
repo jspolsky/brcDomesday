@@ -182,6 +182,13 @@ async function buildSearchIndex() {
         const campData = campsMap.get(campName);
         const history = campHistory[campName];
 
+        // Skip camps that have neither current data nor historical data
+        // These are likely old camp outlines that no longer exist
+        if (!campData && !history) {
+            console.log(`⚠️  Skipping ${campName} (no current or historical data)`);
+            continue;
+        }
+
         // Build searchable text
         const searchText = buildSearchableText(campName, campData, history);
 
