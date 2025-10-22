@@ -841,6 +841,9 @@ function toggleOlderEvents(campName) {
     }
 }
 
+// Make toggleOlderEvents globally accessible for onclick handlers
+window.toggleOlderEvents = toggleOlderEvents;
+
 function buildCampHistorySection(campName) {
     const historyContainer = document.getElementById('fullCampHistory');
 
@@ -2005,6 +2008,11 @@ window.addEventListener('keydown', (e) => {
         }
     }
 });
+
+// Expose functions globally for onclick handlers (needed because we're using ES6 modules)
+window.closeFullCampInfo = closeFullCampInfo;
+window.showInfo = showInfo;
+window.zoomToFit = zoomToFit;
 
 // Start the application
 init();
