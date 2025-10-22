@@ -202,6 +202,16 @@ class CampRanker:
         """
         print(f"\nRanking camps for user profile...")
 
+        # Dynamic weight adjustment: if user provides keywords, prioritize embedding similarity
+        if user_profile.description and len(user_profile.description.strip()) > 0:
+            # User provided keywords - make embedding similarity highly important
+            embedding_weight = 0.7
+            axis_weight = 0.3
+            print(f"Keywords provided - using embedding-focused weights (emb: 0.7, axis: 0.3)")
+        else:
+            # No keywords - stick with default weights (more axis-focused)
+            print(f"No keywords - using axis-focused weights (emb: 0.3, axis: 0.7)")
+
         # Compute component scores
         embedding_scores = self._compute_embedding_similarity(user_profile)
         axis_scores = self._compute_axis_match_score(user_profile)

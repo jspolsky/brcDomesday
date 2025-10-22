@@ -535,9 +535,9 @@
 
             <div class="question">
                 <div class="question-label">
-                    <span>Describe your ideal camp</span>
+                    <span>Anything else you're looking for?</span>
                 </div>
-                <textarea id="description" placeholder="Tell us more about what you're looking for... (optional)"></textarea>
+                <textarea id="description" placeholder="Provide a couple of keywords here (e.g., cola, breathwork, coffee, tea, massage, poetry)"></textarea>
             </div>
 
             <div class="question">
@@ -567,7 +567,7 @@
 
     <script>
         // Initialize all sliders to "not set" state
-        const sliders = ['sound_party', 'hospitality', 'workshops', 'woo_woo', 'art'];
+        const sliders = ['hospitality', 'workshops', 'woo_woo', 'art'];
         const sliderStates = {};
 
         sliders.forEach(id => {
@@ -630,45 +630,65 @@
                     if (data.success) {
                         const profile = data.example.profile;
 
-                        // Reset first
-                        resetForm();
+                        try {
+                            // Reset first
+                            resetForm();
 
-                        // Set sliders
-                        sliders.forEach(id => {
-                            if (profile[id] !== undefined) {
-                                document.getElementById(id).value = profile[id];
-                                updateSlider(id);
+                            // Set sliders
+                            sliders.forEach(id => {
+                                if (profile[id] !== undefined) {
+                                    const element = document.getElementById(id);
+                                    if (element) {
+                                        element.value = profile[id];
+                                        updateSlider(id);
+                                    }
+                                }
+                            });
+
+                            // Set checkboxes
+                            ['queer', 'sober', 'family'].forEach(id => {
+                                if (profile[id] !== undefined && profile[id] >= 80) {
+                                    const element = document.getElementById(`${id}_check`);
+                                    if (element) {
+                                        element.checked = true;
+                                        updateCheckbox(id);
+                                    }
+                                }
+                            });
+
+                            // Set music genre checkboxes
+                            const musicGenres = ['music_electronic', 'music_disco_funk', 'music_ambient_chill',
+                                               'music_live_bands', 'music_rock', 'music_hiphop', 'music_latin',
+                                               'music_world_tribal', 'music_jazz_blues', 'music_classical',
+                                               'music_bass_sound_systems'];
+                            musicGenres.forEach(id => {
+                                if (profile[id] !== undefined && profile[id] >= 70) {
+                                    const element = document.getElementById(id);
+                                    if (element) {
+                                        element.checked = true;
+                                        updateMusicCheckbox(id);
+                                    } else {
+                                        console.warn(`Music checkbox not found: ${id}`);
+                                    }
+                                }
+                            });
+
+                            // Set description
+                            if (profile.description) {
+                                document.getElementById('description').value = profile.description;
                             }
-                        });
 
-                        // Set checkboxes
-                        ['queer', 'sober', 'family'].forEach(id => {
-                            if (profile[id] !== undefined && profile[id] >= 80) {
-                                document.getElementById(`${id}_check`).checked = true;
-                                updateCheckbox(id);
-                            }
-                        });
-
-                        // Set music genre checkboxes
-                        const musicGenres = ['music_electronic', 'music_disco_funk', 'music_ambient_chill',
-                                           'music_live_bands', 'music_rock', 'music_hiphop', 'music_latin',
-                                           'music_world_tribal', 'music_jazz_blues', 'music_classical',
-                                           'music_bass_sound_systems'];
-                        musicGenres.forEach(id => {
-                            if (profile[id] !== undefined && profile[id] >= 70) {
-                                document.getElementById(id).checked = true;
-                                updateMusicCheckbox(id);
-                            }
-                        });
-
-                        // Set description
-                        if (profile.description) {
-                            document.getElementById('description').value = profile.description;
+                            // Auto-submit
+                            setTimeout(() => submitQuiz(), 500);
+                        } catch (error) {
+                            console.error('Error setting up profile:', error);
+                            throw error;
                         }
-
-                        // Auto-submit
-                        setTimeout(() => submitQuiz(), 500);
                     }
+                })
+                .catch(error => {
+                    console.error('Error loading example:', error);
+                    alert('Error loading example profile: ' + error.message);
                 });
         }
 

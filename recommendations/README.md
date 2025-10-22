@@ -628,8 +628,30 @@ Replace the generic "Sound/Party" axis with specific music genre axes to provide
 - ✅ Perfect jazz camps (score 100) rank higher than good jazz camps (score 80-90)
 - ✅ Axis matching logic rewards camps that exceed user preferences
 
+### Keyword Search Enhancement
+
+8. **Improved text field for keyword-based niche search**:
+   - Changed label from "Describe your ideal camp" to "Anything else you're looking for?"
+   - Updated placeholder with concrete examples: "cola, breathwork, coffee, tea, massage, poetry"
+   - **Dynamic weight adjustment**: When keywords are provided, automatically switches weighting:
+     - With keywords: 70% embedding similarity, 30% axis matching
+     - Without keywords: 30% embedding similarity, 70% axis matching
+   - **Results**: Keyword search successfully finds niche camps
+     - "cola" → finds **Hack-a-Cola** as #1 match
+     - "breathwork" → finds camps focused on breathwork practices
+     - Works well for any specific interest not covered by checkboxes/sliders
+
+### Current State
+- ✅ Music genre checkboxes working in quiz UI
+- ✅ Quick Start buttons include all 11 example profiles (6 general + 5 music)
+- ✅ Jazz/Blues checkbox finds jazz camps (Playa Jazz Cafe, Black Rock French Quarter, etc.)
+- ✅ Perfect jazz camps (score 100) rank higher than good jazz camps (score 80-90)
+- ✅ Axis matching logic rewards camps that exceed user preferences
+- ✅ Keyword search for niche interests (cola, breathwork, etc.)
+- ✅ Dynamic weighting prioritizes keywords when provided
+
 ### Next Steps
-- Test with real music lovers
+- Test with real users for feedback on keyword search
 - Consider adding more niche genres (country, reggae-specific, etc.)
 - Gather user feedback on genre categorization
 - Consider adding secondary sorting by event_count/years_active for tie-breaking
