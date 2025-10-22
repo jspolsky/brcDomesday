@@ -1462,6 +1462,7 @@ let selectedAutocompleteIndex = -1;
 let semanticSearchReady = false;
 let semanticSearchInitializing = false;
 let searchDebounceTimer = null;
+let currentSearchQuery = ''; // Track the current search query for semantic search option
 
 function initializeSearch() {
     searchInput = document.getElementById('campSearch');
@@ -1514,6 +1515,9 @@ async function handleSearchInput(e) {
 function showKeywordAutocomplete(query) {
     const lowerQuery = query.toLowerCase();
 
+    // Store the current query for semantic search
+    currentSearchQuery = query;
+
     // Get all camp names
     const campNames = Object.keys(campFidMappings || {}).map(fid => campFidMappings[fid]);
 
@@ -1532,8 +1536,10 @@ function showKeywordAutocomplete(query) {
 
     // Build autocomplete display
     searchAutocomplete.innerHTML = '';
-    selectedAutocompleteIndex = -1;
     autocompleteResults = nameMatches;
+
+    // If no name matches, select the search action by default
+    selectedAutocompleteIndex = nameMatches.length === 0 ? nameMatches.length : -1;
 
     // Add name matches
     nameMatches.forEach((campName, index) => {
@@ -1567,6 +1573,7 @@ function showKeywordAutocomplete(query) {
     // Add "Search for..." option
     const searchItem = document.createElement('div');
     searchItem.className = 'autocomplete-item autocomplete-search-action';
+    searchItem.setAttribute('data-index', nameMatches.length); // Index after all name matches
     searchItem.innerHTML = `🔍 Search for "<strong>${escapeHtml(query)}</strong>"`;
     searchItem.addEventListener('mousedown', async (e) => {
         e.preventDefault();
@@ -1575,6 +1582,10 @@ function showKeywordAutocomplete(query) {
     });
 
     searchAutocomplete.appendChild(searchItem);
+
+    // Update selection highlighting
+    updateAutocompleteSelection();
+
     searchAutocomplete.style.display = 'block';
 }
 
@@ -1675,7 +1686,7 @@ function clearSearchResults() {
         sidebarContent.removeAttribute('data-showing-search-results');
         sidebarContent.style.cursor = 'pointer';
         sidebarContent.innerHTML = `
-            <h2 id="sidebarCampName">Hover over a camp</h2>
+            <h2 id="sidebarCampName">Hover over a camp or type to search</h2>
             <img id="sidebarCampImage" src="" alt="Camp image" style="display: none;">
             <div id="sidebarCampLocation"></div>
             <div id="sidebarCampDescription"></div>
@@ -1711,9 +1722,13 @@ function handleSearchKeydown(e) {
         return;
     }
 
+    // Total items = name matches + 1 (the "Search for..." option)
+    const totalItems = autocompleteResults.length + 1;
+
     if (e.key === 'ArrowDown') {
         e.preventDefault();
-        selectedAutocompleteIndex = Math.min(selectedAutocompleteIndex + 1, autocompleteResults.length - 1);
+        // Allow navigating to the search action (last item)
+        selectedAutocompleteIndex = Math.min(selectedAutocompleteIndex + 1, totalItems - 1);
         updateAutocompleteSelection();
     } else if (e.key === 'ArrowUp') {
         e.preventDefault();
@@ -1721,13 +1736,27 @@ function handleSearchKeydown(e) {
         updateAutocompleteSelection();
     } else if (e.key === 'Enter') {
         e.preventDefault();
-        if (selectedAutocompleteIndex >= 0) {
+
+        // Check if the search action is selected (index equals number of name matches)
+        if (selectedAutocompleteIndex === autocompleteResults.length) {
+            // Trigger semantic search
+            hideAutocomplete();
+            performSemanticSearch(currentSearchQuery);
+        } else if (selectedAutocompleteIndex >= 0 && selectedAutocompleteIndex < autocompleteResults.length) {
+            // A name match is selected
             zoomToCamp(autocompleteResults[selectedAutocompleteIndex]);
+            searchInput.blur();
+            hideAutocomplete();
         } else if (autocompleteResults.length > 0) {
+            // No selection, but there are name matches - zoom to first one
             zoomToCamp(autocompleteResults[0]);
+            searchInput.blur();
+            hideAutocomplete();
+        } else {
+            // No name matches - trigger semantic search
+            hideAutocomplete();
+            performSemanticSearch(currentSearchQuery);
         }
-        searchInput.blur();
-        hideAutocomplete();
     } else if (e.key === 'Escape') {
         hideAutocomplete();
         searchInput.blur();
