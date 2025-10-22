@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Your Burning Man Vibe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .welcome-screen h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-screen p {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 20px 60px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Quiz Screen */
+        .quiz-screen {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .quiz-screen.active {
+            display: block;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            height: 10px;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: white;
+            height: 100%;
+            border-radius: 50px;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .question-number {
+            color: #667eea;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 2em;
+            font-weight: 600;
+            margin-bottom: 40px;
+            line-height: 1.3;
+            color: #333;
+        }
+
+        .choices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .choice {
+            background: #f8f9fa;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            padding: 30px 25px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .choice:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .choice.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .choice-emoji {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .choice-label {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .choice-description {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .nav-btn.secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .nav-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+        }
+
+        .results-screen.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .results-header {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .results-header h2 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .results-header p {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .camp-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 25px;
+        }
+
+        .camp-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .camp-image {
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .camp-image-placeholder {
+            width: 200px;
+            height: 150px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+        }
+
+        .camp-content {
+            flex: 1;
+        }
+
+        .camp-rank {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1.1em;
+            margin-right: 15px;
+        }
+
+        .camp-name {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .camp-match {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .camp-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .camp-explanation {
+            color: #667eea;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .camp-meta {
+            color: #999;
+            font-size: 0.9em;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .camp-url {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .camp-url:hover {
+            text-decoration: underline;
+        }
+
+        .restart-btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 30px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            transition: all 0.2s;
+        }
+
+        .restart-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading spinner */
+        .loading {
+            text-align: center;
+            padding: 60px;
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 1.3em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div class="welcome-screen" id="welcome">
+            <h1>🔥 Find Your Burning Man Vibe 🔥</h1>
+            <p>
+                Take this fun personality quiz to discover camps that match your unique energy!
+                <br><br>
+                Answer 8 quick questions about who you are, and we'll recommend camps
+                where you might feel right at home.
+            </p>
+            <button class="start-btn" onclick="startQuiz()">Let's Go!</button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div class="quiz-screen" id="quiz">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+
+            <div class="question-card" id="question-card">
+                <div class="question-number" id="question-number">Question 1 of 8</div>
+                <div class="question-text" id="question-text"></div>
+                <div class="choices" id="choices"></div>
+            </div>
+
+            <div class="navigation">
+                <button class="nav-btn secondary" id="back-btn" onclick="previousQuestion()" disabled>← Back</button>
+                <button class="nav-btn" id="next-btn" onclick="nextQuestion()" disabled>Next →</button>
+            </div>
+        </div>
+
+        <!-- Loading Screen -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div class="loading-text">Finding your vibe matches...</div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="results">
+            <div class="results-header">
+                <h2>✨ Your Vibe Matches! ✨</h2>
+                <p>Here are camps that match your personality. Explore and see what resonates!</p>
+            </div>
+
+            <div id="results-container"></div>
+
+            <button class="restart-btn" onclick="restartQuiz()">Take Quiz Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Quiz questions with personality-based choices
+        const questions = [
+            {
+                id: 1,
+                text: "How do you like to spend a Friday night?",
+                choices: [
+                    {
+                        emoji: "🎉",
+                        label: "Dancing till dawn",
+                        description: "Out with friends, high energy, party mode!",
+                        scores: { high_energy_social: 90, quiet_contemplative: 10 }
+                    },
+                    {
+                        emoji: "🕯️",
+                        label: "Cozy night in",
+                        description: "Small gathering, deep conversations, intimate vibes",
+                        scores: { high_energy_social: 10, quiet_contemplative: 90 }
+                    }
+                ]
+            },
+            {
+                id: 2,
+                text: "When do you feel most alive?",
+                choices: [
+                    {
+                        emoji: "🌅",
+                        label: "Sunrise",
+                        description: "Morning person, love fresh starts and early light",
+                        scores: { early_bird: 90, night_owl: 10 }
+                    },
+                    {
+                        emoji: "🌙",
+                        label: "Midnight",
+                        description: "Night owl, love the magic of late hours",
+                        scores: { early_bird: 10, night_owl: 90 }
+                    }
+                ]
+            },
+            {
+                id: 3,
+                text: "At an art installation, you'd rather...",
+                choices: [
+                    {
+                        emoji: "🔨",
+                        label: "Build it",
+                        description: "Hands-on, maker energy, love creating",
+                        scores: { hands_on_maker: 90, observer_appreciator: 10 }
+                    },
+                    {
+                        emoji: "👁️",
+                        label: "Admire it",
+                        description: "Appreciate, experience, soak it in",
+                        scores: { hands_on_maker: 10, observer_appreciator: 90 }
+                    }
+                ]
+            },
+            {
+                id: 4,
+                text: "Pick your ideal afternoon:",
+                choices: [
+                    {
+                        emoji: "📚",
+                        label: "Philosophy salon",
+                        description: "Deep conversations, big ideas, intellectual vibes",
+                        scores: { deep_thinker: 90, playful_prankster: 10 }
+                    },
+                    {
+                        emoji: "🤪",
+                        label: "Prank war",
+                        description: "Silly shenanigans, laughter, playful chaos",
+                        scores: { deep_thinker: 10, playful_prankster: 90 }
+                    }
+                ]
+            },
+            {
+                id: 5,
+                text: "Your week at Burning Man:",
+                choices: [
+                    {
+                        emoji: "📅",
+                        label: "Carefully planned",
+                        description: "Schedule events, organized, know what's happening",
+                        scores: { structured_organized: 90, spontaneous_chaotic: 10 }
+                    },
+                    {
+                        emoji: "🌀",
+                        label: "Go with the flow",
+                        description: "Spontaneous adventures, see where the wind takes you",
+                        scores: { structured_organized: 10, spontaneous_chaotic: 90 }
+                    }
+                ]
+            },
+            {
+                id: 6,
+                text: "Which are you more likely to read?",
+                choices: [
+                    {
+                        emoji: "🔮",
+                        label: "Your horoscope",
+                        description: "Spiritual, mystical, believe in energy and magic",
+                        scores: { mystical_spiritual: 90, rational_skeptical: 10 }
+                    },
+                    {
+                        emoji: "🔬",
+                        label: "Science journal",
+                        description: "Rational, evidence-based, love logic and facts",
+                        scores: { mystical_spiritual: 10, rational_skeptical: 90 }
+                    }
+                ]
+            },
+            {
+                id: 7,
+                text: "At a party, you're the one:",
+                choices: [
+                    {
+                        emoji: "🍕",
+                        label: "Making sure everyone's fed",
+                        description: "Generous host, love taking care of people",
+                        scores: { generous_host: 90, social_butterfly: 10 }
+                    },
+                    {
+                        emoji: "🦋",
+                        label: "Meeting new people",
+                        description: "Social butterfly, love making connections",
+                        scores: { generous_host: 10, social_butterfly: 90 }
+                    }
+                ]
+            },
+            {
+                id: 8,
+                text: "Your ideal gathering:",
+                choices: [
+                    {
+                        emoji: "🕯️",
+                        label: "Dinner for 6",
+                        description: "Intimate, small scale, deep connections",
+                        scores: { intimate_small_scale: 90, large_scale_spectacle: 10 }
+                    },
+                    {
+                        emoji: "🎪",
+                        label: "Festival for 600",
+                        description: "Big crowds, grand spectacle, epic scale",
+                        scores: { intimate_small_scale: 10, large_scale_spectacle: 90 }
+                    }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = {};
+
+        function startQuiz() {
+            document.getElementById('welcome').style.display = 'none';
+            document.getElementById('quiz').classList.add('active');
+            showQuestion(0);
+        }
+
+        function showQuestion(index) {
+            currentQuestion = index;
+            const question = questions[index];
+
+            // Update progress
+            const progress = ((index + 1) / questions.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+
+            // Update question
+            document.getElementById('question-number').textContent = `Question ${index + 1} of ${questions.length}`;
+            document.getElementById('question-text').textContent = question.text;
+
+            // Update choices
+            const choicesContainer = document.getElementById('choices');
+            choicesContainer.innerHTML = '';
+
+            question.choices.forEach((choice, i) => {
+                const choiceDiv = document.createElement('div');
+                choiceDiv.className = 'choice';
+                if (answers[question.id] === i) {
+                    choiceDiv.classList.add('selected');
+                }
+
+                choiceDiv.innerHTML = `
+                    <span class="choice-emoji">${choice.emoji}</span>
+                    <div class="choice-label">${choice.label}</div>
+                    <div class="choice-description">${choice.description}</div>
+                `;
+
+                choiceDiv.onclick = () => selectChoice(index, i);
+                choicesContainer.appendChild(choiceDiv);
+            });
+
+            // Update navigation buttons
+            document.getElementById('back-btn').disabled = index === 0;
+            document.getElementById('next-btn').disabled = answers[question.id] === undefined;
+            document.getElementById('next-btn').textContent = index === questions.length - 1 ? 'See Results! ✨' : 'Next →';
+        }
+
+        function selectChoice(questionIndex, choiceIndex) {
+            const question = questions[questionIndex];
+            answers[question.id] = choiceIndex;
+
+            // Update UI
+            const choices = document.querySelectorAll('.choice');
+            choices.forEach((c, i) => {
+                c.classList.toggle('selected', i === choiceIndex);
+            });
+
+            // Enable next button
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                showQuestion(currentQuestion - 1);
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                showQuestion(currentQuestion + 1);
+            } else {
+                submitQuiz();
+            }
+        }
+
+        function submitQuiz() {
+            // Calculate personality scores
+            const personality = {};
+
+            questions.forEach(q => {
+                const choiceIndex = answers[q.id];
+                if (choiceIndex !== undefined) {
+                    const choice = q.choices[choiceIndex];
+                    Object.entries(choice.scores).forEach(([trait, score]) => {
+                        personality[trait] = score;
+                    });
+                }
+            });
+
+            // Show loading
+            document.getElementById('quiz').classList.remove('active');
+            document.getElementById('loading').classList.add('active');
+
+            // Submit to API
+            fetch('/api/rank_personality', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(personality)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayResults(data.results);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error getting recommendations. Please try again.');
+                restartQuiz();
+            });
+        }
+
+        function displayResults(results) {
+            document.getElementById('loading').classList.remove('active');
+            document.getElementById('results').classList.add('active');
+
+            const container = document.getElementById('results-container');
+            container.innerHTML = '';
+
+            results.slice(0, 15).forEach(camp => {
+                const card = document.createElement('div');
+                card.className = 'camp-card';
+
+                // Image or placeholder
+                const imageHtml = camp.images && camp.images.length > 0
+                    ? `<img src="${camp.images[0].thumbnail_url}" class="camp-image" alt="${camp.name}">`
+                    : `<div class="camp-image-placeholder">🔥</div>`;
+
+                // Website link
+                const urlHtml = camp.url
+                    ? `<a href="${camp.url}" target="_blank" class="camp-url">🔗 Visit website</a>`
+                    : '';
+
+                card.innerHTML = `
+                    ${imageHtml}
+                    <div class="camp-content">
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <span class="camp-rank">${camp.rank}</span>
+                            <div style="flex: 1;">
+                                <div class="camp-name">${camp.name}</div>
+                                <div class="camp-match">✨ ${camp.score.toFixed(0)}% personality match</div>
+                            </div>
+                        </div>
+                        <div class="camp-explanation">💡 ${camp.explanation}</div>
+                        <div class="camp-description">${camp.description}</div>
+                        <div class="camp-meta">
+                            <span>📍 ${camp.location_string}</span>
+                            <span>🏠 ${camp.hometown || 'Unknown'}</span>
+                            <span>⏱️ ${camp.years_active} years</span>
+                            ${urlHtml}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            answers = {};
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('welcome').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

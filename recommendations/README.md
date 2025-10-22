@@ -673,8 +673,77 @@ Replace the generic "Sound/Party" axis with specific music genre axes to provide
 - ✅ Hard filters for LGBTQ+, Sober, Family-Friendly (prevents showing wrong camps)
 - ✅ Browser back button works to return from results to quiz
 
+---
+
+## Phase 7: Pivot to Personality-Based Matching (IN PROGRESS)
+
+### The Problem
+The recommendation engine was becoming too much like a "search engine" with hard requirements:
+- If you search for "jazz", you expect to find THE jazz camp
+- If you're sober, you expect 100% clean results
+- Sets expectations that are hard to meet
+- Feels like work (sliders, checkboxes, forms)
+- Too literal and high-stakes
+
+### The Solution: Personality Quiz
+Shift from "what do you want" to "who are you":
+- **Fun personality questions** like "Horoscope or science journal?"
+- **BuzzFeed-style quiz** that's engaging to take
+- **Lower stakes** - "Here are camps your personality might vibe with"
+- **Discovery-oriented** - Find camps you didn't know you'd love
+- **Personality-based** - Match on who you are, not what you're looking for
+
+### New Personality Axes (16 total, 8 spectrums)
+
+1. **Energy Level**: High Energy Social ↔️ Quiet Contemplative
+   - Question: "Friday night - out dancing till dawn or cozy night with close friends?"
+
+2. **Time of Day**: Night Owl ↔️ Early Bird
+   - Question: "When do you feel most alive?"
+
+3. **Participation Style**: Hands-On Maker ↔️ Observer Appreciator
+   - Question: "At an art installation - build it or admire it?"
+
+4. **Intellectual Style**: Deep Thinker ↔️ Playful Prankster
+   - Question: "Philosophy salon or prank war?"
+
+5. **Organization**: Structured Organized ↔️ Spontaneous Chaotic
+   - Question: "Plan your whole week or see where the wind takes you?"
+
+6. **Mystical vs Rational**: Mystical Spiritual ↔️ Rational Skeptical
+   - Question: "Horoscope or science journal?"
+
+7. **Social Style**: Generous Host ↔️ Social Butterfly
+   - Question: "At a party - making sure everyone's fed or meeting new people?"
+
+8. **Scale Preference**: Intimate Small Scale ↔️ Large Scale Spectacle
+   - Question: "Dinner for 6 or festival for 600?"
+
+### Implementation Progress
+
+✅ **Phase 7a: Feature Generation**
+- Created `explore_personality_axes.py` - analyzed 16 personality dimensions
+- All 16 axes have good signal (>10% prevalence, up to 90%)
+- Created `generate_personality_features.py`
+- Generated `camp_personality_features.json` (16.6 MB, 16 personality axes per camp)
+
+✅ **Phase 7b: Ranking Algorithm**
+- Created `rank_camps_personality.py` with PersonalityProfile class
+- Uses softer matching (similarity-based, not hard requirements)
+- No more hard filters - everything is about vibe matching
+- Demo results show excellent personality-based matching:
+  - High-energy party type → Land of Monkey, Alternative Energy Zone
+  - Quiet contemplative maker → Hibernaculum, Enchanted Booty Forest
+
+🚧 **Phase 7c: Quiz UI Redesign (NEXT)**
+- Redesign quiz to feel like a fun personality game
+- 8 engaging questions with fun answer choices
+- Remove sliders, make it more visual and interactive
+- "Which are you?" style questions
+- Results page emphasizes discovery ("camps your vibe might match")
+
 ### Next Steps
-- Test with real users for feedback on keyword search
-- Consider adding more niche genres (country, reggae-specific, etc.)
-- Gather user feedback on genre categorization
-- Consider adding secondary sorting by event_count/years_active for tie-breaking
+- Design fun, engaging personality quiz questions
+- Redesign quiz UI to be more playful and game-like
+- Update Flask backend to use personality-based ranking
+- Test with real users - does it feel fun vs like work?
