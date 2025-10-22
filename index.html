@@ -21,9 +21,13 @@
                 </div>
             </div>
         </div>
+        <div id="searchContainer">
+            <input type="text" id="campSearch" placeholder="Search camps..." autocomplete="off">
+            <div id="searchAutocomplete"></div>
+        </div>
         <div id="campSidebar">
             <div id="sidebarContent">
-                <h2 id="sidebarCampName">Hover over a camp</h2>
+                <h2 id="sidebarCampName">Hover over a camp or type to search</h2>
                 <img id="sidebarCampImage" src="" alt="Camp image" style="display: none;">
                 <div id="sidebarCampLocation"></div>
                 <div id="sidebarCampDescription"></div>
@@ -51,17 +55,13 @@
         <span id="appName">BRC Domesday Book</span>
         <span id="coordinates">--, --</span>
         <span id="currentCamp"></span>
-        <div id="searchContainer">
-            <input type="text" id="campSearch" placeholder="Search camps..." autocomplete="off">
-            <div id="searchAutocomplete"></div>
-        </div>
         <div id="statusBarButtons">
             <button id="infoButton" onclick="showInfo()" title="Information">ⓘ</button>
             <button onclick="zoomToFit()">Zoom to Fit</button>
         </div>
     </div>
 
-    <script src="map.js"></script>
+    <script type="module" src="map.js"></script>
 </body>
 
 </html>

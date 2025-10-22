@@ -1,3 +1,6 @@
+// Import semantic search module
+import semanticSearch from './semantic-search.js';
+
 // HTML escaping utility to prevent XSS injection
 function escapeHtml(text) {
     if (text == null) return '';
@@ -461,7 +464,14 @@ function zoomToFit() {
 
     const latScale = Math.cos(((bounds.maxLat + bounds.minLat) / 2) * Math.PI / 180);
 
-    const scaleX = (canvas.width * 0.9) / (lonRange * latScale);
+    // Account for sidebar when calculating visible area
+    const sidebar = document.getElementById('campSidebar');
+    let availableWidth = canvas.width;
+    if (sidebar && window.getComputedStyle(sidebar).display !== 'none') {
+        availableWidth = canvas.width - sidebar.offsetWidth;
+    }
+
+    const scaleX = (availableWidth * 0.9) / (lonRange * latScale);
     const scaleY = (canvas.height * 0.9) / latRange;
 
     viewport.scale = Math.min(scaleX, scaleY);
@@ -469,14 +479,25 @@ function zoomToFit() {
     viewport.centerY = (bounds.maxLat + bounds.minLat) / 2;
 
     // Adjust for sidebar covering part of the canvas
-    const sidebar = document.getElementById('campSidebar');
     if (sidebar && window.getComputedStyle(sidebar).display !== 'none') {
         const sidebarWidth = sidebar.offsetWidth;
-        // Pan left by half the sidebar width to center the visible area
-        // Convert pixels to geographic offset
+        // Sidebar is on the left, so we need to shift the view right by half the sidebar width
+        // This shift is in canvas space, but we need to account for the 45-degree rotation
+        // when converting to geographic coordinate adjustments
+
+        // Desired shift in rotated canvas space: right by sidebarWidth/2 (positive X direction)
+        // Apply inverse rotation to get the shift needed in geographic space
         const latScale = Math.cos(viewport.centerY * Math.PI / 180);
-        const halfSidebarOffset = (sidebarWidth / 2) / (viewport.scale * latScale);
-        viewport.centerX += halfSidebarOffset;
+        const canvasShiftX = sidebarWidth / 2;  // Positive because shifting right
+        const canvasShiftY = 0;  // No vertical shift needed in canvas space
+
+        // Apply inverse rotation: use transpose of rotation matrix
+        const geoShiftX = (canvasShiftX * COS_ROTATION + canvasShiftY * SIN_ROTATION) / (viewport.scale * latScale);
+        const geoShiftY = (-canvasShiftX * SIN_ROTATION + canvasShiftY * COS_ROTATION) / viewport.scale;
+
+        // Apply the geographic shifts (note: these shift the viewport, which moves the image oppositely)
+        viewport.centerX -= geoShiftX;
+        viewport.centerY += geoShiftY;
     }
 
     redraw();
@@ -585,6 +606,13 @@ function hideCampPopup() {
 function updateSidebarCampInfo(campName) {
     const campData = findCampDataByName(campName);
     currentSidebarCampName = campName;
+
+    // Clear search results flag and restore cursor
+    const sidebarContent = document.getElementById('sidebarContent');
+    if (sidebarContent) {
+        sidebarContent.removeAttribute('data-showing-search-results');
+        sidebarContent.style.cursor = 'pointer';
+    }
 
     // Update text content
     document.getElementById('sidebarCampName').textContent = campData ? (campData.name || campName) : campName;
@@ -812,6 +840,9 @@ function toggleOlderEvents(campName) {
         toggleBtn.textContent = 'Show older events';
     }
 }
+
+// Make toggleOlderEvents globally accessible for onclick handlers
+window.toggleOlderEvents = toggleOlderEvents;
 
 function buildCampHistorySection(campName) {
     const historyContainer = document.getElementById('fullCampHistory');
@@ -1431,6 +1462,10 @@ let searchInput = null;
 let searchAutocomplete = null;
 let autocompleteResults = [];
 let selectedAutocompleteIndex = -1;
+let semanticSearchReady = false;
+let semanticSearchInitializing = false;
+let searchDebounceTimer = null;
+let currentSearchQuery = ''; // Track the current search query for semantic search option
 
 function initializeSearch() {
     searchInput = document.getElementById('campSearch');
@@ -1449,35 +1484,235 @@ function initializeSearch() {
     searchInput.addEventListener('blur', handleSearchBlur);
 }
 
-function handleSearchInput(e) {
-    const query = e.target.value.trim().toLowerCase();
+async function handleSearchInput(e) {
+    const query = e.target.value.trim();
 
     if (query.length === 0) {
         hideAutocomplete();
         return;
     }
 
+    // Initialize semantic search in background on first use (lazy loading)
+    if (!semanticSearchReady && !semanticSearchInitializing) {
+        semanticSearchInitializing = true;
+
+        // Initialize in background without blocking autocomplete
+        semanticSearch.initialize()
+            .then(() => {
+                semanticSearchReady = true;
+                console.log('✅ Semantic search ready');
+            })
+            .catch(error => {
+                console.warn('⚠️ Semantic search failed to load:', error);
+                semanticSearchReady = false;
+            })
+            .finally(() => {
+                semanticSearchInitializing = false;
+            });
+    }
+
+    // Always show keyword autocomplete immediately (no debounce)
+    showKeywordAutocomplete(query);
+}
+
+function showKeywordAutocomplete(query) {
+    const lowerQuery = query.toLowerCase();
+
+    // Store the current query for semantic search
+    currentSearchQuery = query;
+
     // Get all camp names
     const campNames = Object.keys(campFidMappings || {}).map(fid => campFidMappings[fid]);
 
-    // Filter camps that match the query
-    autocompleteResults = campNames
-        .filter(name => name.toLowerCase().includes(query))
+    // Filter camps that match the query in their name
+    const nameMatches = campNames
+        .filter(name => name.toLowerCase().includes(lowerQuery))
         .sort((a, b) => {
             // Prioritize matches at the start of the name
-            const aStarts = a.toLowerCase().startsWith(query);
-            const bStarts = b.toLowerCase().startsWith(query);
+            const aStarts = a.toLowerCase().startsWith(lowerQuery);
+            const bStarts = b.toLowerCase().startsWith(lowerQuery);
             if (aStarts && !bStarts) return -1;
             if (!aStarts && bStarts) return 1;
             return a.localeCompare(b);
         })
-        .slice(0, 10); // Limit to 10 results
+        .slice(0, 9); // Limit to 9 name matches to leave room for "Search for..." option
 
-    if (autocompleteResults.length > 0) {
-        showAutocomplete(autocompleteResults, query);
-    } else {
+    // Build autocomplete display
+    searchAutocomplete.innerHTML = '';
+    autocompleteResults = nameMatches;
+
+    // If no name matches, select the search action by default
+    selectedAutocompleteIndex = nameMatches.length === 0 ? nameMatches.length : -1;
+
+    // Add name matches
+    nameMatches.forEach((campName, index) => {
+        const item = document.createElement('div');
+        item.className = 'autocomplete-item';
+        item.setAttribute('data-index', index);
+
+        // Highlight matching text
+        const lowerName = campName.toLowerCase();
+        const matchIndex = lowerName.indexOf(lowerQuery);
+
+        if (matchIndex >= 0) {
+            const before = campName.substring(0, matchIndex);
+            const match = campName.substring(matchIndex, matchIndex + query.length);
+            const after = campName.substring(matchIndex + query.length);
+            item.innerHTML = `${escapeHtml(before)}<strong>${escapeHtml(match)}</strong>${escapeHtml(after)}`;
+        } else {
+            item.textContent = campName;
+        }
+
+        item.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            zoomToCamp(campName);
+            searchInput.value = campName;
+            hideAutocomplete();
+        });
+
+        searchAutocomplete.appendChild(item);
+    });
+
+    // Add "Search for..." option
+    const searchItem = document.createElement('div');
+    searchItem.className = 'autocomplete-item autocomplete-search-action';
+    searchItem.setAttribute('data-index', nameMatches.length); // Index after all name matches
+    searchItem.innerHTML = `🔍 Search for "<strong>${escapeHtml(query)}</strong>"`;
+    searchItem.addEventListener('mousedown', async (e) => {
+        e.preventDefault();
         hideAutocomplete();
+        await performSemanticSearch(query);
+    });
+
+    searchAutocomplete.appendChild(searchItem);
+
+    // Update selection highlighting
+    updateAutocompleteSelection();
+
+    searchAutocomplete.style.display = 'block';
+}
+
+async function performSemanticSearch(query) {
+    if (!semanticSearchReady) {
+        showSearchResultsInSidebar([], query, 'Semantic search is still loading...');
+        return;
     }
+
+    try {
+        // Show loading state
+        showSearchResultsInSidebar([], query, 'Searching...');
+
+        const results = await semanticSearch.search(query, {
+            limit: 20,
+            minScore: 0.2
+        });
+
+        showSearchResultsInSidebar(results, query);
+    } catch (error) {
+        console.error('Semantic search error:', error);
+        showSearchResultsInSidebar([], query, 'Search failed. Please try again.');
+    }
+}
+
+function showSearchResultsInSidebar(results, query, message = null) {
+    const sidebarContent = document.getElementById('sidebarContent');
+    sidebarContent.style.cursor = 'default';
+    sidebarContent.setAttribute('data-showing-search-results', 'true');
+
+    // Clear currentSidebarCampName so sidebar click handler doesn't interfere
+    currentSidebarCampName = null;
+
+    if (message) {
+        // Show loading or error message
+        sidebarContent.innerHTML = `
+            <h2>Search Results</h2>
+            <div style="color: #aaa; padding: 20px 0; text-align: center;">${escapeHtml(message)}</div>
+        `;
+        return;
+    }
+
+    if (results.length === 0) {
+        sidebarContent.innerHTML = `
+            <h2>Search Results</h2>
+            <p style="color: #aaa;">No camps found for "<strong>${escapeHtml(query)}</strong>"</p>
+            <p style="color: #888; font-size: 13px;">Try different keywords or check spelling.</p>
+        `;
+        return;
+    }
+
+    // Build search results HTML
+    let html = `
+        <h2>Search Results</h2>
+        <div style="color: #aaa; margin-bottom: 15px; font-size: 14px;">
+            Found ${results.length} camp${results.length !== 1 ? 's' : ''} for "<strong>${escapeHtml(query)}</strong>"
+        </div>
+        <div id="searchResultsList">
+    `;
+
+    results.forEach(result => {
+        html += `
+            <div class="search-result-item" data-camp-name="${escapeHtml(result.name)}">
+                <div class="search-result-name">${escapeHtml(result.name)}</div>
+                ${result.location ? `<div class="search-result-location">${escapeHtml(result.location)}</div>` : ''}
+                ${result.snippet ? `<div class="search-result-snippet">${escapeHtml(result.snippet)}</div>` : ''}
+            </div>
+        `;
+    });
+
+    html += '</div>';
+    sidebarContent.innerHTML = html;
+
+    // Add click handlers to search results
+    document.querySelectorAll('.search-result-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            // Stop event from bubbling to prevent sidebar click handler from interfering
+            e.stopPropagation();
+
+            const campName = item.getAttribute('data-camp-name');
+            zoomToCamp(campName);
+            // After zooming, update sidebar to show camp details
+            setTimeout(() => {
+                updateSidebarCampInfo(campName);
+            }, 600); // Wait for zoom animation
+        });
+    });
+}
+
+function isShowingSearchResults() {
+    const sidebarContent = document.getElementById('sidebarContent');
+    return sidebarContent && sidebarContent.getAttribute('data-showing-search-results') === 'true';
+}
+
+function clearSearchResults() {
+    const sidebarContent = document.getElementById('sidebarContent');
+    if (sidebarContent) {
+        sidebarContent.removeAttribute('data-showing-search-results');
+        sidebarContent.style.cursor = 'pointer';
+        sidebarContent.innerHTML = `
+            <h2 id="sidebarCampName">Hover over a camp or type to search</h2>
+            <img id="sidebarCampImage" src="" alt="Camp image" style="display: none;">
+            <div id="sidebarCampLocation"></div>
+            <div id="sidebarCampDescription"></div>
+            <div id="sidebarHint">Click on a camp for more information.</div>
+        `;
+    }
+    currentSidebarCampName = null;
+}
+
+function setSearchPlaceholder(text) {
+    if (searchInput) {
+        searchInput.placeholder = text;
+    }
+}
+
+function showNoResults(query) {
+    searchAutocomplete.innerHTML = `
+        <div class="autocomplete-item autocomplete-no-results">
+            No camps found for "${escapeHtml(query)}"
+        </div>
+    `;
+    searchAutocomplete.style.display = 'block';
+    autocompleteResults = [];
 }
 
 function handleSearchKeydown(e) {
@@ -1490,9 +1725,13 @@ function handleSearchKeydown(e) {
         return;
     }
 
+    // Total items = name matches + 1 (the "Search for..." option)
+    const totalItems = autocompleteResults.length + 1;
+
     if (e.key === 'ArrowDown') {
         e.preventDefault();
-        selectedAutocompleteIndex = Math.min(selectedAutocompleteIndex + 1, autocompleteResults.length - 1);
+        // Allow navigating to the search action (last item)
+        selectedAutocompleteIndex = Math.min(selectedAutocompleteIndex + 1, totalItems - 1);
         updateAutocompleteSelection();
     } else if (e.key === 'ArrowUp') {
         e.preventDefault();
@@ -1500,13 +1739,27 @@ function handleSearchKeydown(e) {
         updateAutocompleteSelection();
     } else if (e.key === 'Enter') {
         e.preventDefault();
-        if (selectedAutocompleteIndex >= 0) {
+
+        // Check if the search action is selected (index equals number of name matches)
+        if (selectedAutocompleteIndex === autocompleteResults.length) {
+            // Trigger semantic search
+            hideAutocomplete();
+            performSemanticSearch(currentSearchQuery);
+        } else if (selectedAutocompleteIndex >= 0 && selectedAutocompleteIndex < autocompleteResults.length) {
+            // A name match is selected
             zoomToCamp(autocompleteResults[selectedAutocompleteIndex]);
+            searchInput.blur();
+            hideAutocomplete();
         } else if (autocompleteResults.length > 0) {
+            // No selection, but there are name matches - zoom to first one
             zoomToCamp(autocompleteResults[0]);
+            searchInput.blur();
+            hideAutocomplete();
+        } else {
+            // No name matches - trigger semantic search
+            hideAutocomplete();
+            performSemanticSearch(currentSearchQuery);
         }
-        searchInput.blur();
-        hideAutocomplete();
     } else if (e.key === 'Escape') {
         hideAutocomplete();
         searchInput.blur();
@@ -1517,8 +1770,10 @@ function handleSearchFocus() {
     // Select all text so user can easily type a new search
     searchInput.select();
 
-    if (autocompleteResults.length > 0) {
-        showAutocomplete(autocompleteResults, searchInput.value.trim().toLowerCase());
+    // Show autocomplete if there's text in the search box
+    const query = searchInput.value.trim();
+    if (query.length > 0) {
+        showKeywordAutocomplete(query);
     }
 }
 
@@ -1529,24 +1784,59 @@ function handleSearchBlur() {
     }, 200);
 }
 
-function showAutocomplete(results, query) {
+function showAutocomplete(results, query, semanticResults = null) {
     searchAutocomplete.innerHTML = '';
     selectedAutocompleteIndex = -1;
 
     results.forEach((campName, index) => {
         const item = document.createElement('div');
         item.className = 'autocomplete-item';
-        item.textContent = campName;
         item.setAttribute('data-index', index);
 
-        // Highlight matching text
-        const lowerName = campName.toLowerCase();
-        const matchIndex = lowerName.indexOf(query);
-        if (matchIndex >= 0) {
-            const before = campName.substring(0, matchIndex);
-            const match = campName.substring(matchIndex, matchIndex + query.length);
-            const after = campName.substring(matchIndex + query.length);
-            item.innerHTML = `${escapeHtml(before)}<strong>${escapeHtml(match)}</strong>${escapeHtml(after)}`;
+        // If we have semantic results, show enhanced information
+        if (semanticResults && semanticResults[index]) {
+            const result = semanticResults[index];
+
+            const nameDiv = document.createElement('div');
+            nameDiv.className = 'autocomplete-name';
+
+            // Try to highlight matching text for keyword matches
+            const lowerName = campName.toLowerCase();
+            const lowerQuery = query.toLowerCase();
+            const matchIndex = lowerName.indexOf(lowerQuery);
+
+            if (matchIndex >= 0) {
+                const before = campName.substring(0, matchIndex);
+                const match = campName.substring(matchIndex, matchIndex + query.length);
+                const after = campName.substring(matchIndex + query.length);
+                nameDiv.innerHTML = `${escapeHtml(before)}<strong>${escapeHtml(match)}</strong>${escapeHtml(after)}`;
+            } else {
+                nameDiv.textContent = campName;
+            }
+
+            item.appendChild(nameDiv);
+
+            // Show snippet if available
+            if (result.snippet) {
+                const snippetDiv = document.createElement('div');
+                snippetDiv.className = 'autocomplete-snippet';
+                snippetDiv.textContent = result.snippet;
+                item.appendChild(snippetDiv);
+            }
+        } else {
+            // Keyword search result - just highlight matching text
+            const lowerName = campName.toLowerCase();
+            const lowerQuery = query.toLowerCase();
+            const matchIndex = lowerName.indexOf(lowerQuery);
+
+            if (matchIndex >= 0) {
+                const before = campName.substring(0, matchIndex);
+                const match = campName.substring(matchIndex, matchIndex + query.length);
+                const after = campName.substring(matchIndex + query.length);
+                item.innerHTML = `${escapeHtml(before)}<strong>${escapeHtml(match)}</strong>${escapeHtml(after)}`;
+            } else {
+                item.textContent = campName;
+            }
         }
 
         item.addEventListener('mousedown', (e) => {
@@ -1630,6 +1920,9 @@ function zoomToCamp(campName) {
         // Highlight the camp after animation completes
         highlightedCamp = feature;
         redraw();
+
+        // Show camp details in sidebar
+        updateSidebarCampInfo(campName);
     });
 }
 
@@ -1669,11 +1962,33 @@ function animateViewport(targetCenterX, targetCenterY, targetScale, onComplete) 
 // Handle window resize
 window.addEventListener('resize', resizeCanvas);
 
+// Handle clicking on sidebar to open full camp info
+document.getElementById('sidebarContent').addEventListener('click', (e) => {
+    // Don't open full camp info if we're showing search results
+    if (isShowingSearchResults()) {
+        return;
+    }
+
+    // Only open full camp info if we have a current camp
+    if (currentSidebarCampName && !fullCampInfoOpen) {
+        openFullCampInfo(currentSidebarCampName);
+    }
+});
+
 // Handle ESC key to close full camp info, and typing to search
 window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         if (fullCampInfoOpen) {
+            // Close full camp info popup
             closeFullCampInfo();
+        } else if (isShowingSearchResults() || (searchInput && searchInput.value.trim().length > 0)) {
+            // Clear search results/sidebar and search box
+            // This handles both: actively showing search results OR having typed a search
+            clearSearchResults();
+            if (searchInput) {
+                searchInput.value = '';
+                searchInput.blur();
+            }
         }
     }
 
@@ -1693,6 +2008,11 @@ window.addEventListener('keydown', (e) => {
         }
     }
 });
+
+// Expose functions globally for onclick handlers (needed because we're using ES6 modules)
+window.closeFullCampInfo = closeFullCampInfo;
+window.showInfo = showInfo;
+window.zoomToFit = zoomToFit;
 
 // Start the application
 init();
