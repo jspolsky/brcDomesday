@@ -1949,8 +1949,9 @@ window.addEventListener('keydown', (e) => {
         if (fullCampInfoOpen) {
             // Close full camp info popup
             closeFullCampInfo();
-        } else if (isShowingSearchResults()) {
-            // Clear search results and search box
+        } else if (isShowingSearchResults() || (searchInput && searchInput.value.trim().length > 0)) {
+            // Clear search results/sidebar and search box
+            // This handles both: actively showing search results OR having typed a search
             clearSearchResults();
             if (searchInput) {
                 searchInput.value = '';
