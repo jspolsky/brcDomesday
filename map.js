@@ -1,3 +1,6 @@
+// Import semantic search module
+import semanticSearch from './semantic-search.js';
+
 // HTML escaping utility to prevent XSS injection
 function escapeHtml(text) {
     if (text == null) return '';
@@ -1449,6 +1452,9 @@ let searchInput = null;
 let searchAutocomplete = null;
 let autocompleteResults = [];
 let selectedAutocompleteIndex = -1;
+let semanticSearchReady = false;
+let semanticSearchInitializing = false;
+let searchDebounceTimer = null;
 
 function initializeSearch() {
     searchInput = document.getElementById('campSearch');
@@ -1467,24 +1473,87 @@ function initializeSearch() {
     searchInput.addEventListener('blur', handleSearchBlur);
 }
 
-function handleSearchInput(e) {
-    const query = e.target.value.trim().toLowerCase();
+async function handleSearchInput(e) {
+    const query = e.target.value.trim();
 
     if (query.length === 0) {
         hideAutocomplete();
         return;
     }
 
+    // Initialize semantic search on first use (lazy loading)
+    if (!semanticSearchReady && !semanticSearchInitializing) {
+        semanticSearchInitializing = true;
+        setSearchPlaceholder('Loading search engine...');
+
+        try {
+            await semanticSearch.initialize();
+            semanticSearchReady = true;
+            setSearchPlaceholder('Search camps...');
+            console.log('✅ Semantic search initialized successfully');
+        } catch (error) {
+            console.warn('⚠️ Semantic search failed to load, using keyword search:', error);
+            semanticSearchReady = false;
+            setSearchPlaceholder('Search camps... (keyword mode)');
+        }
+
+        semanticSearchInitializing = false;
+    }
+
+    // Debounce search to avoid excessive queries while typing
+    if (searchDebounceTimer) {
+        clearTimeout(searchDebounceTimer);
+    }
+
+    searchDebounceTimer = setTimeout(async () => {
+        await performSearch(query);
+    }, 300); // 300ms debounce
+}
+
+async function performSearch(query) {
+    if (semanticSearchReady) {
+        // Use semantic search
+        await performSemanticSearch(query);
+    } else {
+        // Fall back to keyword search
+        performKeywordSearch(query);
+    }
+}
+
+async function performSemanticSearch(query) {
+    try {
+        const results = await semanticSearch.search(query, {
+            limit: 10,
+            minScore: 0.2
+        });
+
+        autocompleteResults = results.map(r => r.name);
+
+        if (autocompleteResults.length > 0) {
+            showAutocomplete(autocompleteResults, query, results);
+        } else {
+            showNoResults(query);
+        }
+    } catch (error) {
+        console.error('Semantic search error:', error);
+        // Fall back to keyword search
+        performKeywordSearch(query);
+    }
+}
+
+function performKeywordSearch(query) {
+    const lowerQuery = query.toLowerCase();
+
     // Get all camp names
     const campNames = Object.keys(campFidMappings || {}).map(fid => campFidMappings[fid]);
 
     // Filter camps that match the query
     autocompleteResults = campNames
-        .filter(name => name.toLowerCase().includes(query))
+        .filter(name => name.toLowerCase().includes(lowerQuery))
         .sort((a, b) => {
             // Prioritize matches at the start of the name
-            const aStarts = a.toLowerCase().startsWith(query);
-            const bStarts = b.toLowerCase().startsWith(query);
+            const aStarts = a.toLowerCase().startsWith(lowerQuery);
+            const bStarts = b.toLowerCase().startsWith(lowerQuery);
             if (aStarts && !bStarts) return -1;
             if (!aStarts && bStarts) return 1;
             return a.localeCompare(b);
@@ -1494,8 +1563,24 @@ function handleSearchInput(e) {
     if (autocompleteResults.length > 0) {
         showAutocomplete(autocompleteResults, query);
     } else {
-        hideAutocomplete();
+        showNoResults(query);
     }
+}
+
+function setSearchPlaceholder(text) {
+    if (searchInput) {
+        searchInput.placeholder = text;
+    }
+}
+
+function showNoResults(query) {
+    searchAutocomplete.innerHTML = `
+        <div class="autocomplete-item autocomplete-no-results">
+            No camps found for "${escapeHtml(query)}"
+        </div>
+    `;
+    searchAutocomplete.style.display = 'block';
+    autocompleteResults = [];
 }
 
 function handleSearchKeydown(e) {
@@ -1547,24 +1632,59 @@ function handleSearchBlur() {
     }, 200);
 }
 
-function showAutocomplete(results, query) {
+function showAutocomplete(results, query, semanticResults = null) {
     searchAutocomplete.innerHTML = '';
     selectedAutocompleteIndex = -1;
 
     results.forEach((campName, index) => {
         const item = document.createElement('div');
         item.className = 'autocomplete-item';
-        item.textContent = campName;
         item.setAttribute('data-index', index);
 
-        // Highlight matching text
-        const lowerName = campName.toLowerCase();
-        const matchIndex = lowerName.indexOf(query);
-        if (matchIndex >= 0) {
-            const before = campName.substring(0, matchIndex);
-            const match = campName.substring(matchIndex, matchIndex + query.length);
-            const after = campName.substring(matchIndex + query.length);
-            item.innerHTML = `${escapeHtml(before)}<strong>${escapeHtml(match)}</strong>${escapeHtml(after)}`;
+        // If we have semantic results, show enhanced information
+        if (semanticResults && semanticResults[index]) {
+            const result = semanticResults[index];
+
+            const nameDiv = document.createElement('div');
+            nameDiv.className = 'autocomplete-name';
+
+            // Try to highlight matching text for keyword matches
+            const lowerName = campName.toLowerCase();
+            const lowerQuery = query.toLowerCase();
+            const matchIndex = lowerName.indexOf(lowerQuery);
+
+            if (matchIndex >= 0) {
+                const before = campName.substring(0, matchIndex);
+                const match = campName.substring(matchIndex, matchIndex + query.length);
+                const after = campName.substring(matchIndex + query.length);
+                nameDiv.innerHTML = `${escapeHtml(before)}<strong>${escapeHtml(match)}</strong>${escapeHtml(after)}`;
+            } else {
+                nameDiv.textContent = campName;
+            }
+
+            item.appendChild(nameDiv);
+
+            // Show snippet if available
+            if (result.snippet) {
+                const snippetDiv = document.createElement('div');
+                snippetDiv.className = 'autocomplete-snippet';
+                snippetDiv.textContent = result.snippet;
+                item.appendChild(snippetDiv);
+            }
+        } else {
+            // Keyword search result - just highlight matching text
+            const lowerName = campName.toLowerCase();
+            const lowerQuery = query.toLowerCase();
+            const matchIndex = lowerName.indexOf(lowerQuery);
+
+            if (matchIndex >= 0) {
+                const before = campName.substring(0, matchIndex);
+                const match = campName.substring(matchIndex, matchIndex + query.length);
+                const after = campName.substring(matchIndex + query.length);
+                item.innerHTML = `${escapeHtml(before)}<strong>${escapeHtml(match)}</strong>${escapeHtml(after)}`;
+            } else {
+                item.textContent = campName;
+            }
         }
 
         item.addEventListener('mousedown', (e) => {
