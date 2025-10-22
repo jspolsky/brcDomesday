@@ -1605,6 +1605,9 @@ function showSearchResultsInSidebar(results, query, message = null) {
     sidebarContent.style.cursor = 'default';
     sidebarContent.setAttribute('data-showing-search-results', 'true');
 
+    // Clear currentSidebarCampName so sidebar click handler doesn't interfere
+    currentSidebarCampName = null;
+
     if (message) {
         // Show loading or error message
         sidebarContent.innerHTML = `
@@ -1647,7 +1650,10 @@ function showSearchResultsInSidebar(results, query, message = null) {
 
     // Add click handlers to search results
     document.querySelectorAll('.search-result-item').forEach(item => {
-        item.addEventListener('click', () => {
+        item.addEventListener('click', (e) => {
+            // Stop event from bubbling to prevent sidebar click handler from interfering
+            e.stopPropagation();
+
             const campName = item.getAttribute('data-camp-name');
             zoomToCamp(campName);
             // After zooming, update sidebar to show camp details
@@ -1925,7 +1931,13 @@ function animateViewport(targetCenterX, targetCenterY, targetScale, onComplete) 
 window.addEventListener('resize', resizeCanvas);
 
 // Handle clicking on sidebar to open full camp info
-document.getElementById('sidebarContent').addEventListener('click', () => {
+document.getElementById('sidebarContent').addEventListener('click', (e) => {
+    // Don't open full camp info if we're showing search results
+    if (isShowingSearchResults()) {
+        return;
+    }
+
+    // Only open full camp info if we have a current camp
     if (currentSidebarCampName && !fullCampInfoOpen) {
         openFullCampInfo(currentSidebarCampName);
     }
