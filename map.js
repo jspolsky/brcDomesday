@@ -478,14 +478,14 @@ function zoomToFit() {
     // Adjust for sidebar covering part of the canvas
     if (sidebar && window.getComputedStyle(sidebar).display !== 'none') {
         const sidebarWidth = sidebar.offsetWidth;
-        // Sidebar is on the right, so we need to shift the view left by half the sidebar width
+        // Sidebar is on the left, so we need to shift the view right by half the sidebar width
         // This shift is in canvas space, but we need to account for the 45-degree rotation
         // when converting to geographic coordinate adjustments
 
-        // Desired shift in rotated canvas space: left by sidebarWidth/2 (negative X direction)
+        // Desired shift in rotated canvas space: right by sidebarWidth/2 (positive X direction)
         // Apply inverse rotation to get the shift needed in geographic space
         const latScale = Math.cos(viewport.centerY * Math.PI / 180);
-        const canvasShiftX = -sidebarWidth / 2;  // Negative because shifting left
+        const canvasShiftX = sidebarWidth / 2;  // Positive because shifting right
         const canvasShiftY = 0;  // No vertical shift needed in canvas space
 
         // Apply inverse rotation: use transpose of rotation matrix
