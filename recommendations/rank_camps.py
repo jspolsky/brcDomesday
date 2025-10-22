@@ -220,6 +220,35 @@ class CampRanker:
         # Normalize embedding scores to 0-100 scale
         embedding_scores_normalized = embedding_scores * 100
 
+        # Apply hard filters for critical axes (queer, sober, family)
+        # These are not preferences - they're requirements
+        filter_axes = ['queer', 'sober', 'family']
+        required_filters = {k: v for k, v in user_profile.axes.items()
+                           if k in filter_axes and v is not None and v >= 80}
+
+        if required_filters:
+            print(f"Applying hard filters: {list(required_filters.keys())}")
+            # Create a mask for camps that meet ALL required filters
+            # A camp must score >= 60 on each required filter axis to pass
+            filter_mask = np.ones(len(self.camps), dtype=bool)
+
+            for filter_key in required_filters.keys():
+                for i, camp in enumerate(self.camps):
+                    if filter_key not in camp['axes'] or camp['axes'][filter_key]['score'] < 60:
+                        filter_mask[i] = False
+
+            num_filtered = np.sum(~filter_mask)
+            num_passing = np.sum(filter_mask)
+            print(f"Filtered out {num_filtered} camps, {num_passing} camps pass filters")
+
+            if num_passing == 0:
+                # No camps meet the required filters
+                print("WARNING: No camps match the required filters!")
+                return []
+        else:
+            # No filters applied - all camps pass
+            filter_mask = np.ones(len(self.camps), dtype=bool)
+
         # Compute final scores
         # Note: geographic bonus is additive, not weighted
         final_scores = (
@@ -228,12 +257,21 @@ class CampRanker:
             geographic_weight * geo_bonuses
         )
 
+        # Apply filter mask - set filtered camps to -infinity so they never rank
+        final_scores = np.where(filter_mask, final_scores, -np.inf)
+
         # Rank camps
         ranked_indices = np.argsort(final_scores)[::-1]  # Descending order
 
-        # Build results
+        # Build results (skip camps with -inf scores)
         results = []
-        for idx in ranked_indices[:top_k]:
+        for idx in ranked_indices:
+            if final_scores[idx] == -np.inf:
+                break  # No more valid camps
+
+            if len(results) >= top_k:
+                break
+
             camp = self.camps[idx]
 
             result = {

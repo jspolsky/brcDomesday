@@ -769,8 +769,34 @@
         }
 
         function displayResults(results) {
+            // Push state to browser history so back button works
+            history.pushState({ view: 'results' }, '', '#results');
+
             const container = document.getElementById('results-container');
             container.innerHTML = '';
+
+            // Handle no results case
+            if (results.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+                        <div style="font-size: 4em; margin-bottom: 20px;">😔</div>
+                        <h2 style="color: #667eea; margin-bottom: 15px;">No Camps Match Your Requirements</h2>
+                        <p style="color: #666; font-size: 1.1em; margin-bottom: 30px;">
+                            Unfortunately, no camps meet all of your filter criteria (LGBTQ+, Sober, or Family-Friendly).
+                        </p>
+                        <p style="color: #666; margin-bottom: 30px;">
+                            Try adjusting your requirements or unchecking one of the filter boxes to see more results.
+                        </p>
+                        <button onclick="showQuiz()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.1em; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
+                            ← Back to Quiz
+                        </button>
+                    </div>
+                `;
+                // Show results section
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('results').classList.add('visible');
+                return;
+            }
 
             results.slice(0, 20).forEach(camp => {
                 const card = document.createElement('div');
@@ -836,6 +862,19 @@
             document.getElementById('results').classList.remove('visible');
             document.getElementById('quiz').style.display = 'block';
         }
+
+        // Handle browser back button
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.view === 'results') {
+                // Going back to results - do nothing, results are still visible
+            } else {
+                // Going back to quiz
+                showQuiz();
+            }
+        });
+
+        // Set initial state for the quiz page
+        history.replaceState({ view: 'quiz' }, '', '#quiz');
     </script>
 </body>
 </html>

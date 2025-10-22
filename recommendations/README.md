@@ -641,6 +641,27 @@ Replace the generic "Sound/Party" axis with specific music genre axes to provide
      - "breathwork" → finds camps focused on breathwork practices
      - Works well for any specific interest not covered by checkboxes/sliders
 
+### Hard Filters for Critical Axes
+
+9. **Implemented hard filtering for LGBTQ+, Sober, and Family-Friendly**:
+   - These are treated as **requirements**, not preferences
+   - If a checkbox is checked, **only camps scoring >= 60** on that axis are shown
+   - **No results** message if no camps meet all filter criteria
+   - Prevents showing inappropriate camps (e.g., party camps to sober seekers)
+
+   **Filter Statistics**:
+   - Sober spaces: 43 camps (3.1% of total)
+   - LGBTQ+ affirming: 32 camps (2.3% of total)
+   - Family-friendly: 74 camps (5.3% of total)
+   - Sober + LGBTQ+: 1 camp (LuvClub)
+   - All three: 0 camps (impossible combination)
+
+   **Implementation**:
+   - Filters applied before ranking
+   - Filtered camps get score of -infinity (never shown)
+   - User gets clear message when combination is impossible
+   - Back button returns to quiz to adjust filters
+
 ### Current State
 - ✅ Music genre checkboxes working in quiz UI
 - ✅ Quick Start buttons include all 11 example profiles (6 general + 5 music)
@@ -649,6 +670,8 @@ Replace the generic "Sound/Party" axis with specific music genre axes to provide
 - ✅ Axis matching logic rewards camps that exceed user preferences
 - ✅ Keyword search for niche interests (cola, breathwork, etc.)
 - ✅ Dynamic weighting prioritizes keywords when provided
+- ✅ Hard filters for LGBTQ+, Sober, Family-Friendly (prevents showing wrong camps)
+- ✅ Browser back button works to return from results to quiz
 
 ### Next Steps
 - Test with real users for feedback on keyword search
