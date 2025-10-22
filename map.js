@@ -461,7 +461,14 @@ function zoomToFit() {
 
     const latScale = Math.cos(((bounds.maxLat + bounds.minLat) / 2) * Math.PI / 180);
 
-    const scaleX = (canvas.width * 0.9) / (lonRange * latScale);
+    // Account for sidebar when calculating visible area
+    const sidebar = document.getElementById('campSidebar');
+    let availableWidth = canvas.width;
+    if (sidebar && window.getComputedStyle(sidebar).display !== 'none') {
+        availableWidth = canvas.width - sidebar.offsetWidth;
+    }
+
+    const scaleX = (availableWidth * 0.9) / (lonRange * latScale);
     const scaleY = (canvas.height * 0.9) / latRange;
 
     viewport.scale = Math.min(scaleX, scaleY);
@@ -469,14 +476,25 @@ function zoomToFit() {
     viewport.centerY = (bounds.maxLat + bounds.minLat) / 2;
 
     // Adjust for sidebar covering part of the canvas
-    const sidebar = document.getElementById('campSidebar');
     if (sidebar && window.getComputedStyle(sidebar).display !== 'none') {
         const sidebarWidth = sidebar.offsetWidth;
-        // Pan left by half the sidebar width to center the visible area
-        // Convert pixels to geographic offset
+        // Sidebar is on the right, so we need to shift the view left by half the sidebar width
+        // This shift is in canvas space, but we need to account for the 45-degree rotation
+        // when converting to geographic coordinate adjustments
+
+        // Desired shift in rotated canvas space: left by sidebarWidth/2 (negative X direction)
+        // Apply inverse rotation to get the shift needed in geographic space
         const latScale = Math.cos(viewport.centerY * Math.PI / 180);
-        const halfSidebarOffset = (sidebarWidth / 2) / (viewport.scale * latScale);
-        viewport.centerX += halfSidebarOffset;
+        const canvasShiftX = -sidebarWidth / 2;  // Negative because shifting left
+        const canvasShiftY = 0;  // No vertical shift needed in canvas space
+
+        // Apply inverse rotation: use transpose of rotation matrix
+        const geoShiftX = (canvasShiftX * COS_ROTATION + canvasShiftY * SIN_ROTATION) / (viewport.scale * latScale);
+        const geoShiftY = (-canvasShiftX * SIN_ROTATION + canvasShiftY * COS_ROTATION) / viewport.scale;
+
+        // Apply the geographic shifts (note: these shift the viewport, which moves the image oppositely)
+        viewport.centerX -= geoShiftX;
+        viewport.centerY += geoShiftY;
     }
 
     redraw();
