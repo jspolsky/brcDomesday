@@ -465,10 +465,18 @@ function zoomToFit() {
     const latScale = Math.cos(((bounds.maxLat + bounds.minLat) / 2) * Math.PI / 180);
 
     // Account for sidebar when calculating visible area
-    const sidebar = document.getElementById('campSidebar');
+    // Check both camp sidebar and search results sidebar
+    const campSidebar = document.getElementById('campSidebar');
+    const searchResultsSidebar = document.getElementById('searchResultsSidebar');
+    let activeSidebar = null;
     let availableWidth = canvas.width;
-    if (sidebar && window.getComputedStyle(sidebar).display !== 'none') {
-        availableWidth = canvas.width - sidebar.offsetWidth;
+
+    if (campSidebar && window.getComputedStyle(campSidebar).display !== 'none') {
+        activeSidebar = campSidebar;
+        availableWidth = canvas.width - campSidebar.offsetWidth;
+    } else if (searchResultsSidebar && window.getComputedStyle(searchResultsSidebar).display !== 'none') {
+        activeSidebar = searchResultsSidebar;
+        availableWidth = canvas.width - searchResultsSidebar.offsetWidth;
     }
 
     const scaleX = (availableWidth * 0.9) / (lonRange * latScale);
@@ -479,8 +487,8 @@ function zoomToFit() {
     viewport.centerY = (bounds.maxLat + bounds.minLat) / 2;
 
     // Adjust for sidebar covering part of the canvas
-    if (sidebar && window.getComputedStyle(sidebar).display !== 'none') {
-        const sidebarWidth = sidebar.offsetWidth;
+    if (activeSidebar) {
+        const sidebarWidth = activeSidebar.offsetWidth;
         // Sidebar is on the left, so we need to shift the view right by half the sidebar width
         // This shift is in canvas space, but we need to account for the 45-degree rotation
         // when converting to geographic coordinate adjustments
@@ -606,13 +614,6 @@ function hideCampPopup() {
 function updateSidebarCampInfo(campName) {
     const campData = findCampDataByName(campName);
     currentSidebarCampName = campName;
-
-    // Clear search results flag and restore cursor
-    const sidebarContent = document.getElementById('sidebarContent');
-    if (sidebarContent) {
-        sidebarContent.removeAttribute('data-showing-search-results');
-        sidebarContent.style.cursor = 'pointer';
-    }
 
     // Update text content
     document.getElementById('sidebarCampName').textContent = campData ? (campData.name || campName) : campName;
@@ -1467,6 +1468,11 @@ let semanticSearchInitializing = false;
 let searchDebounceTimer = null;
 let currentSearchQuery = ''; // Track the current search query for semantic search option
 
+// Navigation state for back button
+let lastSearchResults = null;
+let lastSearchQuery = null;
+let navigatedFromSearch = false;
+
 function initializeSearch() {
     searchInput = document.getElementById('campSearch');
     searchAutocomplete = document.getElementById('searchAutocomplete');
@@ -1607,6 +1613,19 @@ async function performSemanticSearch(query) {
             minScore: 0.2
         });
 
+        // Push state to history when showing search results
+        if (results.length > 0) {
+            history.pushState(
+                {
+                    type: 'search',
+                    searchQuery: query,
+                    searchResults: results
+                },
+                '',
+                `#search/${encodeURIComponent(query)}`
+            );
+        }
+
         showSearchResultsInSidebar(results, query);
     } catch (error) {
         console.error('Semantic search error:', error);
@@ -1615,25 +1634,37 @@ async function performSemanticSearch(query) {
 }
 
 function showSearchResultsInSidebar(results, query, message = null) {
-    const sidebarContent = document.getElementById('sidebarContent');
-    sidebarContent.style.cursor = 'default';
-    sidebarContent.setAttribute('data-showing-search-results', 'true');
+    const searchResultsSidebar = document.getElementById('searchResultsSidebar');
+    const searchResultsContent = document.getElementById('searchResultsContent');
+    const campSidebar = document.getElementById('campSidebar');
 
-    // Clear currentSidebarCampName so sidebar click handler doesn't interfere
-    currentSidebarCampName = null;
+    // Save search state for navigation
+    if (!message && results.length > 0) {
+        lastSearchResults = results;
+        lastSearchQuery = query;
+    }
+
+    // Hide the back link when showing search results
+    hideBackToSearchLink();
+
+    // Hide the camp sidebar and show the search results sidebar
+    if (campSidebar) {
+        campSidebar.style.display = 'none';
+    }
+    searchResultsSidebar.style.display = 'block';
 
     if (message) {
         // Show loading or error message
-        sidebarContent.innerHTML = `
-            <h2>Search Results</h2>
+        searchResultsContent.innerHTML = `
+            <h2 style="color: #ffffff;">Search Results</h2>
             <div style="color: #aaa; padding: 20px 0; text-align: center;">${escapeHtml(message)}</div>
         `;
         return;
     }
 
     if (results.length === 0) {
-        sidebarContent.innerHTML = `
-            <h2>Search Results</h2>
+        searchResultsContent.innerHTML = `
+            <h2 style="color: #ffffff;">Search Results</h2>
             <p style="color: #aaa;">No camps found for "<strong>${escapeHtml(query)}</strong>"</p>
             <p style="color: #888; font-size: 13px;">Try different keywords or check spelling.</p>
         `;
@@ -1642,7 +1673,7 @@ function showSearchResultsInSidebar(results, query, message = null) {
 
     // Build search results HTML
     let html = `
-        <h2>Search Results</h2>
+        <h2 style="color: #ffffff;">Search Results</h2>
         <div style="color: #aaa; margin-bottom: 15px; font-size: 14px;">
             Found ${results.length} camp${results.length !== 1 ? 's' : ''} for "<strong>${escapeHtml(query)}</strong>"
         </div>
@@ -1660,43 +1691,102 @@ function showSearchResultsInSidebar(results, query, message = null) {
     });
 
     html += '</div>';
-    sidebarContent.innerHTML = html;
+    searchResultsContent.innerHTML = html;
 
     // Add click handlers to search results
     document.querySelectorAll('.search-result-item').forEach(item => {
         item.addEventListener('click', (e) => {
-            // Stop event from bubbling to prevent sidebar click handler from interfering
-            e.stopPropagation();
-
             const campName = item.getAttribute('data-camp-name');
+
+            // Push state to browser history for back button support
+            history.pushState(
+                {
+                    type: 'camp',
+                    campName: campName,
+                    fromSearch: true,
+                    searchQuery: query,
+                    searchResults: results
+                },
+                '',
+                `#camp/${encodeURIComponent(campName)}`
+            );
+
+            // Mark that we navigated from search
+            navigatedFromSearch = true;
+
             zoomToCamp(campName);
-            // After zooming, update sidebar to show camp details
+            // After zooming, hide search results and show camp details in camp sidebar
             setTimeout(() => {
+                clearSearchResults();
                 updateSidebarCampInfo(campName);
+                showBackToSearchLink();
             }, 600); // Wait for zoom animation
         });
     });
 }
 
 function isShowingSearchResults() {
-    const sidebarContent = document.getElementById('sidebarContent');
-    return sidebarContent && sidebarContent.getAttribute('data-showing-search-results') === 'true';
+    const searchResultsSidebar = document.getElementById('searchResultsSidebar');
+    return searchResultsSidebar && searchResultsSidebar.style.display === 'block';
 }
 
 function clearSearchResults() {
-    const sidebarContent = document.getElementById('sidebarContent');
-    if (sidebarContent) {
-        sidebarContent.removeAttribute('data-showing-search-results');
-        sidebarContent.style.cursor = 'pointer';
-        sidebarContent.innerHTML = `
-            <h2 id="sidebarCampName">Hover over a camp or type to search</h2>
-            <img id="sidebarCampImage" src="" alt="Camp image" style="display: none;">
-            <div id="sidebarCampLocation"></div>
-            <div id="sidebarCampDescription"></div>
-            <div id="sidebarHint">Click on a camp for more information.</div>
-        `;
+    const searchResultsSidebar = document.getElementById('searchResultsSidebar');
+    const searchResultsContent = document.getElementById('searchResultsContent');
+    const campSidebar = document.getElementById('campSidebar');
+
+    // Hide search results sidebar
+    if (searchResultsSidebar) {
+        searchResultsSidebar.style.display = 'none';
     }
-    currentSidebarCampName = null;
+
+    if (searchResultsContent) {
+        searchResultsContent.innerHTML = '';
+    }
+
+    // Show camp sidebar again by removing inline display style
+    // (this allows the CSS media query to control visibility on mobile)
+    if (campSidebar) {
+        campSidebar.style.display = '';
+    }
+
+    // Hide back link
+    hideBackToSearchLink();
+}
+
+function showBackToSearchLink() {
+    const backLink = document.getElementById('backToSearchLink');
+    const campSidebar = document.getElementById('campSidebar');
+
+    if (backLink && lastSearchResults && lastSearchQuery) {
+        backLink.style.display = 'block';
+
+        // Add class to increase sidebar padding to avoid overlap
+        if (campSidebar) {
+            campSidebar.classList.add('with-back-link');
+        }
+    }
+}
+
+function hideBackToSearchLink() {
+    const backLink = document.getElementById('backToSearchLink');
+    const campSidebar = document.getElementById('campSidebar');
+
+    if (backLink) {
+        backLink.style.display = 'none';
+    }
+
+    // Remove class to restore normal sidebar padding
+    if (campSidebar) {
+        campSidebar.classList.remove('with-back-link');
+    }
+}
+
+function restoreSearchResults() {
+    if (lastSearchResults && lastSearchQuery) {
+        showSearchResultsInSidebar(lastSearchResults, lastSearchQuery);
+        navigatedFromSearch = false;
+    }
 }
 
 function setSearchPlaceholder(text) {
@@ -2006,6 +2096,52 @@ window.addEventListener('keydown', (e) => {
             searchInput.focus();
             // The character will be typed into the now-focused input naturally
         }
+    }
+});
+
+// Handle browser back button
+window.addEventListener('popstate', (e) => {
+    if (e.state && e.state.type === 'search') {
+        // Going back to search results
+        restoreSearchResults();
+    } else if (e.state && e.state.type === 'camp' && e.state.fromSearch) {
+        // Going back to a camp from search (rare, but handle it)
+        lastSearchResults = e.state.searchResults;
+        lastSearchQuery = e.state.searchQuery;
+        navigatedFromSearch = true;
+        clearSearchResults();
+        updateSidebarCampInfo(e.state.campName);
+        showBackToSearchLink();
+    } else {
+        // Going back to initial state or unknown state
+        clearSearchResults();
+        hideBackToSearchLink();
+        navigatedFromSearch = false;
+    }
+});
+
+// Handle clicking the back to search link
+document.addEventListener('DOMContentLoaded', () => {
+    const backButton = document.getElementById('backToSearchButton');
+    if (backButton) {
+        backButton.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            // Push search state to history
+            if (lastSearchQuery) {
+                history.pushState(
+                    {
+                        type: 'search',
+                        searchQuery: lastSearchQuery,
+                        searchResults: lastSearchResults
+                    },
+                    '',
+                    `#search/${encodeURIComponent(lastSearchQuery)}`
+                );
+            }
+
+            restoreSearchResults();
+        });
     }
 });
 
