@@ -35,7 +35,8 @@ def get_approved_images_for_camp(camp_name):
     """
     Get all approved images for a camp from its metadata.json file.
 
-    Returns a list of image dictionaries with url, width, height, and source_page_url.
+    Returns a list of image dictionaries with url, width, height, source_page_url,
+    photographer, and year.
     """
     camp_dir = CANDIDATES_DIR / camp_name
     metadata_file = camp_dir / "metadata.json"
@@ -51,12 +52,22 @@ def get_approved_images_for_camp(camp_name):
     for img in metadata.get('images', []):
         # Only include approved images
         if img.get('curation_result') == 'approved':
-            approved_images.append({
+            image_data = {
                 'url': img['image_url'],
                 'width': img['width'],
                 'height': img['height'],
                 'source_page_url': img.get('source_page_url', img['image_url'])
-            })
+            }
+
+            # Add photographer if available
+            if img.get('photographer'):
+                image_data['photographer'] = img['photographer']
+
+            # Add year if available
+            if img.get('year'):
+                image_data['year'] = img['year']
+
+            approved_images.append(image_data)
 
     return approved_images
 

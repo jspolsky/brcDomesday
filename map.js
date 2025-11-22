@@ -1036,6 +1036,23 @@ function buildCampGallerySection(campName) {
         const escapedUrl = escapeHtml(image.url);
         const escapedSourceUrl = escapeHtml(image.source_page_url);
 
+        // Build caption if photographer and/or year exist
+        let caption = '';
+        if (image.photographer || image.year) {
+            let captionText = '';
+            if (image.photographer && image.year) {
+                captionText = `Photo by ${escapeHtml(image.photographer)} (${image.year})`;
+            } else if (image.photographer) {
+                captionText = `Photo by ${escapeHtml(image.photographer)}`;
+            } else if (image.year) {
+                captionText = `Photo from ${image.year}`;
+            }
+
+            if (captionText) {
+                caption = `<div class="gallery-caption">${captionText}</div>`;
+            }
+        }
+
         galleryHTML += `
             <div class="gallery-item">
                 <a href="${escapedSourceUrl}" target="_blank" rel="noopener noreferrer">
@@ -1044,6 +1061,7 @@ function buildCampGallerySection(campName) {
                          loading="lazy"
                          width="${image.width}"
                          height="${image.height}">
+                    ${caption}
                 </a>
             </div>
         `;

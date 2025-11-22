@@ -650,6 +650,11 @@ button:hover {
     width: 100%;
 }
 
+.gallery-item a {
+    position: relative;
+    display: block;
+}
+
 .gallery-item img {
     width: 100%;
     height: auto;
@@ -663,6 +668,21 @@ button:hover {
 .gallery-item img:hover {
     transform: scale(1.02);
     box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+.gallery-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    color: #000000;
+    padding: 8px 12px;
+    font-size: 12px;
+    line-height: 1.4;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    pointer-events: none;
 }
 
 /* Mobile/small screen responsive styles */
