@@ -45,12 +45,12 @@ LOG_FILE = SCRIPT_DIR / "gallery_scraper.log"
 GALLERY_BASE_URL = "https://gallery.burningman.org"
 GALLERY_SEARCH_URL = f"{GALLERY_BASE_URL}/search/"
 DEFAULT_MAX_IMAGES = 128
-DEFAULT_CAMP_DELAY = 12  # seconds between camps
+DEFAULT_CAMP_DELAY = 8  # seconds between camps
 DEFAULT_PAGE_DELAY = 2.5  # seconds between search pages
 DEFAULT_DETAIL_DELAY = 1.5  # seconds between asset detail fetches
 DEFAULT_DOWNLOAD_DELAY = 1.5  # seconds between downloads
 
-USER_AGENT = "BRC-Domesday-Scraper/1.0 (Research project; contact: joel@spolsky.com)"
+USER_AGENT = "BRC-Domesday-Scraper/1.0 (non commercial art project brcdomesday.vercel.app); contact: joel@futureturtles.com)"
 
 # Setup logging
 logging.basicConfig(
