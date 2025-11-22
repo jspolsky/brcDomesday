@@ -861,10 +861,10 @@
       "redirected_urls": {
         "http://arctica.burningman.org/": "https://arctica.burningman.org/"
       },
-      "images_downloaded": 60,
+      "images_downloaded": 83,
       "status": "success",
-      "last_processed": "2025-10-19 23:50:04",
-      "last_curated": "2025-10-20 10:49:10"
+      "last_processed": "2025-11-22 14:16:57",
+      "last_curated": "2025-11-22 14:18:07"
     },
     "Arctica Ice Sales - Ice Nine": {
       "urls_provided": [
@@ -16613,6 +16613,11 @@
       "status": "success",
       "last_processed": "2025-10-19 23:15:40",
       "last_curated": "2025-10-21 15:32:08"
+    },
+    "El Tesoro": {
+      "images_downloaded": 1,
+      "last_processed": "2025-11-22 14:15:59",
+      "status": "success"
     }
   },
   "summary": {

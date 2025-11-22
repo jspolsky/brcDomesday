@@ -1,0 +1,163 @@
+2025-11-22 11:58:16,741 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 11:58:16,746 - INFO - Loaded 1385 camps
+2025-11-22 11:58:16,747 - INFO - Processing camp 1 of 1: Black Rock Roller Disco
+2025-11-22 11:58:16,747 - INFO - Processing camp: Black Rock Roller Disco
+2025-11-22 11:58:16,749 - INFO - Camp already has 128 images (>= 128), skipping
+2025-11-22 11:59:16,711 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 11:59:16,717 - INFO - Loaded 1385 camps
+2025-11-22 11:59:16,717 - INFO - Processing camp 1 of 1: Chariot Project
+2025-11-22 11:59:16,717 - INFO - Processing camp: Chariot Project
+2025-11-22 11:59:16,719 - INFO - Camp already has 22 images (>= 5), skipping
+2025-11-22 11:59:30,104 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 11:59:30,109 - INFO - Loaded 1385 camps
+2025-11-22 11:59:30,110 - INFO - Processing camp 1 of 1: Camp ASL Support Services HUB
+2025-11-22 11:59:30,110 - INFO - Processing camp: Camp ASL Support Services HUB
+2025-11-22 11:59:30,111 - INFO - Searching gallery for: Camp ASL Support Services HUB
+2025-11-22 11:59:31,855 - INFO - No gallery results found for Camp ASL Support Services HUB
+2025-11-22 11:59:31,856 - INFO - No gallery images found for Camp ASL Support Services HUB
+2025-11-22 12:01:51,287 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 12:01:51,292 - INFO - Loaded 1385 camps
+2025-11-22 12:01:51,293 - INFO - Processing camp 1 of 1: Bag o' Dicks
+2025-11-22 12:01:51,293 - INFO - Processing camp: Bag o' Dicks
+2025-11-22 12:01:51,293 - INFO - Searching gallery for: Bag o' Dicks
+2025-11-22 12:01:52,595 - INFO - No gallery results found for Bag o' Dicks
+2025-11-22 12:01:52,596 - INFO - No gallery images found for Bag o' Dicks
+2025-11-22 12:02:26,010 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 12:02:26,015 - INFO - Loaded 1385 camps
+2025-11-22 12:02:26,016 - INFO - Processing camp 1 of 1: Chair Camp
+2025-11-22 12:02:26,016 - INFO - Processing camp: Chair Camp
+2025-11-22 12:02:26,016 - INFO - Searching gallery for: Chair Camp
+2025-11-22 12:02:43,889 - WARNING - Request failed: 404 Client Error: Not Found for url: https://gallery.burningman.org/search/?q=Chair+Camp&p=5. Retrying in 1s...
+2025-11-22 12:02:46,222 - WARNING - Request failed: 404 Client Error: Not Found for url: https://gallery.burningman.org/search/?q=Chair+Camp&p=5. Retrying in 2s...
+2025-11-22 12:02:49,463 - ERROR - Request failed after 3 attempts: 404 Client Error: Not Found for url: https://gallery.burningman.org/search/?q=Chair+Camp&p=5
+2025-11-22 12:02:49,465 - WARNING - Failed to fetch page 5 for Chair Camp
+2025-11-22 12:02:49,465 - INFO - Found 92 total images for Chair Camp
+2025-11-22 12:02:52,434 - INFO - [DRY RUN] Would download image_00001.jpg from https://previews.us-east-1.widencdn.net/preview/19766140/assets/asset-view/de0d381c-3a45-409a-a304-b8e5fd7770a9/thumbnail/eyJ3IjozMDAsImgiOjMwMCwic2NvcGUiOiJhcHAifQ==?sig.ver=1&sig.keyId=us-east-1.20240821&sig.expires=1763895600&sig=IeE6i6oAKqyjO8Bqva4HupkZJwlRi9XHZrRWNck6rz4
+2025-11-22 12:02:52,434 - INFO - Reached image limit of 1 for Chair Camp
+2025-11-22 12:02:52,573 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 12:02:52,579 - INFO - Loaded 1385 camps
+2025-11-22 12:02:52,579 - INFO - Processing camp 1 of 1: The Sound Garden
+2025-11-22 12:02:52,579 - INFO - Processing camp: The Sound Garden
+2025-11-22 12:02:52,579 - INFO - Searching gallery for: The Sound Garden
+2025-11-22 12:02:57,507 - WARNING - Request failed: 404 Client Error: Not Found for url: https://gallery.burningman.org/search/?q=The+Sound+Garden&p=2. Retrying in 1s...
+2025-11-22 12:02:59,600 - WARNING - Request failed: 404 Client Error: Not Found for url: https://gallery.burningman.org/search/?q=The+Sound+Garden&p=2. Retrying in 2s...
+2025-11-22 12:03:02,773 - ERROR - Request failed after 3 attempts: 404 Client Error: Not Found for url: https://gallery.burningman.org/search/?q=The+Sound+Garden&p=2
+2025-11-22 12:03:02,775 - WARNING - Failed to fetch page 2 for The Sound Garden
+2025-11-22 12:03:02,775 - INFO - Found 2 total images for The Sound Garden
+2025-11-22 12:03:05,672 - INFO - [DRY RUN] Would download image_00001.jpg from https://previews.us-east-1.widencdn.net/preview/19766140/assets/asset-view/3fd40876-9b10-4d23-868c-c1c47a28b2cf/thumbnail/eyJ3IjozMDAsImgiOjMwMCwic2NvcGUiOiJhcHAifQ==?sig.ver=1&sig.keyId=us-east-1.20240821&sig.expires=1763895600&sig=caJ2hCmamc5m25djKvgzQ4GYVH0Ze7J3hvRoZ63tf78
+2025-11-22 12:03:05,672 - INFO - Reached image limit of 1 for The Sound Garden
+2025-11-22 12:03:05,830 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 12:03:05,835 - INFO - Loaded 1385 camps
+2025-11-22 12:03:05,835 - INFO - Processing camp 1 of 1: El Tesoro
+2025-11-22 12:03:05,835 - INFO - Processing camp: El Tesoro
+2025-11-22 12:03:05,835 - INFO - Searching gallery for: El Tesoro
+2025-11-22 12:03:10,762 - WARNING - Request failed: 404 Client Error: Not Found for url: https://gallery.burningman.org/search/?q=El+Tesoro&p=2. Retrying in 1s...
+2025-11-22 12:03:13,111 - WARNING - Request failed: 404 Client Error: Not Found for url: https://gallery.burningman.org/search/?q=El+Tesoro&p=2. Retrying in 2s...
+2025-11-22 12:03:16,232 - ERROR - Request failed after 3 attempts: 404 Client Error: Not Found for url: https://gallery.burningman.org/search/?q=El+Tesoro&p=2
+2025-11-22 12:03:16,236 - WARNING - Failed to fetch page 2 for El Tesoro
+2025-11-22 12:03:16,236 - INFO - Found 1 total images for El Tesoro
+2025-11-22 12:03:19,110 - INFO - [DRY RUN] Would download image_00001.jpg from https://previews.us-east-1.widencdn.net/preview/19766140/assets/asset-view/6241d137-9438-42ec-8834-d2fafd841def/thumbnail/eyJ3IjozMDAsImgiOjMwMCwic2NvcGUiOiJhcHAifQ==?sig.ver=1&sig.keyId=us-east-1.20240821&sig.expires=1763895600&sig=wtbyHyTc2tS-smbeiT4Ptgb109wBmiRkZrfu1GuFEX4
+2025-11-22 12:03:19,273 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 12:03:19,279 - INFO - Loaded 1385 camps
+2025-11-22 12:03:19,279 - INFO - Processing camp 1 of 1: Dancing Cat
+2025-11-22 12:03:19,279 - INFO - Processing camp: Dancing Cat
+2025-11-22 12:03:19,279 - INFO - Searching gallery for: Dancing Cat
+2025-11-22 12:04:29,806 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 12:04:29,812 - INFO - Loaded 1385 camps
+2025-11-22 12:04:29,812 - INFO - Processing camp 1 of 1: The Sound Garden
+2025-11-22 12:04:29,812 - INFO - Processing camp: The Sound Garden
+2025-11-22 12:04:29,813 - INFO - Searching gallery for: The Sound Garden
+2025-11-22 12:04:34,887 - INFO - Found 2 total images for The Sound Garden
+2025-11-22 12:04:37,821 - INFO - [DRY RUN] Would download image_00001.jpg from https://previews.us-east-1.widencdn.net/preview/19766140/assets/asset-view/3fd40876-9b10-4d23-868c-c1c47a28b2cf/thumbnail/eyJ3IjozMDAsImgiOjMwMCwic2NvcGUiOiJhcHAifQ==?sig.ver=1&sig.keyId=us-east-1.20240821&sig.expires=1763895600&sig=caJ2hCmamc5m25djKvgzQ4GYVH0Ze7J3hvRoZ63tf78
+2025-11-22 12:04:40,414 - INFO - [DRY RUN] Would download image_00001.jpg from https://previews.us-east-1.widencdn.net/preview/19766140/assets/asset-view/0047ed4b-8df3-4db6-81c3-ab6329a74088/thumbnail/eyJ3IjozMDAsImgiOjMwMCwic2NvcGUiOiJhcHAifQ==?sig.ver=1&sig.keyId=us-east-1.20240821&sig.expires=1763895600&sig=EL7diFQif350SZ0isfjGZeERXC-rDgwOly5bZvbYZEc
+2025-11-22 12:05:11,703 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 12:05:11,708 - INFO - Loaded 1385 camps
+2025-11-22 12:05:11,709 - INFO - Processing camp 1 of 1: The Sound Garden
+2025-11-22 12:05:11,709 - INFO - Processing camp: The Sound Garden
+2025-11-22 12:05:11,709 - INFO - Searching gallery for: The Sound Garden
+2025-11-22 12:05:17,187 - INFO - Found 2 total images for The Sound Garden
+2025-11-22 12:05:20,140 - INFO - [DRY RUN] Would download image_00001.jpg from https://previews.us-east-1.widencdn.net/preview/19766140/assets/asset-view/3fd40876-9b10-4d23-868c-c1c47a28b2cf/thumbnail/eyJ3IjozMDAsImgiOjMwMCwic2NvcGUiOiJhcHAifQ==?sig.ver=1&sig.keyId=us-east-1.20240821&sig.expires=1763895600&sig=caJ2hCmamc5m25djKvgzQ4GYVH0Ze7J3hvRoZ63tf78
+2025-11-22 12:05:22,732 - INFO - [DRY RUN] Would download image_00002.jpg from https://previews.us-east-1.widencdn.net/preview/19766140/assets/asset-view/0047ed4b-8df3-4db6-81c3-ab6329a74088/thumbnail/eyJ3IjozMDAsImgiOjMwMCwic2NvcGUiOiJhcHAifQ==?sig.ver=1&sig.keyId=us-east-1.20240821&sig.expires=1763895600&sig=EL7diFQif350SZ0isfjGZeERXC-rDgwOly5bZvbYZEc
+2025-11-22 12:05:37,458 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 12:05:37,464 - INFO - Loaded 1385 camps
+2025-11-22 12:05:37,464 - INFO - Processing camp 1 of 1: The Sound Garden
+2025-11-22 12:05:37,465 - INFO - Processing camp: The Sound Garden
+2025-11-22 12:05:37,465 - INFO - Searching gallery for: The Sound Garden
+2025-11-22 12:05:42,434 - INFO - Found 2 total images for The Sound Garden
+2025-11-22 12:05:46,466 - INFO - Downloaded image_00001.jpg for The Sound Garden
+2025-11-22 12:05:51,760 - INFO - Downloaded image_00002.jpg for The Sound Garden
+2025-11-22 12:09:39,741 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 12:09:39,747 - INFO - Loaded 1385 camps
+2025-11-22 12:09:39,747 - INFO - Processing camp 1 of 1: The Sound Garden
+2025-11-22 12:09:39,747 - INFO - Processing camp: The Sound Garden
+2025-11-22 12:09:39,747 - INFO - Searching gallery for: The Sound Garden
+2025-11-22 12:09:45,301 - INFO - Found 2 total images for The Sound Garden
+2025-11-22 12:09:49,370 - INFO - Downloaded image_00001.jpg for The Sound Garden
+2025-11-22 12:09:54,343 - INFO - Downloaded image_00002.jpg for The Sound Garden
+2025-11-22 12:11:15,298 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 12:11:15,304 - INFO - Loaded 1385 camps
+2025-11-22 12:11:15,304 - INFO - Processing camp 1 of 1: The Sound Garden
+2025-11-22 12:11:15,304 - INFO - Processing camp: The Sound Garden
+2025-11-22 12:11:15,304 - INFO - Searching gallery for: The Sound Garden
+2025-11-22 12:11:20,654 - INFO - Found 2 total images for The Sound Garden
+2025-11-22 12:11:24,553 - INFO - Downloaded image_00001.jpg for The Sound Garden
+2025-11-22 12:11:29,428 - INFO - Downloaded image_00002.jpg for The Sound Garden
+2025-11-22 12:14:39,029 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 12:14:39,034 - INFO - Loaded 1385 camps
+2025-11-22 12:14:39,035 - INFO - Processing camp 1 of 1: Arctica Ice Sales
+2025-11-22 12:14:39,035 - INFO - Processing camp: Arctica Ice Sales
+2025-11-22 12:14:39,036 - INFO - Searching gallery for: Arctica Ice Sales
+2025-11-22 12:14:45,069 - INFO - Found 23 total images for Arctica Ice Sales
+2025-11-22 12:14:49,310 - INFO - Downloaded image_00061.jpg for Arctica Ice Sales
+2025-11-22 12:14:54,529 - INFO - Downloaded image_00062.jpg for Arctica Ice Sales
+2025-11-22 12:15:00,265 - INFO - Downloaded image_00063.jpg for Arctica Ice Sales
+2025-11-22 12:15:05,908 - INFO - Downloaded image_00064.jpg for Arctica Ice Sales
+2025-11-22 12:15:11,441 - INFO - Downloaded image_00065.jpg for Arctica Ice Sales
+2025-11-22 12:15:16,874 - INFO - Downloaded image_00066.jpg for Arctica Ice Sales
+2025-11-22 12:15:22,193 - INFO - Downloaded image_00067.jpg for Arctica Ice Sales
+2025-11-22 12:15:27,912 - INFO - Downloaded image_00068.jpg for Arctica Ice Sales
+2025-11-22 12:15:33,118 - INFO - Downloaded image_00069.jpg for Arctica Ice Sales
+2025-11-22 12:15:38,690 - INFO - Downloaded image_00070.jpg for Arctica Ice Sales
+2025-11-22 12:15:44,320 - INFO - Downloaded image_00071.jpg for Arctica Ice Sales
+2025-11-22 12:15:49,823 - INFO - Downloaded image_00072.jpg for Arctica Ice Sales
+2025-11-22 12:15:54,937 - INFO - Downloaded image_00073.jpg for Arctica Ice Sales
+2025-11-22 12:16:00,205 - INFO - Downloaded image_00074.jpg for Arctica Ice Sales
+2025-11-22 12:16:05,439 - INFO - Downloaded image_00075.jpg for Arctica Ice Sales
+2025-11-22 12:16:10,715 - INFO - Downloaded image_00076.jpg for Arctica Ice Sales
+2025-11-22 12:16:15,954 - INFO - Downloaded image_00077.jpg for Arctica Ice Sales
+2025-11-22 12:16:21,395 - INFO - Downloaded image_00078.jpg for Arctica Ice Sales
+2025-11-22 12:16:26,853 - INFO - Downloaded image_00079.jpg for Arctica Ice Sales
+2025-11-22 12:16:32,093 - INFO - Downloaded image_00080.jpg for Arctica Ice Sales
+2025-11-22 12:16:37,361 - INFO - Downloaded image_00081.jpg for Arctica Ice Sales
+2025-11-22 12:16:42,495 - INFO - Downloaded image_00082.jpg for Arctica Ice Sales
+2025-11-22 12:16:47,815 - INFO - Downloaded image_00083.jpg for Arctica Ice Sales
+2025-11-22 12:18:13,062 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 12:18:13,068 - INFO - Loaded 1385 camps
+2025-11-22 12:18:13,068 - INFO - Processing camp 1 of 1: The Sound Garden
+2025-11-22 12:18:13,068 - INFO - Processing camp: The Sound Garden
+2025-11-22 12:18:13,069 - INFO - Camp has 2 total images, 2 from gallery
+2025-11-22 12:18:13,069 - INFO - Searching gallery for: The Sound Garden
+2025-11-22 12:18:18,677 - INFO - Found 2 total images for The Sound Garden
+2025-11-22 12:19:14,678 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 12:19:14,684 - INFO - Loaded 1385 camps
+2025-11-22 12:19:14,684 - INFO - Processing camp 1 of 1: El Tesoro
+2025-11-22 12:19:14,684 - INFO - Processing camp: El Tesoro
+2025-11-22 12:19:14,684 - INFO - Camp has 0 total images, 0 from gallery
+2025-11-22 12:19:14,684 - INFO - Searching gallery for: El Tesoro
+2025-11-22 12:19:19,820 - INFO - Found 1 total images for El Tesoro
+2025-11-22 12:19:24,097 - INFO - Downloaded image_00001.jpg for El Tesoro
+2025-11-22 12:19:54,182 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 12:19:54,187 - INFO - Loaded 1385 camps
+2025-11-22 12:19:54,188 - INFO - Processing camp 1 of 1: El Tesoro
+2025-11-22 12:19:54,188 - INFO - Processing camp: El Tesoro
+2025-11-22 12:19:54,188 - INFO - Camp has 1 total images, 1 from gallery
+2025-11-22 12:19:54,188 - INFO - Searching gallery for: El Tesoro
+2025-11-22 12:19:59,375 - INFO - Found 1 total images for El Tesoro
+2025-11-22 14:15:47,253 - INFO - Loading camps data from /Users/spolsky/Library/CloudStorage/Dropbox/src/brcDomesday/data/camps.json
+2025-11-22 14:15:47,259 - INFO - Loaded 1385 camps
+2025-11-22 14:15:47,260 - INFO - Processing camp 1 of 1: El Tesoro
+2025-11-22 14:15:47,260 - INFO - Processing camp: El Tesoro
+2025-11-22 14:15:47,260 - INFO - Camp has 0 total images, 0 from gallery
+2025-11-22 14:15:47,260 - INFO - Searching gallery for: El Tesoro
+2025-11-22 14:15:53,068 - INFO - Found 1 total images for El Tesoro
+2025-11-22 14:15:58,015 - INFO - Downloaded image_00001.jpg for El Tesoro
