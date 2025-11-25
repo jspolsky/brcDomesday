@@ -1,3 +1,4 @@
 .DS_Store
 images/candidates/*
 node_modules/*
+data/gallery_scraper.log
