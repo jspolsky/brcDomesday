@@ -79,6 +79,21 @@ header h1 {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.section-heading {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: white;
+    background-color: black;
+    padding: 12px 20px;
+    border-radius: 4px;
+}
+
+#new-images-section,
+#curated-images-section {
+    margin-bottom: 30px;
+}
+
 .controls {
     background: white;
     padding: 15px 20px;
@@ -173,13 +188,45 @@ header h1 {
     position: absolute;
     top: 10px;
     right: 10px;
-    font-size: 48px;
     display: none;
     pointer-events: none;
 }
 
 .image-item.rejected .reject-badge {
     display: block;
+}
+
+.image-item .approve-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: none;
+    pointer-events: none;
+}
+
+.image-item.approved .approve-badge {
+    display: block;
+}
+
+.badge-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.badge-reject {
+    background-color: #f44336;
+}
+
+.badge-approve {
+    background-color: #4CAF50;
 }
 
 .image-info {
@@ -196,6 +243,24 @@ header h1 {
 
 .image-info .dimensions {
     color: #999;
+}
+
+.image-info .image-credit {
+    margin-top: 5px;
+    color: #666;
+}
+
+.image-info .image-title {
+    margin-top: 5px;
+    color: #666;
+    font-style: italic;
+}
+
+.image-info .image-caption {
+    margin-top: 3px;
+    color: #888;
+    font-size: 11px;
+    line-height: 1.4;
 }
 
 .image-info .source {

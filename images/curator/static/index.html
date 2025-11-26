@@ -29,17 +29,29 @@
             <div class="controls">
                 <button id="submit-btn" class="btn btn-primary">Submit Curation →</button>
                 <button id="reject-all-btn" class="btn btn-secondary">Reject All</button>
+                <button id="reject-all-new-btn" class="btn btn-secondary">Reject All New</button>
                 <button id="accept-all-btn" class="btn btn-secondary">Accept All</button>
                 <button id="toggle-rejected-btn" class="btn btn-secondary">Hide Rejected</button>
             </div>
 
-            <div class="image-grid" id="image-grid">
-                <!-- Images will be loaded here dynamically -->
+            <div id="new-images-section" style="display: none;">
+                <h3 class="section-heading">New images</h3>
+                <div class="image-grid" id="new-images-grid">
+                    <!-- New images will be loaded here dynamically -->
+                </div>
+            </div>
+
+            <div id="curated-images-section" style="display: none;">
+                <h3 class="section-heading">Previously curated images</h3>
+                <div class="image-grid" id="curated-images-grid">
+                    <!-- Previously curated images will be loaded here dynamically -->
+                </div>
             </div>
 
             <div class="controls bottom-controls">
                 <button id="submit-btn-bottom" class="btn btn-primary">Submit Curation →</button>
                 <button id="reject-all-btn-bottom" class="btn btn-secondary">Reject All</button>
+                <button id="reject-all-new-btn-bottom" class="btn btn-secondary">Reject All New</button>
                 <button id="accept-all-btn-bottom" class="btn btn-secondary">Accept All</button>
                 <button id="toggle-rejected-btn-bottom" class="btn btn-secondary">Hide Rejected</button>
             </div>
