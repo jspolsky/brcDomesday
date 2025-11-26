@@ -44,11 +44,11 @@ LOG_FILE = SCRIPT_DIR / "gallery_scraper.log"
 # Constants
 GALLERY_BASE_URL = "https://gallery.burningman.org"
 GALLERY_SEARCH_URL = f"{GALLERY_BASE_URL}/search/"
-DEFAULT_MAX_IMAGES = 128
+DEFAULT_MAX_IMAGES = 100
 DEFAULT_CAMP_DELAY = 8  # seconds between camps
-DEFAULT_PAGE_DELAY = 2.5  # seconds between search pages
-DEFAULT_DETAIL_DELAY = 1.5  # seconds between asset detail fetches
-DEFAULT_DOWNLOAD_DELAY = 1.5  # seconds between downloads
+DEFAULT_PAGE_DELAY = 0  # seconds between search pages
+DEFAULT_DETAIL_DELAY = 0  # seconds between asset detail fetches
+DEFAULT_DOWNLOAD_DELAY = 1  # seconds between downloads
 
 USER_AGENT = "BRC-Domesday-Scraper/1.0 (non commercial art project brcdomesday.vercel.app); contact: joel@futureturtles.com)"
 
@@ -208,10 +208,15 @@ def make_request(url: str, retries: int = 3, tolerate_404: bool = False) -> Opti
     return None
 
 
-def search_gallery(camp_name: str, page_delay: float) -> List[Dict]:
+def search_gallery(camp_name: str, page_delay: float, max_results: int = 200) -> List[Dict]:
     """
     Search gallery.burningman.org for a camp name.
     Returns list of image results with metadata.
+
+    Args:
+        camp_name: Name of the camp to search for
+        page_delay: Delay between page fetches
+        max_results: Maximum number of images to collect (default 200)
     """
     logger.info(f"Searching gallery for: {camp_name}")
 
@@ -219,9 +224,11 @@ def search_gallery(camp_name: str, page_delay: float) -> List[Dict]:
     search_url = f"{GALLERY_SEARCH_URL}?q={query}"
 
     all_images = []
+    seen_asset_ids = set()
     page = 1
+    max_pages = 50  # Safety limit to prevent infinite loops
 
-    while True:
+    while page <= max_pages:
         # Construct page URL
         if page == 1:
             url = search_url
@@ -258,8 +265,28 @@ def search_gallery(camp_name: str, page_delay: float) -> List[Dict]:
             logger.debug(f"No more images found on page {page}")
             break
 
-        all_images.extend(page_images)
-        logger.debug(f"Found {len(page_images)} images on page {page}")
+        # Check for duplicate images (infinite scroll might return same images on all pages)
+        new_images = []
+        duplicate_count = 0
+        for img in page_images:
+            asset_id = img.get('asset_id')
+            if asset_id and asset_id not in seen_asset_ids:
+                seen_asset_ids.add(asset_id)
+                new_images.append(img)
+            else:
+                duplicate_count += 1
+
+        if not new_images:
+            logger.debug(f"No new images on page {page} (all {duplicate_count} were duplicates), stopping pagination")
+            break
+
+        all_images.extend(new_images)
+        logger.debug(f"Found {len(new_images)} new images on page {page} ({duplicate_count} duplicates skipped)")
+
+        # Stop if we have enough images
+        if len(all_images) >= max_results:
+            logger.info(f"Reached max results limit of {max_results}, stopping search")
+            break
 
         # Check if there are more pages
         # The gallery uses infinite scroll, but we can access pages via ?p= parameter
@@ -445,8 +472,8 @@ def process_camp(
     existing_gallery_count = sum(1 for img in metadata.get('images', []) if 'asset_id' in img)
     logger.info(f"Camp has {len(metadata.get('images', []))} total images, {existing_gallery_count} from gallery")
 
-    # Search gallery
-    search_results = search_gallery(camp_name, page_delay)
+    # Search gallery (limit to 200 search results to avoid excessive API calls)
+    search_results = search_gallery(camp_name, page_delay, max_results=200)
 
     if not search_results:
         logger.info(f"No gallery images found for {camp_name}")
@@ -547,6 +574,7 @@ def main():
     )
     parser.add_argument('--camp', type=str, help='Process single camp only')
     parser.add_argument('--limit', type=int, help='Process only first N camps')
+    parser.add_argument('--skipto', type=str, help='Skip to this camp and continue from there (useful for resuming after interruption)')
     parser.add_argument('--skip-existing', action='store_true',
                        help='Skip camps that already have gallery images')
     parser.add_argument('--max-images', type=int, default=DEFAULT_MAX_IMAGES,
@@ -578,6 +606,24 @@ def main():
         if not camps_data:
             logger.error(f"Camp '{args.camp}' not found in camps.json")
             return 1
+
+    # Skip to a specific camp if requested
+    if args.skipto:
+        # Find the index of the camp to skip to
+        skip_to_index = None
+        for idx, camp in enumerate(camps_data):
+            if camp.get('name') == args.skipto:
+                skip_to_index = idx
+                break
+
+        if skip_to_index is None:
+            logger.error(f"Camp '{args.skipto}' not found in camps.json")
+            return 1
+
+        # Keep only camps from this point onward
+        skipped_count = skip_to_index
+        camps_data = camps_data[skip_to_index:]
+        logger.info(f"Skipping first {skipped_count} camps, starting from '{args.skipto}'")
 
     if args.limit:
         camps_data = camps_data[:args.limit]
