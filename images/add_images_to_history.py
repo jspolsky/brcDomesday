@@ -2,14 +2,25 @@
 """
 Add Approved Images to Camp History
 
-This script reads the curation results from the candidates directory
-and adds approved images to the campHistory.json file.
+This script reads the curation results from the candidates directory,
+processes images from gallery.burningman.org to create thumbnails,
+uploads them to S3, and adds the approved images to campHistory.json.
+
+For images from gallery.burningman.org:
+- Downloads the full-size image
+- Resizes to max 1024px width (maintaining aspect ratio)
+- Uploads to S3 bucket (brcdomesday-thumbnails)
+- Caches thumbnail URLs in metadata.json to avoid reprocessing
 
 Usage:
-    python3 add_images_to_history.py
+    python3 add_images_to_history.py [--verbose] [--max-thumbnails N]
 
-The script is idempotent - running it multiple times will replace
-the images data with the current curation results.
+Options:
+    --verbose           Print detailed debug information
+    --max-thumbnails N  Process only N thumbnails (for testing)
+
+The script is idempotent - running it multiple times will use cached
+thumbnails and only process new images.
 """
 
 import argparse
@@ -37,20 +48,27 @@ S3_BUCKET_NAME = "brcdomesday-thumbnails"
 
 def create_thumbnail(image_data, verbose=False, thumbnails_remaining=None):
     """
-    Create a thumbnail for an image.
+    Create a thumbnail for an image from gallery.burningman.org.
 
-    For now, this function returns the image_data unchanged.
-    Later, this will be modified to look at source_page_url, url, width, and height,
-    create an actual thumbnail, and modify those four values accordingly.
+    Process:
+    1. Checks if source_page_url is from gallery.burningman.org (skips if not)
+    2. Fetches the gallery page HTML and finds the full-size image
+    3. Downloads the full-size image
+    4. Resizes to max 1024px width using LANCZOS algorithm (maintains aspect ratio)
+    5. Uploads to S3 bucket (brcdomesday-thumbnails)
+    6. Updates image_data with S3 URL and new dimensions
+    7. Pauses 10 seconds to be polite to the gallery server
 
     Args:
         image_data: Dictionary containing url, width, height, source_page_url,
                    and optionally photographer and year
-        verbose: If True, print input and output for debugging
+        verbose: If True, print detailed debug information
         thumbnails_remaining: List with one element tracking remaining thumbnail count
+                             (decremented when a thumbnail is processed)
 
     Returns:
-        Modified image_data dictionary (currently unchanged)
+        Modified image_data dictionary with S3 URL and updated dimensions,
+        or unchanged if not a gallery image or on error
     """
     # Only process images from gallery.burningman.org
     source_url = image_data.get('source_page_url', '')
@@ -253,12 +271,16 @@ def save_thumbnail_to_metadata(camp_name, image_filename, thumbnail_url, thumbna
     """
     Save thumbnail information back to the metadata.json file.
 
+    This caches the thumbnail data to avoid regenerating thumbnails on
+    subsequent runs. Adds three fields to the image entry: thumbnail_url,
+    thumbnail_width, and thumbnail_height.
+
     Args:
         camp_name: Name of the camp
         image_filename: Filename of the image in metadata
-        thumbnail_url: URL of the uploaded thumbnail
-        thumbnail_width: Width of the thumbnail
-        thumbnail_height: Height of the thumbnail
+        thumbnail_url: S3 URL of the uploaded thumbnail
+        thumbnail_width: Width of the resized thumbnail
+        thumbnail_height: Height of the resized thumbnail
     """
     camp_dir = CANDIDATES_DIR / camp_name
     metadata_file = camp_dir / "metadata.json"
@@ -283,13 +305,21 @@ def get_approved_images_for_camp(camp_name, verbose=False, thumbnails_remaining=
     """
     Get all approved images for a camp from its metadata.json file.
 
+    For each approved image:
+    - Checks if a thumbnail already exists in metadata (thumbnail_url field)
+    - If yes, uses the cached thumbnail URL and dimensions
+    - If no, calls create_thumbnail to generate and upload one
+    - Saves newly created thumbnail info back to metadata.json
+
     Args:
         camp_name: Name of the camp
         verbose: If True, print debug information
         thumbnails_remaining: List with one element tracking remaining thumbnail count
 
-    Returns a list of image dictionaries with url, width, height, source_page_url,
-    photographer, and year.
+    Returns:
+        List of image dictionaries with url, width, height, source_page_url,
+        and optionally photographer and year. For gallery images, url points to
+        S3 thumbnail and dimensions reflect the resized image.
     """
     if verbose:
         print(f"👉  {camp_name}")
@@ -366,18 +396,18 @@ def get_approved_images_for_camp(camp_name, verbose=False, thumbnails_remaining=
 def main():
     # Parse command-line arguments
     parser = argparse.ArgumentParser(
-        description='Add approved images to campHistory.json'
+        description='Process approved images from gallery.burningman.org, create thumbnails, upload to S3, and add to campHistory.json'
     )
     parser.add_argument(
         '--verbose',
         action='store_true',
-        help='Print debug information for thumbnail creation'
+        help='Print detailed debug information (download progress, resize details, S3 uploads)'
     )
     parser.add_argument(
         '--max-thumbnails',
         type=int,
         default=None,
-        help='Process only this many thumbnails then exit (for testing)'
+        help='Process only N gallery thumbnails then exit (for testing/debugging)'
     )
     args = parser.parse_args()
 
