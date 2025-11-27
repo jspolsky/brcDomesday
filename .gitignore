@@ -4,3 +4,4 @@ node_modules/*
 data/gallery_scraper.log
 images/scraper/download_state.json
 tmp/*
+images/.env
