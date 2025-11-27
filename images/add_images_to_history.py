@@ -12,14 +12,232 @@ The script is idempotent - running it multiple times will replace
 the images data with the current curation results.
 """
 
+import argparse
 import json
+import os
+import tempfile
 from pathlib import Path
+from urllib.parse import urljoin
+from dotenv import load_dotenv
+
+import requests
+from bs4 import BeautifulSoup
+from PIL import Image
+import boto3
 
 # Paths
 IMAGES_DIR = Path(__file__).parent
 CANDIDATES_DIR = IMAGES_DIR / "candidates"
 DATA_DIR = IMAGES_DIR.parent / "data"
+TMP_DIR = IMAGES_DIR.parent / "tmp"
 CAMP_HISTORY_FILE = DATA_DIR / "campHistory.json"
+
+# S3 Configuration
+S3_BUCKET_NAME = "brcdomesday-thumbnails"
+
+def create_thumbnail(image_data, verbose=False, thumbnails_remaining=None):
+    """
+    Create a thumbnail for an image.
+
+    For now, this function returns the image_data unchanged.
+    Later, this will be modified to look at source_page_url, url, width, and height,
+    create an actual thumbnail, and modify those four values accordingly.
+
+    Args:
+        image_data: Dictionary containing url, width, height, source_page_url,
+                   and optionally photographer and year
+        verbose: If True, print input and output for debugging
+        thumbnails_remaining: List with one element tracking remaining thumbnail count
+
+    Returns:
+        Modified image_data dictionary (currently unchanged)
+    """
+    # Only process images from gallery.burningman.org
+    source_url = image_data.get('source_page_url', '')
+    if not source_url.startswith('https://gallery.burningman.org'):
+        # Not a gallery image, return unchanged
+        return image_data
+
+    if verbose:
+        print(f"\n  create_thumbnail INPUT:")
+        print(f"    {json.dumps(image_data, indent=6)}")
+
+    try:
+        # Step 1: Fetch the HTML from the gallery page
+        if verbose:
+            print(f"  Fetching HTML from: {source_url}")
+
+        response = requests.get(source_url, timeout=30)
+        response.raise_for_status()
+
+        # Step 2: Parse the HTML with BeautifulSoup
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        # Step 3: Find the <img> tag with id="bigImg"
+        big_img = soup.find('img', id='bigImg')
+        if not big_img:
+            if verbose:
+                print(f"  WARNING: Could not find img tag with id='bigImg'")
+            return image_data
+
+        # Step 4: Get the image source URL
+        img_src = big_img.get('data-src')
+        if not img_src:
+            if verbose:
+                print(f"  WARNING: img tag has no data-src attribute")
+            return image_data
+
+        # Make the URL absolute if it's relative
+        img_url = urljoin(source_url, img_src)
+
+        if verbose:
+            print(f"  Found image URL: {img_url}")
+
+        # Step 5: Download the image to a temporary file
+        if verbose:
+            print(f"  Downloading image...")
+
+        img_response = requests.get(img_url, timeout=30)
+        img_response.raise_for_status()
+
+        # Determine file extension from Content-Type header
+        content_type = img_response.headers.get('Content-Type', '').lower()
+
+        # Map common image MIME types to extensions
+        mime_to_ext = {
+            'image/jpeg': '.jpg',
+            'image/jpg': '.jpg',
+            'image/png': '.png',
+            'image/gif': '.gif',
+            'image/webp': '.webp',
+            'image/bmp': '.bmp',
+            'image/tiff': '.tiff',
+        }
+
+        # Try to get extension from Content-Type, fall back to URL, then default to .jpg
+        img_ext = mime_to_ext.get(content_type.split(';')[0].strip())
+        if not img_ext:
+            img_ext = os.path.splitext(img_url)[1] or '.jpg'
+
+        if verbose:
+            print(f"  Content-Type: {content_type}, using extension: {img_ext}")
+
+        # Create tmp directory if it doesn't exist
+        TMP_DIR.mkdir(exist_ok=True)
+
+        # Create a unique filename using timestamp
+        import time
+        timestamp = str(int(time.time() * 1000000))  # microseconds for uniqueness
+        temp_filename = f"thumbnail_{timestamp}{img_ext}"
+        temp_filepath = TMP_DIR / temp_filename
+
+        # Write the downloaded image
+        with open(temp_filepath, 'wb') as f:
+            f.write(img_response.content)
+
+        if verbose:
+            print(f"  Downloaded to: {temp_filepath}")
+
+        # Step 6: Scale the image down if width > 1024
+        img = Image.open(temp_filepath)
+        original_width, original_height = img.size
+
+        if verbose:
+            print(f"  Original dimensions: {original_width} × {original_height}")
+
+        if original_width > 1024:
+            # Calculate new dimensions maintaining aspect ratio
+            new_width = 1024
+            new_height = int((original_height * new_width) / original_width)
+
+            if verbose:
+                print(f"  Resizing to: {new_width} × {new_height}")
+
+            # Resize using LANCZOS for best quality when downscaling
+            resized_img = img.resize((new_width, new_height), Image.LANCZOS)
+
+            # Save the resized image back to the temp file
+            resized_img.save(temp_filepath)
+
+            # Update dimensions in output_data
+            output_data = image_data.copy()
+            output_data['width'] = new_width
+            output_data['height'] = new_height
+
+            if verbose:
+                print(f"  Saved resized image")
+        else:
+            if verbose:
+                print(f"  No resize needed (width <= 1024)")
+            output_data = image_data
+
+        # Close the image
+        img.close()
+
+        # Step 7: Upload to S3
+        if verbose:
+            print(f"  Uploading to S3 bucket: {S3_BUCKET_NAME}")
+
+        load_dotenv()
+        s3_client = boto3.client('s3')
+        s3_key = temp_filename  # Use the same filename in S3
+
+        # Determine content type for S3
+        content_type_map = {
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.png': 'image/png',
+            '.gif': 'image/gif',
+            '.webp': 'image/webp',
+            '.bmp': 'image/bmp',
+            '.tiff': 'image/tiff',
+        }
+        s3_content_type = content_type_map.get(img_ext, 'image/jpeg')
+
+        # Upload to S3
+        s3_client.upload_file(
+            str(temp_filepath),
+            S3_BUCKET_NAME,
+            s3_key,
+            ExtraArgs={
+                'ContentType': s3_content_type
+            }
+        )
+
+        # Generate S3 URL
+        s3_url = f"https://{S3_BUCKET_NAME}.s3.amazonaws.com/{s3_key}"
+
+        if verbose:
+            print(f"  Uploaded to: {s3_url}")
+
+        # Update the image_data with the S3 URL
+        output_data['url'] = s3_url
+
+        # Delete the temporary file
+        os.unlink(temp_filepath)
+        if verbose:
+            print(f"  Deleted temporary file")
+
+        # Pause to avoid hammering the gallery server
+        if verbose:
+            print(f"  Pausing 10 seconds to be polite to gallery.burningman.org...")
+        time.sleep(10)
+
+    except Exception as e:
+        if verbose:
+            print(f"  ERROR creating thumbnail: {e}")
+        # Return original data on error
+        output_data = image_data
+
+    # Decrement the thumbnail counter (only for processed thumbnails)
+    if thumbnails_remaining and thumbnails_remaining[0] is not None:
+        thumbnails_remaining[0] -= 1
+
+    if verbose:
+        print(f"  create_thumbnail OUTPUT:")
+        print(f"    {json.dumps(output_data, indent=6)}")
+
+    return output_data
 
 def load_camp_history():
     """Load the campHistory.json file."""
@@ -31,13 +249,51 @@ def save_camp_history(history):
     with open(CAMP_HISTORY_FILE, 'w') as f:
         json.dump(history, f, indent=2)
 
-def get_approved_images_for_camp(camp_name):
+def save_thumbnail_to_metadata(camp_name, image_filename, thumbnail_url, thumbnail_width, thumbnail_height):
+    """
+    Save thumbnail information back to the metadata.json file.
+
+    Args:
+        camp_name: Name of the camp
+        image_filename: Filename of the image in metadata
+        thumbnail_url: URL of the uploaded thumbnail
+        thumbnail_width: Width of the thumbnail
+        thumbnail_height: Height of the thumbnail
+    """
+    camp_dir = CANDIDATES_DIR / camp_name
+    metadata_file = camp_dir / "metadata.json"
+
+    # Read the metadata
+    with open(metadata_file, 'r') as f:
+        metadata = json.load(f)
+
+    # Find and update the image
+    for img in metadata.get('images', []):
+        if img.get('filename') == image_filename:
+            img['thumbnail_url'] = thumbnail_url
+            img['thumbnail_width'] = thumbnail_width
+            img['thumbnail_height'] = thumbnail_height
+            break
+
+    # Write back to file
+    with open(metadata_file, 'w') as f:
+        json.dump(metadata, f, indent=2)
+
+def get_approved_images_for_camp(camp_name, verbose=False, thumbnails_remaining=None):
     """
     Get all approved images for a camp from its metadata.json file.
+
+    Args:
+        camp_name: Name of the camp
+        verbose: If True, print debug information
+        thumbnails_remaining: List with one element tracking remaining thumbnail count
 
     Returns a list of image dictionaries with url, width, height, source_page_url,
     photographer, and year.
     """
+    if verbose:
+        print(f"👉  {camp_name}")
+
     camp_dir = CANDIDATES_DIR / camp_name
     metadata_file = camp_dir / "metadata.json"
 
@@ -52,12 +308,44 @@ def get_approved_images_for_camp(camp_name):
     for img in metadata.get('images', []):
         # Only include approved images
         if img.get('curation_result') == 'approved':
-            image_data = {
-                'url': img['image_url'],
-                'width': img['width'],
-                'height': img['height'],
-                'source_page_url': img.get('source_page_url', img['image_url'])
-            }
+            # Check if thumbnail already exists
+            if img.get('thumbnail_url'):
+                # Use existing thumbnail
+                if verbose:
+                    print(f"  Using existing thumbnail for {img.get('filename')}")
+                image_data = {
+                    'url': img['thumbnail_url'],
+                    'width': img['thumbnail_width'],
+                    'height': img['thumbnail_height'],
+                    'source_page_url': img.get('source_page_url', img['image_url'])
+                }
+            else:
+                # Need to create thumbnail
+                image_data = {
+                    'url': img['image_url'],
+                    'width': img['width'],
+                    'height': img['height'],
+                    'source_page_url': img.get('source_page_url', img['image_url'])
+                }
+
+                # Store original image data for comparison
+                original_url = image_data['url']
+
+                # Create thumbnail
+                image_data = create_thumbnail(image_data, verbose=verbose,
+                                             thumbnails_remaining=thumbnails_remaining)
+
+                # If thumbnail was created (URL changed), save it to metadata
+                if image_data['url'] != original_url:
+                    save_thumbnail_to_metadata(
+                        camp_name,
+                        img['filename'],
+                        image_data['url'],
+                        image_data['width'],
+                        image_data['height']
+                    )
+                    if verbose:
+                        print(f"  Saved thumbnail info to metadata.json")
 
             # Add photographer if available
             if img.get('photographer'):
@@ -69,13 +357,45 @@ def get_approved_images_for_camp(camp_name):
 
             approved_images.append(image_data)
 
+            # Check if we've hit the limit and should stop processing more images
+            if thumbnails_remaining and thumbnails_remaining[0] is not None and thumbnails_remaining[0] <= 0:
+                break
+
     return approved_images
 
 def main():
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(
+        description='Add approved images to campHistory.json'
+    )
+    parser.add_argument(
+        '--verbose',
+        action='store_true',
+        help='Print debug information for thumbnail creation'
+    )
+    parser.add_argument(
+        '--max-thumbnails',
+        type=int,
+        default=None,
+        help='Process only this many thumbnails then exit (for testing)'
+    )
+    args = parser.parse_args()
+
     print("=" * 80)
     print("Adding Approved Images to Camp History")
     print("=" * 80)
     print()
+
+    if args.verbose:
+        print("Verbose mode enabled - will print thumbnail creation details")
+        print()
+
+    if args.max_thumbnails:
+        print(f"Max thumbnails mode: will process only {args.max_thumbnails} thumbnail(s)")
+        print()
+
+    # Create mutable counter for max_thumbnails (list with one element)
+    thumbnails_remaining = [args.max_thumbnails] if args.max_thumbnails else [None]
 
     # Load camp history
     print(f"Loading {CAMP_HISTORY_FILE}...")
@@ -98,7 +418,8 @@ def main():
         camp_name = camp_dir.name
 
         # Get approved images
-        approved_images = get_approved_images_for_camp(camp_name)
+        approved_images = get_approved_images_for_camp(camp_name, verbose=args.verbose,
+                                                       thumbnails_remaining=thumbnails_remaining)
 
         # Check if this camp exists in camp history
         if camp_name in camp_history:
@@ -127,6 +448,11 @@ def main():
             # We'll skip it since campHistory.json should only contain camps with history
             if approved_images:
                 print(f"  ⚠ {camp_name}: Has {len(approved_images)} approved image(s) but not in campHistory.json (skipping)")
+
+        # Check if we've reached the max thumbnail limit
+        if thumbnails_remaining[0] is not None and thumbnails_remaining[0] <= 0:
+            print(f"\n  Reached max thumbnail limit, stopping early")
+            break
 
     print()
     print("=" * 80)
