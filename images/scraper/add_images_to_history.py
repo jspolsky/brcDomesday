@@ -37,7 +37,7 @@ from PIL import Image
 import boto3
 
 # Paths
-IMAGES_DIR = Path(__file__).parent
+IMAGES_DIR = Path(__file__).parent.parent
 CANDIDATES_DIR = IMAGES_DIR / "candidates"
 DATA_DIR = IMAGES_DIR.parent / "data"
 TMP_DIR = IMAGES_DIR.parent / "tmp"
@@ -257,6 +257,150 @@ def create_thumbnail(image_data, verbose=False, thumbnails_remaining=None):
 
     return output_data
 
+def upload_local_image(camp_name, image_data, verbose=False):
+    """
+    Upload a local image (from social media) to S3.
+
+    Process:
+    1. Reads the local image file from candidates directory
+    2. Resizes to max 1024px width using LANCZOS algorithm (maintains aspect ratio)
+    3. Uploads to S3 bucket (brcdomesday-thumbnails)
+    4. Updates image_data with S3 URL and new dimensions
+
+    Args:
+        camp_name: Name of the camp (used to find the candidates directory)
+        image_data: Dictionary containing filename, width, height, source_page_url
+        verbose: If True, print detailed debug information
+
+    Returns:
+        Modified image_data dictionary with S3 URL and updated dimensions,
+        or None on error
+    """
+    import time
+
+    filename = image_data.get('filename')
+    if not filename:
+        if verbose:
+            print(f"  ERROR: No filename in image_data")
+        return None
+
+    # Find the local file
+    camp_dir = CANDIDATES_DIR / camp_name
+    local_filepath = camp_dir / filename
+
+    if not local_filepath.exists():
+        if verbose:
+            print(f"  ERROR: Local file not found: {local_filepath}")
+        return None
+
+    if verbose:
+        print(f"\n  upload_local_image INPUT:")
+        print(f"    {json.dumps(image_data, indent=6)}")
+        print(f"  Reading local file: {local_filepath}")
+
+    try:
+        # Get file extension
+        img_ext = os.path.splitext(filename)[1].lower() or '.jpg'
+
+        # Create tmp directory if it doesn't exist
+        TMP_DIR.mkdir(exist_ok=True)
+
+        # Create a unique filename using timestamp
+        timestamp = str(int(time.time() * 1000000))  # microseconds for uniqueness
+        temp_filename = f"social_{timestamp}{img_ext}"
+        temp_filepath = TMP_DIR / temp_filename
+
+        # Open and process the image
+        img = Image.open(local_filepath)
+        original_width, original_height = img.size
+
+        if verbose:
+            print(f"  Original dimensions: {original_width} x {original_height}")
+
+        output_data = image_data.copy()
+
+        if original_width > 1024:
+            # Calculate new dimensions maintaining aspect ratio
+            new_width = 1024
+            new_height = int((original_height * new_width) / original_width)
+
+            if verbose:
+                print(f"  Resizing to: {new_width} x {new_height}")
+
+            # Resize using LANCZOS for best quality when downscaling
+            resized_img = img.resize((new_width, new_height), Image.LANCZOS)
+            resized_img.save(temp_filepath)
+            resized_img.close()
+
+            output_data['width'] = new_width
+            output_data['height'] = new_height
+        else:
+            # No resize needed, just copy the file
+            if verbose:
+                print(f"  No resize needed (width <= 1024)")
+            img.save(temp_filepath)
+            output_data['width'] = original_width
+            output_data['height'] = original_height
+
+        img.close()
+
+        # Upload to S3
+        if verbose:
+            print(f"  Uploading to S3 bucket: {S3_BUCKET_NAME}")
+
+        load_dotenv()
+        s3_client = boto3.client('s3')
+        s3_key = temp_filename
+
+        # Determine content type for S3
+        content_type_map = {
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.png': 'image/png',
+            '.gif': 'image/gif',
+            '.webp': 'image/webp',
+            '.bmp': 'image/bmp',
+            '.tiff': 'image/tiff',
+            '.heic': 'image/heic',
+        }
+        s3_content_type = content_type_map.get(img_ext, 'image/jpeg')
+
+        # Upload to S3
+        s3_client.upload_file(
+            str(temp_filepath),
+            S3_BUCKET_NAME,
+            s3_key,
+            ExtraArgs={
+                'ContentType': s3_content_type
+            }
+        )
+
+        # Generate S3 URL
+        s3_url = f"https://{S3_BUCKET_NAME}.s3.amazonaws.com/{s3_key}"
+
+        if verbose:
+            print(f"  Uploaded to: {s3_url}")
+
+        # Update the output data with the S3 URL
+        output_data['url'] = s3_url
+
+        # Delete the temporary file
+        os.unlink(temp_filepath)
+        if verbose:
+            print(f"  Deleted temporary file")
+
+        if verbose:
+            print(f"  upload_local_image OUTPUT:")
+            print(f"    {json.dumps(output_data, indent=6)}")
+
+        return output_data
+
+    except Exception as e:
+        if verbose:
+            print(f"  ERROR uploading local image: {e}")
+        return None
+
+
 def load_camp_history():
     """Load the campHistory.json file."""
     with open(CAMP_HISTORY_FILE, 'r') as f:
@@ -339,6 +483,10 @@ def get_approved_images_for_camp(camp_name, verbose=False, thumbnails_remaining=
         # Only include approved images
         if img.get('curation_result') == 'approved':
             # Check if thumbnail already exists
+            # Get the image URL - gallery images have 'image_url', social media images don't
+            image_url = img.get('image_url')
+            source_page_url = img.get('source_page_url', image_url)
+
             if img.get('thumbnail_url'):
                 # Use existing thumbnail
                 if verbose:
@@ -347,15 +495,15 @@ def get_approved_images_for_camp(camp_name, verbose=False, thumbnails_remaining=
                     'url': img['thumbnail_url'],
                     'width': img['thumbnail_width'],
                     'height': img['thumbnail_height'],
-                    'source_page_url': img.get('source_page_url', img['image_url'])
+                    'source_page_url': source_page_url
                 }
-            else:
-                # Need to create thumbnail
+            elif image_url:
+                # Gallery image - need to create thumbnail
                 image_data = {
-                    'url': img['image_url'],
-                    'width': img['width'],
-                    'height': img['height'],
-                    'source_page_url': img.get('source_page_url', img['image_url'])
+                    'url': image_url,
+                    'width': img.get('width'),
+                    'height': img.get('height'),
+                    'source_page_url': source_page_url
                 }
 
                 # Store original image data for comparison
@@ -376,6 +524,35 @@ def get_approved_images_for_camp(camp_name, verbose=False, thumbnails_remaining=
                     )
                     if verbose:
                         print(f"  Saved thumbnail info to metadata.json")
+            else:
+                # Social media image - local file, upload to S3
+                local_image_data = {
+                    'filename': img.get('filename'),
+                    'width': img.get('width'),
+                    'height': img.get('height'),
+                    'source_page_url': source_page_url
+                }
+                image_data = upload_local_image(camp_name, local_image_data, verbose=verbose)
+
+                if image_data is None:
+                    if verbose:
+                        print(f"  Failed to upload {img.get('filename')}, skipping")
+                    continue
+
+                # Decrement the thumbnail counter
+                if thumbnails_remaining and thumbnails_remaining[0] is not None:
+                    thumbnails_remaining[0] -= 1
+
+                # Save thumbnail info to metadata for caching
+                save_thumbnail_to_metadata(
+                    camp_name,
+                    img['filename'],
+                    image_data['url'],
+                    image_data['width'],
+                    image_data['height']
+                )
+                if verbose:
+                    print(f"  Saved thumbnail info to metadata.json")
 
             # Add photographer if available
             if img.get('photographer'):
