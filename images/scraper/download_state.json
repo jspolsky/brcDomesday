@@ -339,9 +339,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:19:54"
+      "images_downloaded": 12,
+      "status": "success",
+      "last_processed": "2025-11-29 17:38:07"
     },
     "Ab Avo and Therapy Tea": {
       "urls_provided": [
@@ -356,8 +356,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:50:03"
+      "status": "success",
+      "last_processed": "2025-11-29 17:38:37"
     },
     "Abraxas Camp": {
       "urls_provided": [
@@ -384,9 +384,9 @@
         }
       ],
       "redirected_urls": {},
-      "images_downloaded": 10,
+      "images_downloaded": 31,
       "status": "success",
-      "last_processed": "2025-11-22 15:39:34",
+      "last_processed": "2025-11-29 17:40:49",
       "last_curated": "2025-11-23 11:32:48"
     },
     "Abstininthe": {
@@ -499,9 +499,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:42:15"
+      "images_downloaded": 14,
+      "status": "success",
+      "last_processed": "2025-11-29 17:42:36"
     },
     "Airpusher Collective": {
       "urls_provided": [
@@ -718,9 +718,9 @@
       "redirected_urls": {
         "https://www.androidoasis.com": "https://www.androidoasis.com/"
       },
-      "images_downloaded": 0,
-      "status": "no_images_found",
-      "last_processed": "2025-10-19 22:05:31"
+      "images_downloaded": 13,
+      "status": "success",
+      "last_processed": "2025-11-29 17:44:25"
     },
     "Anonymous Village": {
       "urls_provided": [
@@ -1187,9 +1187,9 @@
         }
       ],
       "redirected_urls": {},
-      "images_downloaded": 104,
+      "images_downloaded": 109,
       "status": "success",
-      "last_processed": "2025-11-22 21:23:54",
+      "last_processed": "2025-11-29 17:45:35",
       "last_curated": "2025-11-23 11:54:52"
     },
     "Atom Cult": {
@@ -1244,9 +1244,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:19:16"
+      "images_downloaded": 2,
+      "status": "success",
+      "last_processed": "2025-11-29 17:46:16"
     },
     "Aurora": {
       "urls_provided": [
@@ -1579,7 +1579,7 @@
       "redirected_urls": {},
       "images_downloaded": 97,
       "status": "success",
-      "last_processed": "2025-11-23 05:01:38",
+      "last_processed": "2025-11-29 17:47:08",
       "last_curated": "2025-11-23 12:03:19"
     },
     "Baconeers": {
@@ -1747,9 +1747,9 @@
       "redirected_urls": {
         "http://www.campbeaverton.org": "https://www.campbeaverton.org/"
       },
-      "images_downloaded": 22,
+      "images_downloaded": 24,
       "status": "success",
-      "last_processed": "2025-10-19 22:51:23",
+      "last_processed": "2025-11-29 17:48:35",
       "last_curated": "2025-10-20 11:20:45"
     },
     "BeeYond:": {
@@ -1858,9 +1858,9 @@
       "redirected_urls": {
         "http://blackrockacademy.com": "https://blackrocknetworks.com/computer-programming-winchester-ma/"
       },
-      "images_downloaded": 30,
+      "images_downloaded": 33,
       "status": "success",
-      "last_processed": "2025-11-22 23:56:30",
+      "last_processed": "2025-11-29 17:49:51",
       "last_curated": "2025-11-23 12:10:03"
     },
     "Black Rock Boutique": {
@@ -2014,9 +2014,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 58,
+      "images_downloaded": 71,
       "status": "success",
-      "last_processed": "2025-10-19 21:35:42",
+      "last_processed": "2025-11-29 17:51:07",
       "last_curated": "2025-10-20 11:26:08"
     },
     "Black Rock City Passport Office": {
@@ -2128,9 +2128,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 7,
+      "images_downloaded": 10,
       "status": "success",
-      "last_processed": "2025-11-23 05:51:20",
+      "last_processed": "2025-11-29 17:52:12",
       "last_curated": "2025-11-23 12:22:38"
     },
     "Black Rock Public Library": {
@@ -2326,9 +2326,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:32:01"
+      "images_downloaded": 18,
+      "status": "success",
+      "last_processed": "2025-11-29 17:55:15"
     },
     "BlinkingManCamp97": {
       "urls_provided": [
@@ -2359,9 +2359,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 13,
+      "images_downloaded": 15,
       "status": "success",
-      "last_processed": "2025-11-23 01:00:12",
+      "last_processed": "2025-11-29 17:56:02",
       "last_curated": "2025-11-23 12:29:59"
     },
     "Blue Bull": {
@@ -2429,9 +2429,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:40:24"
+      "images_downloaded": 4,
+      "status": "success",
+      "last_processed": "2025-11-29 17:56:54"
     },
     "Brain Freeze Camp": {
       "urls_provided": [
@@ -2499,9 +2499,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 3,
+      "images_downloaded": 4,
       "status": "success",
-      "last_processed": "2025-11-23 05:47:02",
+      "last_processed": "2025-11-29 17:57:04",
       "last_curated": "2025-11-23 12:32:52"
     },
     "Bubble Lounge": {
@@ -2581,7 +2581,7 @@
       "redirected_urls": {},
       "images_downloaded": 1,
       "status": "success",
-      "last_processed": "2025-11-22 20:43:52"
+      "last_processed": "2025-11-29 17:57:26"
     },
     "BuddhaCamp @ the Lotus Dome": {
       "urls_provided": [
@@ -2658,9 +2658,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:20:32"
+      "images_downloaded": 1,
+      "status": "success",
+      "last_processed": "2025-11-29 17:57:51"
     },
     "Bureau of Misinformation": {
       "urls_provided": [
@@ -2936,9 +2936,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:12:58"
+      "images_downloaded": 7,
+      "status": "success",
+      "last_processed": "2025-11-29 17:59:07"
     },
     "CEOdeck": {
       "urls_provided": [
@@ -2953,8 +2953,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:56:31"
+      "status": "success",
+      "last_processed": "2025-11-29 18:00:09"
     },
     "CURB": {
       "urls_provided": [
@@ -3099,9 +3099,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 14,
+      "images_downloaded": 18,
       "status": "success",
-      "last_processed": "2025-11-23 00:40:08",
+      "last_processed": "2025-11-29 18:00:46",
       "last_curated": "2025-11-24 08:08:44"
     },
     "Camp As-Is": {
@@ -3189,9 +3189,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 14,
+      "images_downloaded": 15,
       "status": "success",
-      "last_processed": "2025-11-22 15:04:29",
+      "last_processed": "2025-11-29 18:01:04",
       "last_curated": "2025-11-24 08:12:32"
     },
     "Camp Clusterfuck": {
@@ -3209,9 +3209,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:06:54"
+      "images_downloaded": 3,
+      "status": "success",
+      "last_processed": "2025-11-29 18:02:06"
     },
     "Camp Come Find Us CCFU": {
       "urls_provided": [
@@ -3291,9 +3291,9 @@
       "redirected_urls": {
         "http://www.campcorny.com": "https://www.campcorny.com/"
       },
-      "images_downloaded": 26,
+      "images_downloaded": 43,
       "status": "success",
-      "last_processed": "2025-11-23 04:11:13",
+      "last_processed": "2025-11-29 18:04:28",
       "last_curated": "2025-11-24 08:13:50"
     },
     "Camp Cul-de-Sac": {
@@ -3558,9 +3558,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 46,
+      "images_downloaded": 52,
       "status": "success",
-      "last_processed": "2025-11-22 20:28:33",
+      "last_processed": "2025-11-29 18:05:54",
       "last_curated": "2025-11-24 08:22:40"
     },
     "Camp Orange": {
@@ -3581,9 +3581,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 100,
+      "images_downloaded": 102,
       "status": "success",
-      "last_processed": "2025-11-23 01:57:53",
+      "last_processed": "2025-11-29 18:06:45",
       "last_curated": "2025-11-24 08:23:09"
     },
     "Camp Orange Heart": {
@@ -3637,9 +3637,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:35:34"
+      "images_downloaded": 8,
+      "status": "success",
+      "last_processed": "2025-11-29 18:07:31"
     },
     "Camp Pendant": {
       "urls_provided": [
@@ -3706,9 +3706,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 1,
+      "images_downloaded": 10,
       "status": "success",
-      "last_processed": "2025-11-23 02:55:01"
+      "last_processed": "2025-11-29 18:08:43"
     },
     "Camp Safari": {
       "urls_provided": [
@@ -3780,9 +3780,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:21:57"
+      "images_downloaded": 4,
+      "status": "success",
+      "last_processed": "2025-11-29 18:09:24"
     },
     "Camp Synthesis": {
       "urls_provided": [
@@ -3887,7 +3887,7 @@
       "redirected_urls": {},
       "images_downloaded": 1,
       "status": "success",
-      "last_processed": "2025-11-23 03:52:10"
+      "last_processed": "2025-11-29 18:10:59"
     },
     "Camp Yellow Umbrella": {
       "urls_provided": [
@@ -3903,7 +3903,7 @@
       "redirected_urls": {},
       "images_downloaded": 1,
       "status": "success",
-      "last_processed": "2025-11-22 20:16:04"
+      "last_processed": "2025-11-29 18:11:13"
     },
     "Camp [No Name]": {
       "urls_provided": [
@@ -4075,9 +4075,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:12:53"
+      "images_downloaded": 11,
+      "status": "success",
+      "last_processed": "2025-11-29 18:12:14"
     },
     "Casa": {
       "urls_provided": [
@@ -4222,9 +4222,9 @@
       "redirected_urls": {
         "https://celestialsideshow.org": "https://celestialsideshow.org/"
       },
-      "images_downloaded": 19,
+      "images_downloaded": 27,
       "status": "success",
-      "last_processed": "2025-10-19 22:50:25",
+      "last_processed": "2025-11-29 18:13:41",
       "last_curated": "2025-10-20 11:49:10"
     },
     "Celtic Chaos": {
@@ -4245,9 +4245,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 10,
+      "images_downloaded": 12,
       "status": "success",
-      "last_processed": "2025-11-23 04:55:51",
+      "last_processed": "2025-11-29 18:14:28",
       "last_curated": "2025-11-24 10:05:38"
     },
     "Census": {
@@ -4300,7 +4300,7 @@
       "redirected_urls": {},
       "images_downloaded": 17,
       "status": "success",
-      "last_processed": "2025-11-23 05:49:38",
+      "last_processed": "2025-11-29 18:14:34",
       "last_curated": "2025-11-24 10:08:39"
     },
     "Chain Reaction": {
@@ -4447,7 +4447,7 @@
       "redirected_urls": {},
       "images_downloaded": 100,
       "status": "success",
-      "last_processed": "2025-11-22 19:10:13",
+      "last_processed": "2025-11-29 18:14:58",
       "last_curated": "2025-11-24 10:11:33"
     },
     "Chromosomatic": {
@@ -4651,9 +4651,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:06:32"
+      "images_downloaded": 9,
+      "status": "success",
+      "last_processed": "2025-11-29 18:15:45"
     },
     "Contraptionists": {
       "urls_provided": [
@@ -5394,9 +5394,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:58:08"
+      "images_downloaded": 7,
+      "status": "success",
+      "last_processed": "2025-11-29 18:16:14"
     },
     "Deep Playa Surprise": {
       "urls_provided": [
@@ -5602,7 +5602,7 @@
       "redirected_urls": {},
       "images_downloaded": 2,
       "status": "success",
-      "last_processed": "2025-11-23 07:35:18",
+      "last_processed": "2025-11-29 18:16:32",
       "last_curated": "2025-11-24 10:34:48"
     },
     "Disco Snail": {
@@ -5617,9 +5617,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 5,
+      "images_downloaded": 6,
       "status": "success",
-      "last_processed": "2025-11-22 21:06:45",
+      "last_processed": "2025-11-29 18:16:55",
       "last_curated": "2025-11-24 10:35:21"
     },
     "Disco Space Shuttle": {
@@ -5726,9 +5726,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:42:30"
+      "images_downloaded": 18,
+      "status": "success",
+      "last_processed": "2025-11-29 18:17:47"
     },
     "Down Low Club": {
       "urls_provided": [
@@ -5879,9 +5879,9 @@
         }
       ],
       "redirected_urls": {},
-      "images_downloaded": 6,
+      "images_downloaded": 7,
       "status": "success",
-      "last_processed": "2025-11-22 19:54:55",
+      "last_processed": "2025-11-29 18:18:39",
       "last_curated": "2025-11-25 12:37:26"
     },
     "Dust Circus": {
@@ -5987,9 +5987,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 1,
+      "images_downloaded": 16,
       "status": "success",
-      "last_processed": "2025-11-23 02:10:49"
+      "last_processed": "2025-11-29 18:19:32"
     },
     "Dusty Dreamers": {
       "urls_provided": [
@@ -6361,9 +6361,9 @@
       "redirected_urls": {
         "http://camp-endstation.com": "http://camp-endstation.com/"
       },
-      "images_downloaded": 0,
-      "status": "no_images_found",
-      "last_processed": "2025-10-19 22:11:00"
+      "images_downloaded": 2,
+      "status": "success",
+      "last_processed": "2025-11-29 18:21:12"
     },
     "Enrichment.Institute": {
       "urls_provided": [
@@ -6485,9 +6485,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:24:22"
+      "images_downloaded": 1,
+      "status": "success",
+      "last_processed": "2025-11-29 18:21:28"
     },
     "FUN-DO BAR": {
       "urls_provided": [
@@ -6540,9 +6540,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:28:30"
+      "images_downloaded": 1,
+      "status": "success",
+      "last_processed": "2025-11-29 18:22:08"
     },
     "Favela Culture": {
       "urls_provided": [
@@ -6563,7 +6563,7 @@
       "redirected_urls": {},
       "images_downloaded": 1,
       "status": "success",
-      "last_processed": "2025-10-19 23:15:29"
+      "last_processed": "2025-11-29 18:22:21"
     },
     "Feed tHE ARTists": {
       "urls_provided": [
@@ -6596,9 +6596,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:55:01"
+      "images_downloaded": 17,
+      "status": "success",
+      "last_processed": "2025-11-29 18:23:35"
     },
     "Fever Dream Theater": {
       "urls_provided": [
@@ -6612,9 +6612,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:07:32"
+      "images_downloaded": 4,
+      "status": "success",
+      "last_processed": "2025-11-29 18:24:21"
     },
     "Fire Conclave Convergence": {
       "urls_provided": [
@@ -6683,9 +6683,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 100,
+      "images_downloaded": 107,
       "status": "success",
-      "last_processed": "2025-11-22 17:41:55",
+      "last_processed": "2025-11-29 18:25:37",
       "last_curated": "2025-11-25 12:49:51"
     },
     "French Maid Brigade": {
@@ -7204,8 +7204,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:20:13"
+      "status": "success",
+      "last_processed": "2025-11-29 18:25:54"
     },
     "Glow Job": {
       "urls_provided": [
@@ -7237,8 +7237,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:11:18"
+      "status": "success",
+      "last_processed": "2025-11-29 18:26:08"
     },
     "Golden Gate Project": {
       "urls_provided": [
@@ -7257,7 +7257,7 @@
       "redirected_urls": {},
       "images_downloaded": 6,
       "status": "success",
-      "last_processed": "2025-11-22 22:06:07",
+      "last_processed": "2025-11-29 18:26:12",
       "last_curated": "2025-11-25 12:55:13"
     },
     "Good Question": {
@@ -7313,8 +7313,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:31:48"
+      "status": "success",
+      "last_processed": "2025-11-29 18:26:17"
     },
     "Gritty Garden": {
       "urls_provided": [
@@ -7486,8 +7486,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:20:26"
+      "status": "success",
+      "last_processed": "2025-11-29 18:26:43"
     },
     "Halloween Camp": {
       "urls_provided": [
@@ -7502,8 +7502,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:30:39"
+      "status": "success",
+      "last_processed": "2025-11-29 18:26:56"
     },
     "Hang-Out, the": {
       "urls_provided": [
@@ -7605,8 +7605,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:28:55"
+      "status": "success",
+      "last_processed": "2025-11-29 18:27:09"
     },
     "HeeBeeGeeBee Healers": {
       "urls_provided": [
@@ -8150,9 +8150,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:20:13"
+      "images_downloaded": 10,
+      "status": "success",
+      "last_processed": "2025-11-29 18:28:24"
     },
     "IN DUST WE TRUST": {
       "urls_provided": [
@@ -8573,9 +8573,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:20:17"
+      "images_downloaded": 2,
+      "status": "success",
+      "last_processed": "2025-11-29 18:29:14"
     },
     "KAIF": {
       "urls_provided": [
@@ -8589,9 +8589,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:29:27"
+      "images_downloaded": 4,
+      "status": "success",
+      "last_processed": "2025-11-29 18:31:37"
     },
     "Kaleidoscope": {
       "urls_provided": [
@@ -8803,7 +8803,7 @@
       },
       "images_downloaded": 6,
       "status": "success",
-      "last_processed": "2025-10-19 20:58:20",
+      "last_processed": "2025-11-29 18:31:41",
       "last_curated": "2025-10-20 18:16:44"
     },
     "Kidsville": {
@@ -8847,9 +8847,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 23:14:49"
+      "images_downloaded": 4,
+      "status": "success",
+      "last_processed": "2025-11-29 18:32:25"
     },
     "Kiosk Art Support Camp": {
       "urls_provided": [
@@ -9071,9 +9071,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 23:14:49"
+      "images_downloaded": 1,
+      "status": "success",
+      "last_processed": "2025-11-29 18:33:06"
     },
     "La Calaca Village": {
       "urls_provided": [
@@ -9333,9 +9333,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:30:44"
+      "images_downloaded": 18,
+      "status": "success",
+      "last_processed": "2025-11-29 18:33:36"
     },
     "Looners Camp": {
       "urls_provided": [
@@ -9478,9 +9478,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 3,
+      "images_downloaded": 9,
       "status": "success",
-      "last_processed": "2025-11-23 01:47:22",
+      "last_processed": "2025-11-29 18:34:26",
       "last_curated": "2025-11-25 18:54:56"
     },
     "Ludus Symposium": {
@@ -9713,9 +9713,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 3,
+      "images_downloaded": 23,
       "status": "success",
-      "last_processed": "2025-11-23 05:37:57",
+      "last_processed": "2025-11-29 18:35:16",
       "last_curated": "2025-11-25 18:58:13"
     },
     "Magic Lantern Society": {
@@ -9783,9 +9783,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:03:24"
+      "images_downloaded": 1,
+      "status": "success",
+      "last_processed": "2025-11-29 18:36:22"
     },
     "Math Camp @ Group W": {
       "urls_provided": [
@@ -9916,8 +9916,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:16:43"
+      "status": "success",
+      "last_processed": "2025-11-29 18:36:29"
     },
     "Miki Beach": {
       "urls_provided": [
@@ -10047,9 +10047,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 131,
+      "images_downloaded": 140,
       "status": "success",
-      "last_processed": "2025-11-23 06:28:02",
+      "last_processed": "2025-11-29 18:37:03",
       "last_curated": "2025-11-25 19:03:26"
     },
     "Misfit Island": {
@@ -10221,9 +10221,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:06:42"
+      "images_downloaded": 1,
+      "status": "success",
+      "last_processed": "2025-11-29 18:37:38"
     },
     "Motropolis": {
       "urls_provided": [
@@ -10280,7 +10280,7 @@
       },
       "images_downloaded": 3,
       "status": "success",
-      "last_processed": "2025-11-22 23:54:26",
+      "last_processed": "2025-11-29 18:37:44",
       "last_curated": "2025-11-25 19:08:07"
     },
     "Museum of One": {
@@ -10313,8 +10313,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:51:56"
+      "status": "success",
+      "last_processed": "2025-11-29 18:37:48"
     },
     "My Dad's House": {
       "urls_provided": [
@@ -10334,9 +10334,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 8,
+      "images_downloaded": 18,
       "status": "success",
-      "last_processed": "2025-11-22 21:21:30",
+      "last_processed": "2025-11-29 18:38:37",
       "last_curated": "2025-11-25 19:08:47"
     },
     "Mycodelic Forest": {
@@ -10419,7 +10419,7 @@
       },
       "images_downloaded": 8,
       "status": "success",
-      "last_processed": "2025-11-23 02:23:11",
+      "last_processed": "2025-11-29 22:09:02",
       "last_curated": "2025-11-25 19:10:00"
     },
     "MythMaker": {
@@ -10454,9 +10454,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 1,
+      "images_downloaded": 6,
       "status": "success",
-      "last_processed": "2025-11-23 03:59:03"
+      "last_processed": "2025-11-30 07:02:30"
     },
     "NOT BORING": {
       "urls_provided": [
@@ -10472,7 +10472,7 @@
       "redirected_urls": {},
       "images_downloaded": 5,
       "status": "success",
-      "last_processed": "2025-11-23 07:12:28",
+      "last_processed": "2025-11-30 07:03:07",
       "last_curated": "2025-11-25 19:10:37"
     },
     "NYC Community Container": {
@@ -10568,7 +10568,7 @@
       "redirected_urls": {},
       "images_downloaded": 1,
       "status": "success",
-      "last_processed": "2025-11-23 03:49:15"
+      "last_processed": "2025-11-30 07:27:20"
     },
     "Neodebauchery": {
       "urls_provided": [
@@ -10724,9 +10724,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:20:34"
+      "images_downloaded": 4,
+      "status": "success",
+      "last_processed": "2025-11-30 07:28:56"
     },
     "No ReGretzkys": {
       "urls_provided": [
@@ -10747,9 +10747,9 @@
         }
       ],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "error",
-      "last_processed": "2025-10-19 21:57:54"
+      "images_downloaded": 15,
+      "status": "success",
+      "last_processed": "2025-11-30 07:30:45"
     },
     "Nobo House": {
       "urls_provided": [
@@ -10840,7 +10840,7 @@
       "redirected_urls": {},
       "images_downloaded": 10,
       "status": "success",
-      "last_processed": "2025-11-22 15:29:58",
+      "last_processed": "2025-11-30 07:31:32",
       "last_curated": "2025-11-25 19:12:45"
     },
     "Northern Lights": {
@@ -11080,9 +11080,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:06:42"
+      "images_downloaded": 43,
+      "status": "success",
+      "last_processed": "2025-11-30 07:32:34"
     },
     "Off the Dome": {
       "urls_provided": [
@@ -11132,9 +11132,9 @@
         }
       ],
       "redirected_urls": {},
-      "images_downloaded": 31,
+      "images_downloaded": 50,
       "status": "success",
-      "last_processed": "2025-11-22 16:02:56",
+      "last_processed": "2025-11-30 07:34:29",
       "last_curated": "2025-11-25 19:14:42"
     },
     "Oh No You Didn't!": {
@@ -11414,9 +11414,9 @@
       "redirected_urls": {
         "https://www.papercranesburningman.com": "https://www.papercranesburningman.com/"
       },
-      "images_downloaded": 134,
+      "images_downloaded": 157,
       "status": "success",
-      "last_processed": "2025-11-23 03:28:54",
+      "last_processed": "2025-11-30 07:35:57",
       "last_curated": "2025-11-25 19:17:09"
     },
     "Parliament Art Crew": {
@@ -11512,9 +11512,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:23:41"
+      "images_downloaded": 35,
+      "status": "success",
+      "last_processed": "2025-11-30 07:38:26"
     },
     "Penny Smashing Point": {
       "urls_provided": [
@@ -11628,9 +11628,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 2,
+      "images_downloaded": 41,
       "status": "success",
-      "last_processed": "2025-11-22 19:55:56",
+      "last_processed": "2025-11-30 07:40:12",
       "last_curated": "2025-11-25 19:20:20"
     },
     "PhoCureBurn": {
@@ -11706,7 +11706,7 @@
       "redirected_urls": {},
       "images_downloaded": 8,
       "status": "success",
-      "last_processed": "2025-11-23 06:29:28",
+      "last_processed": "2025-11-30 07:40:46",
       "last_curated": "2025-11-25 19:20:45"
     },
     "Pink Fuzzy Monkey": {
@@ -12131,9 +12131,9 @@
         "http://www.playasos.com/": "https://www.facebook.com/CampPlayasos",
         "http://www.playasos.com": "https://www.facebook.com/CampPlayasos"
       },
-      "images_downloaded": 1,
+      "images_downloaded": 3,
       "status": "success",
-      "last_processed": "2025-11-22 18:17:06"
+      "last_processed": "2025-11-30 07:41:35"
     },
     "Playground": {
       "urls_provided": [
@@ -12184,9 +12184,9 @@
       "redirected_urls": {
         "https://sites.google.com/site/plovkraft": "https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fsites.google.com%2Fsite%2Fplovkraft&dsh=S1714255034%3A1760926111565944&followup=https%3A%2F%2Fsites.google.com%2Fsite%2Fplovkraft&ifkv=AfYwgwVscm2haWOqm4V7t167BBB7zw01TUE9b8VFgIChFGpHKOycPCd18KUqZQahsXlDekh9JNy4xg&osid=1&passive=1209600&flowName=WebLiteSignIn&flowEntry=ServiceLogin"
       },
-      "images_downloaded": 1,
+      "images_downloaded": 2,
       "status": "success",
-      "last_processed": "2025-10-19 22:08:31"
+      "last_processed": "2025-11-30 07:42:46"
     },
     "Plunderground": {
       "urls_provided": [
@@ -12349,9 +12349,9 @@
         }
       ],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "error",
-      "last_processed": "2025-10-19 22:18:49"
+      "images_downloaded": 20,
+      "status": "success",
+      "last_processed": "2025-11-30 07:43:58"
     },
     "Potty Project": {
       "urls_provided": [
@@ -12626,7 +12626,7 @@
       "redirected_urls": {},
       "images_downloaded": 1,
       "status": "success",
-      "last_processed": "2025-11-22 15:49:04"
+      "last_processed": "2025-11-30 07:45:21"
     },
     "Rabble Rousers": {
       "urls_provided": [
@@ -12640,9 +12640,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:58:13"
+      "images_downloaded": 1,
+      "status": "success",
+      "last_processed": "2025-11-30 07:47:33"
     },
     "Raccoons": {
       "urls_provided": [
@@ -12890,7 +12890,7 @@
       "redirected_urls": {},
       "images_downloaded": 100,
       "status": "success",
-      "last_processed": "2025-11-23 01:43:02",
+      "last_processed": "2025-11-30 07:47:49",
       "last_curated": "2025-11-25 19:33:41"
     },
     "RedNeck Regal Theatre": {
@@ -12921,9 +12921,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:05:13"
+      "images_downloaded": 16,
+      "status": "success",
+      "last_processed": "2025-11-30 07:49:16"
     },
     "Refugee Camp": {
       "urls_provided": [
@@ -12960,7 +12960,7 @@
       },
       "images_downloaded": 66,
       "status": "success",
-      "last_processed": "2025-11-23 04:23:41",
+      "last_processed": "2025-11-30 07:49:50",
       "last_curated": "2025-11-25 19:33:58"
     },
     "Religious As Fuck": {
@@ -13333,7 +13333,7 @@
       "redirected_urls": {},
       "images_downloaded": 5,
       "status": "success",
-      "last_processed": "2025-11-22 23:22:04",
+      "last_processed": "2025-11-30 07:50:28",
       "last_curated": "2025-11-25 19:36:13"
     },
     "Sakenoma": {
@@ -13425,9 +13425,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:06:49"
+      "images_downloaded": 10,
+      "status": "success",
+      "last_processed": "2025-11-30 07:51:11"
     },
     "Santo Cabr\u00f3n": {
       "urls_provided": [
@@ -13490,9 +13490,9 @@
         "http://groups.google.com/group/scotch--hop": "https://groups.google.com/access-error?continue=https://groups.google.com/g/scotch--hop",
         "http://www.scotchandhop.com": "http://www.scotchandhop.com/"
       },
-      "images_downloaded": 1,
+      "images_downloaded": 8,
       "status": "success",
-      "last_processed": "2025-10-19 21:35:50"
+      "last_processed": "2025-11-30 07:52:57"
     },
     "Seashell Cartel": {
       "urls_provided": [
@@ -13549,9 +13549,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 20:59:14"
+      "images_downloaded": 12,
+      "status": "success",
+      "last_processed": "2025-11-30 07:53:37"
     },
     "Shamandome": {
       "urls_provided": [
@@ -13602,8 +13602,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:52:02"
+      "status": "success",
+      "last_processed": "2025-11-30 07:53:42"
     },
     "Sharkey's Bar and Lounge": {
       "urls_provided": [
@@ -13636,9 +13636,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 23:15:36"
+      "images_downloaded": 2,
+      "status": "success",
+      "last_processed": "2025-11-30 07:54:50"
     },
     "Shipwreck Tiki Lounge": {
       "urls_provided": [
@@ -13750,9 +13750,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 100,
+      "images_downloaded": 119,
       "status": "success",
-      "last_processed": "2025-11-22 21:40:00",
+      "last_processed": "2025-11-30 07:55:44",
       "last_curated": "2025-11-25 19:37:14"
     },
     "Siren's Cove": {
@@ -13845,8 +13845,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:12:44"
+      "status": "success",
+      "last_processed": "2025-11-30 07:56:32"
     },
     "Snack Shack": {
       "urls_provided": [
@@ -13860,9 +13860,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:15:42"
+      "images_downloaded": 18,
+      "status": "success",
+      "last_processed": "2025-11-30 07:57:58"
     },
     "SnoHo": {
       "urls_provided": [
@@ -14051,9 +14051,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:41:28"
+      "images_downloaded": 15,
+      "status": "success",
+      "last_processed": "2025-11-30 07:58:58"
     },
     "Soulshakers": {
       "urls_provided": [
@@ -14436,9 +14436,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 3,
+      "images_downloaded": 17,
       "status": "success",
-      "last_processed": "2025-11-22 15:59:09",
+      "last_processed": "2025-11-30 07:59:41",
       "last_curated": "2025-11-25 19:41:01"
     },
     "Storytime Friends": {
@@ -14505,9 +14505,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:01:49"
+      "images_downloaded": 4,
+      "status": "success",
+      "last_processed": "2025-11-30 08:00:47"
     },
     "Studio and Spa": {
       "urls_provided": [
@@ -14541,9 +14541,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 13,
+      "images_downloaded": 25,
       "status": "success",
-      "last_processed": "2025-11-22 23:43:10",
+      "last_processed": "2025-11-30 08:03:11",
       "last_curated": "2025-11-25 19:41:31"
     },
     "Sundowners": {
@@ -14562,7 +14562,7 @@
       "redirected_urls": {},
       "images_downloaded": 33,
       "status": "success",
-      "last_processed": "2025-11-23 04:38:03",
+      "last_processed": "2025-11-30 08:04:53",
       "last_curated": "2025-11-25 19:41:42"
     },
     "Sunrise Diner": {
@@ -14756,9 +14756,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 23:14:39"
+      "images_downloaded": 11,
+      "status": "success",
+      "last_processed": "2025-11-30 08:05:43"
     },
     "THICC VIBEZ": {
       "urls_provided": [
@@ -14773,8 +14773,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 23:15:59"
+      "status": "success",
+      "last_processed": "2025-11-30 08:06:09"
     },
     "TRYST": {
       "urls_provided": [
@@ -14971,9 +14971,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 23:16:07"
+      "images_downloaded": 1,
+      "status": "success",
+      "last_processed": "2025-11-30 08:06:40"
     },
     "The Airship": {
       "urls_provided": [
@@ -15019,9 +15019,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 23:15:36"
+      "images_downloaded": 3,
+      "status": "success",
+      "last_processed": "2025-11-30 08:08:27"
     },
     "The Carrot Club": {
       "urls_provided": [
@@ -15351,8 +15351,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:27:28"
+      "status": "success",
+      "last_processed": "2025-11-30 08:09:01"
     },
     "The New Barbarians": {
       "urls_provided": [
@@ -15405,9 +15405,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 21:28:30"
+      "images_downloaded": 15,
+      "status": "success",
+      "last_processed": "2025-11-30 08:10:29"
     },
     "The Shire": {
       "urls_provided": [
@@ -15533,8 +15533,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:17:10"
+      "status": "success",
+      "last_processed": "2025-11-30 08:10:39"
     },
     "There Ain't No Virgin Mary": {
       "urls_provided": [
@@ -15871,9 +15871,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 9,
+      "images_downloaded": 17,
       "status": "success",
-      "last_processed": "2025-11-22 18:04:16",
+      "last_processed": "2025-11-30 08:11:04",
       "last_curated": "2025-11-25 19:53:08"
     },
     "Uncle Larry's Misguided Burners": {
@@ -15992,9 +15992,9 @@
       "redirected_urls": {
         "http://www.vagabondsandtagalongs.com": "http://www.vagabondsandtagalongs.com/"
       },
-      "images_downloaded": 0,
-      "status": "error",
-      "last_processed": "2025-10-19 21:34:06"
+      "images_downloaded": 4,
+      "status": "success",
+      "last_processed": "2025-11-30 08:13:37"
     },
     "Vamp Camp": {
       "urls_provided": [
@@ -16034,9 +16034,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 1,
+      "images_downloaded": 10,
       "status": "success",
-      "last_processed": "2025-11-23 04:13:44"
+      "last_processed": "2025-11-30 08:15:14"
     },
     "Vessels of Love": {
       "urls_provided": [
@@ -16163,9 +16163,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 18,
+      "images_downloaded": 31,
       "status": "success",
-      "last_processed": "2025-11-23 02:14:15",
+      "last_processed": "2025-11-30 08:17:00",
       "last_curated": "2025-11-25 19:55:35"
     },
     "Vulcan Empire": {
@@ -16427,7 +16427,7 @@
       "redirected_urls": {},
       "images_downloaded": 16,
       "status": "success",
-      "last_processed": "2025-11-23 05:13:02",
+      "last_processed": "2025-11-30 08:17:19",
       "last_curated": "2025-11-25 19:56:23"
     },
     "Wild Child": {
@@ -16444,7 +16444,7 @@
       "redirected_urls": {},
       "images_downloaded": 6,
       "status": "success",
-      "last_processed": "2025-11-22 15:33:27",
+      "last_processed": "2025-11-30 08:18:06",
       "last_curated": "2025-11-25 19:56:31"
     },
     "Wings of Resonance Art Support": {
@@ -16624,9 +16624,9 @@
         }
       ],
       "redirected_urls": {},
-      "images_downloaded": 0,
-      "status": "error",
-      "last_processed": "2025-10-19 21:42:48"
+      "images_downloaded": 1,
+      "status": "success",
+      "last_processed": "2025-11-30 08:18:26"
     },
     "Yes Please": {
       "urls_provided": [
@@ -16721,9 +16721,9 @@
       ],
       "error_urls": [],
       "redirected_urls": {},
-      "images_downloaded": 1,
+      "images_downloaded": 8,
       "status": "success",
-      "last_processed": "2025-11-22 20:18:44"
+      "last_processed": "2025-11-30 08:19:15"
     },
     "fruitPOP": {
       "urls_provided": [
@@ -16779,9 +16779,9 @@
       "redirected_urls": {
         "https://www.flickr.com/photos/9522562@N02/?": "https://www.flickr.com/photos/9522562@N02/"
       },
-      "images_downloaded": 129,
+      "images_downloaded": 131,
       "status": "success",
-      "last_processed": "2025-11-23 03:26:19",
+      "last_processed": "2025-11-30 08:20:26",
       "last_curated": "2025-11-25 19:59:08"
     },
     "planet wood collective": {
@@ -16797,8 +16797,8 @@
       "error_urls": [],
       "redirected_urls": {},
       "images_downloaded": 0,
-      "status": "social_media_only",
-      "last_processed": "2025-10-19 22:13:20"
+      "status": "success",
+      "last_processed": "2025-11-30 08:20:38"
     },
     "the black hole": {
       "urls_provided": [
