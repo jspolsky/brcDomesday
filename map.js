@@ -18,7 +18,8 @@ const loadingStatus = document.getElementById('loadingStatus');
 let campOutlines = null;
 let campFidMappings = null; // Maps FID to camp name
 let campsData = null; // Full camp data from camps.json
-let campHistory = null; // Historical camp data
+let campHistory = null; // Historical camp data (lazy loaded)
+let campHistoryLoading = false; // Track if campHistory is currently loading
 let showOutlines = false; // Don't display outlines, but keep for hit testing
 
 // Background map image
@@ -383,6 +384,38 @@ async function loadJSON(url) {
     }
 }
 
+// Lazy load campHistory.json on first use (14MB file)
+async function ensureCampHistoryLoaded() {
+    // Already loaded
+    if (campHistory) {
+        return true;
+    }
+
+    // Already loading - wait for it
+    if (campHistoryLoading) {
+        // Wait for the load to complete by polling
+        while (campHistoryLoading) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        return campHistory !== null;
+    }
+
+    // Start loading
+    campHistoryLoading = true;
+    console.log('Loading campHistory.json...');
+
+    try {
+        campHistory = await loadJSON('data/campHistory.json');
+        console.log('campHistory.json loaded successfully');
+        return campHistory !== null;
+    } catch (error) {
+        console.error('Failed to load campHistory.json:', error);
+        return false;
+    } finally {
+        campHistoryLoading = false;
+    }
+}
+
 // Initialize the application
 async function init() {
     loadingStatus.textContent = 'Loading background map image...';
@@ -400,17 +433,14 @@ async function init() {
 
     loadingStatus.textContent = 'Loading camp data...';
 
-    // Load camp FID to name mappings
+    // Load essential data for map interaction (small files loaded first)
     campFidMappings = await loadJSON('data/camp_fid_mappings.json');
+    campOutlines = await loadGeoJSON('data/camp_outlines_2025.geojson');
 
-    // Load full camp data
+    // Load full camp data (needed for hover/sidebar info)
     campsData = await loadJSON('data/camps.json');
 
-    // Load camp history
-    campHistory = await loadJSON('data/campHistory.json');
-
-    // Load camp outlines
-    campOutlines = await loadGeoJSON('data/camp_outlines_2025.geojson');
+    // Note: campHistory.json (14MB) is lazy-loaded on first use in openFullCampInfo()
 
     loadingStatus.style.display = 'none';
 
@@ -1072,7 +1102,7 @@ function buildCampGallerySection(campName) {
 }
 
 // Open full camp information mode
-function openFullCampInfo(campName) {
+async function openFullCampInfo(campName) {
     const campData = findCampDataByName(campName);
     const overlay = document.getElementById('mapOverlay');
     const fullInfo = document.getElementById('fullCampInfo');
@@ -1080,7 +1110,7 @@ function openFullCampInfo(campName) {
     fullCampInfoOpen = true;
     currentFullCampName = campName;
 
-    // Update content
+    // Update content immediately (from camps.json which is already loaded)
     document.getElementById('fullCampName').textContent = campData ? (campData.name || campName) : campName;
     document.getElementById('fullCampLocation').textContent = campData ? (campData.location_string || '') : '';
     document.getElementById('fullCampDescription').textContent = campData ? (campData.description || 'No description available.') : 'No description available.';
@@ -1107,16 +1137,7 @@ function openFullCampInfo(campName) {
     }
     document.getElementById('fullCampDetails').innerHTML = details;
 
-    // Build events section
-    buildCampEventsSection(campName);
-
-    // Build history section
-    buildCampHistorySection(campName);
-
-    // Build image gallery section
-    buildCampGallerySection(campName);
-
-    // Update image
+    // Update image immediately
     const img = document.getElementById('fullCampImage');
     if (campName === 'First Camp') {
         img.src = '';
@@ -1143,12 +1164,40 @@ function openFullCampInfo(campName) {
         img.style.display = 'none';
     }
 
-    // Show overlay and full info
+    // Show loading state for history-dependent sections
+    const eventsContainer = document.getElementById('fullCampEvents');
+    const historyContainer = document.getElementById('fullCampHistory');
+    const galleryContainer = document.getElementById('fullCampGallery');
+
+    if (!campHistory) {
+        // Show loading indicator while campHistory loads
+        const loadingHTML = '<div style="color: #aaa; font-style: italic; padding: 10px 0;">Loading history data...</div>';
+        eventsContainer.innerHTML = loadingHTML;
+        historyContainer.innerHTML = loadingHTML;
+        galleryContainer.innerHTML = '';
+    }
+
+    // Show overlay and full info immediately
     overlay.classList.remove('overlay-hidden');
     fullInfo.classList.remove('fullcamp-hidden');
 
     // Reset scroll position to top
     fullInfo.scrollTop = 0;
+
+    // Now load campHistory if needed and populate the sections
+    await ensureCampHistoryLoaded();
+
+    // Only update if we're still showing this camp
+    if (currentFullCampName === campName && fullCampInfoOpen) {
+        // Build events section
+        buildCampEventsSection(campName);
+
+        // Build history section
+        buildCampHistorySection(campName);
+
+        // Build image gallery section
+        buildCampGallerySection(campName);
+    }
 }
 
 // Close full camp information mode
