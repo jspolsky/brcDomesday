@@ -498,23 +498,56 @@ def get_approved_images_for_camp(camp_name, verbose=False, thumbnails_remaining=
                     'source_page_url': source_page_url
                 }
             elif image_url:
-                # Gallery image - need to create thumbnail
-                image_data = {
-                    'url': image_url,
-                    'width': img.get('width'),
-                    'height': img.get('height'),
-                    'source_page_url': source_page_url
-                }
+                # Check if this is a gallery image or a website-scraped image
+                is_gallery = source_page_url and source_page_url.startswith('https://gallery.burningman.org')
 
-                # Store original image data for comparison
-                original_url = image_data['url']
+                if is_gallery:
+                    # Gallery image - need to create thumbnail
+                    image_data = {
+                        'url': image_url,
+                        'width': img.get('width'),
+                        'height': img.get('height'),
+                        'source_page_url': source_page_url
+                    }
 
-                # Create thumbnail
-                image_data = create_thumbnail(image_data, verbose=verbose,
-                                             thumbnails_remaining=thumbnails_remaining)
+                    # Store original image data for comparison
+                    original_url = image_data['url']
 
-                # If thumbnail was created (URL changed), save it to metadata
-                if image_data['url'] != original_url:
+                    # Create thumbnail
+                    image_data = create_thumbnail(image_data, verbose=verbose,
+                                                 thumbnails_remaining=thumbnails_remaining)
+
+                    # If thumbnail was created (URL changed), save it to metadata
+                    if image_data['url'] != original_url:
+                        save_thumbnail_to_metadata(
+                            camp_name,
+                            img['filename'],
+                            image_data['url'],
+                            image_data['width'],
+                            image_data['height']
+                        )
+                        if verbose:
+                            print(f"  Saved thumbnail info to metadata.json")
+                else:
+                    # Website-scraped image - upload local copy to S3
+                    local_image_data = {
+                        'filename': img.get('filename'),
+                        'width': img.get('width'),
+                        'height': img.get('height'),
+                        'source_page_url': source_page_url
+                    }
+                    image_data = upload_local_image(camp_name, local_image_data, verbose=verbose)
+
+                    if image_data is None:
+                        if verbose:
+                            print(f"  Failed to upload {img.get('filename')}, skipping")
+                        continue
+
+                    # Decrement the thumbnail counter
+                    if thumbnails_remaining and thumbnails_remaining[0] is not None:
+                        thumbnails_remaining[0] -= 1
+
+                    # Save thumbnail info to metadata for caching
                     save_thumbnail_to_metadata(
                         camp_name,
                         img['filename'],
