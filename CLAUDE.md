@@ -43,6 +43,20 @@ All data files are located in the `data/` subdirectory:
 ### Additional Assets
 - `firstcamp.jpg` - Sample camp image for display in UI
 
+### Image Pipeline (`images/`)
+Camp images are scraped from multiple sources, curated, and hosted on S3:
+- `images/candidates/[Camp Name]/` - Downloaded candidate images and `metadata.json` per camp
+- `images/scraper/` - Scraping and processing scripts:
+  - `scrape_images.py` - Downloads candidate images from camp websites
+  - `scrape_gallery.py` - Downloads candidate images from gallery.burningman.org
+  - `scrape_socials.py` - Semi-automated tool for collecting images from Instagram/Facebook
+  - `curator_server.py` - Web-based curation UI for approving/rejecting candidate images
+  - `add_images_to_history.py` - Processes approved images: resizes, uploads to S3 (`brcdomesday-thumbnails` bucket), and adds to campHistory.json
+  - `borg-gallery-spec.md` - Design spec for gallery scraper
+  - `scrape_socials_spec.md` - Design spec for social media scraper
+- All camp images in campHistory.json are hosted on S3 (`https://brcdomesday-thumbnails.s3.amazonaws.com/...`)
+- The `add_images_to_history.py` script caches S3 URLs in each camp's `metadata.json` (`thumbnail_url` field) for idempotent re-runs
+
 ### Python Utilities
 Located in the `data/` subdirectory:
 - `download_historical_camps.py` - Downloads historical camp data from Burning Man API (2015-2025)
@@ -156,6 +170,14 @@ The GeoJSON structure is consistent across files:
 {
   "Camp Name": {
     "name": "Camp Name",
+    "images": [  // Optional, only present for camps with curated images
+      {
+        "url": "https://brcdomesday-thumbnails.s3.amazonaws.com/social_1770833560751598.jpg",
+        "width": 1024,
+        "height": 518,
+        "source_page_url": "https://campwebsite.com/gallery"
+      }
+    ],
     "history": [
       {
         "year": 2025,
@@ -222,6 +244,7 @@ The main branch now contains a fully functional interactive camp browser that:
 2. Shows camp details when users hover or click on camp boundaries
 3. Provides three levels of detail: popup (hover), sidebar (click), full-page (double-click)
 4. Uses the completed `camp_fid_mappings.json` to connect outline polygons to camp metadata
+5. Displays curated camp image galleries (all images hosted on S3)
 
 The earlier tool for building the FID mappings has been moved to the `createcampnames` branch.
 

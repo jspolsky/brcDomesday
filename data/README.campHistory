@@ -81,10 +81,12 @@ Each entry in the `events` array represents an event hosted by the camp:
 
 Each entry in the `images` array (if present) represents a curated camp image:
 
-- **url** (string): The original URL of the image on the web.
-- **width** (number): The width of the image in pixels.
-- **height** (number): The height of the image in pixels.
-- **source_page_url** (string): The URL of the web page where the image was found.
+- **url** (string): S3 URL of the hosted image (`https://brcdomesday-thumbnails.s3.amazonaws.com/...`). All images are uploaded to S3 by `add_images_to_history.py` to avoid broken links from camp websites going down or blocking hotlinking.
+- **width** (number): The width of the image in pixels (max 1024px, resized during upload).
+- **height** (number): The height of the image in pixels (aspect ratio preserved).
+- **source_page_url** (string): The URL of the web page where the image was originally found.
+- **photographer** (string, optional): Photo credit, present for gallery.burningman.org images.
+- **year** (number, optional): Year the photo was taken, present for gallery.burningman.org images.
 
 ## Matching Logic
 
@@ -114,16 +116,18 @@ Camps are matched across years by their **name** field. The matching algorithm s
     "name": "Bag o' Dicks",
     "images": [
       {
-        "url": "https://example.com/images/camp-photo1.jpg",
-        "width": 1920,
-        "height": 1080,
+        "url": "https://brcdomesday-thumbnails.s3.amazonaws.com/social_1770833560751598.jpg",
+        "width": 1024,
+        "height": 518,
         "source_page_url": "https://bagodicks.com/gallery"
       },
       {
-        "url": "https://example.com/images/camp-photo2.jpg",
-        "width": 1200,
+        "url": "https://brcdomesday-thumbnails.s3.amazonaws.com/thumbnail_1770712345678901.jpg",
+        "width": 1024,
         "height": 800,
-        "source_page_url": "https://bagodicks.com/gallery"
+        "source_page_url": "https://gallery.burningman.org/asset/43f2ce01-2d7e-46c1-ba5b-05207b631bdd",
+        "photographer": "Philippe Glade",
+        "year": 2023
       }
     ],
     "history": [
